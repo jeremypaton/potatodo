@@ -9,8 +9,20 @@ import Foundation
 import SwiftUI
 import Combine
 
+enum AppMode: String, Codable {
+    case debug
+    case test
+    case prod
+}
+
+class Settings: ObservableObject {
+    @Published var mode : AppMode = .prod
+}
+
 @MainActor
 class TaskManager: ObservableObject {
+    let settings: Settings = Settings()
+
     @Published private(set) var tasks: [Task] = []
     @Published var errorMessage: String?
     
@@ -19,7 +31,9 @@ class TaskManager: ObservableObject {
     
     init() {
         loadTasks()
-        setupAutoSave()
+        if settings.mode == .prod {
+            setupAutoSave()
+        }
     }
     
     // MARK: - Task Management
@@ -79,6 +93,17 @@ class TaskManager: ObservableObject {
     }
     
     private func loadTasks() {
+        switch settings.mode {
+        case .debug:
+            loadDebugTasks()
+        case .test:
+            loadCSVTestTasks()
+        case .prod:
+            loadRealTasks()
+        }
+    }
+    
+    private func loadRealTasks() {
         guard let data = UserDefaults.standard.data(forKey: saveKey) else { return }
         
         do {
@@ -90,7 +115,7 @@ class TaskManager: ObservableObject {
     
     // MARK: - Test Data
     
-    func loadTestTasks() {
+    private func loadDebugTasks() {
         let testTasks = [
             Task(title: "Buy groceries", isCompleted: true, color: .green, date: Date()),
             Task(title: "Call mom", isCompleted: true, color: .blue, date: Date()),
@@ -100,7 +125,7 @@ class TaskManager: ObservableObject {
         tasks = testTasks
     }
     
-    func loadCSVTestTasks() {
+    private func loadCSVTestTasks() {
         guard let csvURL = Bundle.main.url(forResource: "test_tasks", withExtension: "csv") else {
             errorMessage = "Could not find test_tasks.csv"
             return
@@ -150,8 +175,10 @@ class TaskManager: ObservableObject {
 }
 
 #Preview {
+    let settings = Settings()
+    settings.mode = .debug
+    
     let taskManager = TaskManager()
-    taskManager.loadTestTasks()
     
     return VStack {
         ForEach(taskManager.tasks) { task in
@@ -171,4 +198,5 @@ class TaskManager: ObservableObject {
             Spacer()
         }
     }
+    .environmentObject(settings)
 }

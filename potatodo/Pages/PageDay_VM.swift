@@ -11,7 +11,7 @@ struct PageDay_VM: View {
     @ObservedObject var taskManager: TaskManager
     @ObservedObject var navManager: NavManager
     @ObservedObject var potatoManager: PotatoManager
-
+    @State private var previousCompletedCount = 0
     
     private var tasksForCurrentDay: [Task] {
         taskManager.tasks.filter { task in
@@ -19,10 +19,14 @@ struct PageDay_VM: View {
         }
     }
     
+    private var completedTasksCount: Int {
+        tasksForCurrentDay.filter { $0.isCompleted }.count
+    }
+    
     var body: some View {
         TopNav_V(navManager: navManager)
         
-        if navManager.isToday{
+        if navManager.isToday {
             Potato_V(potatoManager: potatoManager)
         }
 
@@ -36,6 +40,23 @@ struct PageDay_VM: View {
             }
         }
         .padding(.horizontal)
+        .onChange(of: completedTasksCount) { oldCount, newCount in
+            // Update potato level based on completed tasks
+            potatoManager.setLevel(newCount)
+            
+            // Celebrate if we've completed more tasks than before
+            if newCount > oldCount {
+                potatoManager.celebrateLevel(newCount)
+            }
+            
+            // Update previous count
+            previousCompletedCount = newCount
+        }
+        .onAppear {
+            // Initialize previous count and set initial level
+            previousCompletedCount = completedTasksCount
+            potatoManager.setLevel(completedTasksCount)
+        }
     }
 }
 
@@ -44,7 +65,7 @@ struct PageDay_VM: View {
     let navManager = NavManager()
     let potatoManager = PotatoManager()
     // Add some test tasks
-    taskManager.loadCSVTestTasks()
+//    taskManager.loadCSVTestTasks()
     
     return VStack {
         // Top navigation bar

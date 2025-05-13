@@ -15,6 +15,10 @@ class PotatoManager: ObservableObject {
         messageManager.loadMessages()
     }
     
+    func setLevel(_ newLevel: Int) {
+        level = newLevel
+    }
+    
     func celebrateLevel(_ newLevel: Int) {
         messageManager.showMessageForCompletionLevel(newLevel)
         
@@ -22,10 +26,10 @@ class PotatoManager: ObservableObject {
             isCelebrating = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
                 self?.isCelebrating = false
-                self?.level = newLevel
+                self?.setLevel(newLevel)
             }
         } else {
-            level = newLevel
+            setLevel(newLevel)
         }
     }
     

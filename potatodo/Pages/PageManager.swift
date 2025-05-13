@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct PageManager_VM: View {
+struct PageManager: View {
     @ObservedObject var taskManager: TaskManager
     @ObservedObject var navManager: NavManager
     @ObservedObject var potatoManager: PotatoManager
@@ -38,8 +38,7 @@ struct PageManager_VM: View {
 
     
     // Add some test tasks
-    taskManager.loadCSVTestTasks()
     
-    return PageManager_VM(taskManager: taskManager, navManager: navManager,
+    return PageManager(taskManager: taskManager, navManager: navManager,
                           potatoManager: potatoManager)
 }

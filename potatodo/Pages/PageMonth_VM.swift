@@ -223,7 +223,6 @@ struct PageMonth_VM: View {
     navManager.setInterval(.month)
     
     // Add some test tasks
-    taskManager.loadCSVTestTasks()
     
     return VStack {
 //        TopNav_V(navManager: navManager)

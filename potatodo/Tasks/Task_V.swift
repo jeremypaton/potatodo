@@ -181,7 +181,7 @@ struct AddTaskButton_V: View {
 
 #Preview {
     let taskManager = TaskManager()
-    taskManager.loadTestTasks()
+
     return VStack {
         ForEach(taskManager.tasks) { task in
             Task_V(taskManager: taskManager, taskId: task.id, isCompact: false)

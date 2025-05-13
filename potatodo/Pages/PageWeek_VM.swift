@@ -125,7 +125,6 @@ struct PageWeek_VM: View {
     navManager.setInterval(.week)
     
     // Add some test tasks
-    taskManager.loadCSVTestTasks()
     
     return VStack {
 //        TopNav_V(navManager: navManager)
