@@ -150,12 +150,12 @@ class NavManager: ObservableObject {
         )
         
         Spacer()
-        Text(navManager.currentDate.formatted())
+        Text("time: \(navManager.currentDate.formatted())")
         Spacer()
         
         BottomNav_V(
             navManager: navManager
         )
     }
-    .background(Color(.systemGray6))
+    .background(Color(.green))
 }

@@ -144,6 +144,7 @@ struct Task_V: View {
 struct AddTaskButton_V: View {
     @ObservedObject var taskManager: TaskManager
     let isCompact: Bool
+    let date: Date
     @State private var showingAddTask = false
     @State private var newTaskText = ""
     
@@ -163,10 +164,11 @@ struct AddTaskButton_V: View {
         .alert("Add New Task", isPresented: $showingAddTask) {
             TextField("Task description", text: $newTaskText)
             Button("Cancel", role: .cancel){
-                
+                newTaskText = ""
             }
             Button("Add") {
-                if taskManager.addNewTask(title: newTaskText){
+                if taskManager.addNewTask(title: newTaskText, date: date) {
+                    newTaskText = ""
                 }
             }
         }
@@ -181,7 +183,7 @@ struct AddTaskButton_V: View {
             Task_V(taskManager: taskManager, taskId: task.id, isCompact: false)
         }
         
-        AddTaskButton_V(taskManager: taskManager, isCompact: false)
+        AddTaskButton_V(taskManager: taskManager, isCompact: false, date: Date())
         
         HStack {
             VStack {

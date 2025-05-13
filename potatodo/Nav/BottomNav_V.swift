@@ -56,5 +56,5 @@ struct BottomNav_V: View {
             navManager: NavManager()
         )
     }
-    .background(Color(.systemGray6))
+    .background(Color(.green))
 }

@@ -1,0 +1,135 @@
+//
+//  TaskWeekList_V.swift
+//  potatodo
+//
+//  Created by Jeremy Paton on 13/5/2025.
+//
+
+import SwiftUI
+
+struct TaskListWeek_V: View {
+    @ObservedObject var taskManager: TaskManager
+    @ObservedObject var navManager: NavManager
+    
+    private var weekDays: [Date] {
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: navManager.weekStart)
+        let daysToSubtract = (weekday + 5) % 7
+        
+        return (0..<7).map { day in
+            calendar.date(byAdding: .day, value: day - daysToSubtract, to: navManager.weekStart) ?? Date()
+        }
+    }
+    
+    private var completedTasksThisWeek: Int {
+        taskManager.tasks.filter { task in
+            let taskDate = task.date
+            return task.isCompleted && weekDays.contains { day in
+                Calendar.current.isDate(taskDate, inSameDayAs: day)
+            }
+        }.count
+    }
+    
+    private func formatDayHeader(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE"
+        return formatter.string(from: date).uppercased()
+    }
+    
+    private func formatDateHeader(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        return formatter.string(from: date).uppercased()
+    }
+    
+    private func tasksForDay(_ date: Date) -> [Task] {
+        taskManager.tasks.filter { task in
+            Calendar.current.isDate(task.date, inSameDayAs: date)
+        }
+    }
+    
+    private func dayView(for date: Date) -> some View {
+        VStack(alignment: .center, spacing: 0) {
+            // Header
+            HStack {
+                Text(formatDayHeader(date))
+                    .font(.headline)
+                Text(formatDateHeader(date))
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+            .padding(.bottom, 2)
+            
+            // Task List of day in compact mode
+            VStack(spacing: 4) {
+                ForEach(tasksForDay(date)) { task in
+                    Task_V(taskManager: taskManager, taskId: task.id, isCompact: true)
+                }
+                
+                if tasksForDay(date).count < 3 {
+                    AddTaskButton_V(taskManager: taskManager, isCompact: true, date: date)
+                }
+                
+                Spacer(minLength: 0)
+            }
+        }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 4)
+        .background(Color.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+        )
+    }
+    
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack {
+                Color(.systemGray6)
+                    .edgesIgnoringSafeArea(.all)
+                
+                VStack(spacing: 0) {
+                    LazyVGrid(columns: [
+                        GridItem(.flexible(), spacing: 8),
+                        GridItem(.flexible(), spacing: 8)
+                    ], spacing: 8) {
+                        ForEach(0..<7) { index in
+                            dayView(for: weekDays[index])
+                                .frame(height: (geometry.size.height - 32) / 4) // 32 for padding, 4 rows
+                        }
+                        
+                        // Potato Counter as 8th box
+                        VStack(alignment: .leading) {
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                        )
+                        .frame(height: (geometry.size.height - 32) / 4)
+                    }
+                }
+                .padding(8)
+            }
+        }
+    }
+}
+
+#Preview {
+    let taskManager = TaskManager()
+    let navManager = NavManager()
+    navManager.setInterval(.week)
+    
+    // Add some test tasks
+    taskManager.loadTestTasks()
+    
+    return VStack {
+        TopNav_V(navManager: navManager)
+        TaskListWeek_V(taskManager: taskManager, navManager: navManager)
+        BottomNav_V(navManager: navManager)
+    }
+    .background(Color(.systemGroupedBackground))
+}
+

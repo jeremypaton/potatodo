@@ -24,8 +24,8 @@ class TaskManager: ObservableObject {
     
     // MARK: - Task Management
     
-    func addNewTask(title: String, color: TaskColor = .green) -> Bool {
-        let task = Task(title: title, color: color)
+    func addNewTask(title: String, color: TaskColor = .green, date: Date = Date()) -> Bool {
+        let task = Task(title: title, color: color, date: date)
         guard task.isValid else {
             errorMessage = "Task text cannot be empty"
             return false
@@ -92,9 +92,9 @@ class TaskManager: ObservableObject {
     
     func loadTestTasks() {
         let testTasks = [
-            Task(title: "Buy groceries", isCompleted: true, color: .green),
-            Task(title: "Call mom", isCompleted: true, color: .blue),
-            Task(title: "Finish project", isCompleted: false, color: .red),
+            Task(title: "Buy groceries", isCompleted: true, color: .green, date: Date()),
+            Task(title: "Call mom", isCompleted: true, color: .blue, date: Date()),
+            Task(title: "Finish project", isCompleted: false, color: .red, date: Date()),
         ]
         
         tasks = testTasks
@@ -104,12 +104,13 @@ class TaskManager: ObservableObject {
 #Preview {
     let taskManager = TaskManager()
     taskManager.loadTestTasks()
+    
     return VStack {
         ForEach(taskManager.tasks) { task in
             Task_V(taskManager: taskManager, taskId: task.id, isCompact: false)
         }
         
-        AddTaskButton_V(taskManager: taskManager, isCompact: false)
+        AddTaskButton_V(taskManager: taskManager, isCompact: false, date: Date())
         
         HStack {
             VStack {

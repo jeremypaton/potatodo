@@ -19,7 +19,7 @@ struct TopNav_V: View {
                     .font(.largeTitle)
                 Text(navManager.subtitle)
                     .font(.headline)
-            }
+            }.padding(10)
             
             Spacer()
             
@@ -29,12 +29,14 @@ struct TopNav_V: View {
                     .font(.system(size: 24))
                     .frame(width: 60)
             }
-        }
+        }.background(Color(.systemGray6))
+
     }
 }
 
 #Preview {
-    NavigationView {
+    VStack {
         TopNav_V(navManager: NavManager())
-    }
+        Spacer()
+    }.background(Color(.green))
 }
