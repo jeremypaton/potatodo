@@ -25,7 +25,7 @@ struct DefaultTaskRowStyle: BaseTaskRowStyle {
 }
 
 struct CompactTaskRowStyle: BaseTaskRowStyle {
-    var height: CGFloat = 40
+    var height: CGFloat = 35
     var fontSize: CGFloat = 20
     var padding = EdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12)
     var backgroundColor: Color = .white
@@ -39,6 +39,10 @@ struct CompactTaskRowStyle: BaseTaskRowStyle {
 struct TaskStyle {
     static func partialColor(for task: Task) -> Color {
         return TaskStyle.fullColor(for: task).mix(with: Color.white, by: 0.4)
+    }
+    
+    static func hintColor(for task: Task) -> Color {
+        return TaskStyle.fullColor(for: task).mix(with: Color.white, by: 0.7)
     }
     
     static func fullColor(for task: Task) -> Color {
@@ -156,7 +160,7 @@ struct AddTaskButton_V: View {
             }
             .foregroundColor(.blue)
             .frame(maxWidth: .infinity)
-            .frame(height: isCompact ? 40 : 60)
+            .frame(height: isCompact ? CompactTaskRowStyle().height : DefaultTaskRowStyle().height)
             .background(Color.gray.opacity(0.2))
             .cornerRadius(isCompact ? 8 : 12)
             .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
@@ -190,8 +194,12 @@ struct AddTaskButton_V: View {
                 ForEach(taskManager.tasks) { task in
                     Task_V(taskManager: taskManager, taskId: task.id, isCompact: true)
                 }
+                
+                AddTaskButton_V(taskManager: taskManager, isCompact: true, date: Date())
+
             }
             .frame(width: UIScreen.main.bounds.width / 2)
+            
             
             Spacer()
         }

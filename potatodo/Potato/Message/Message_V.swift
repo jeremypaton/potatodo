@@ -7,12 +7,13 @@ struct Message_V: View {
         if messageManager.isShowingMessage {
             VStack {
                 Text(messageManager.displayedText)
-                    .font(.system(size: 18, weight: .light))
+                    .font(.system(size: 26, weight: .light))
                     .multilineTextAlignment(.center)
                     .padding(12)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.white)
+                            .fill(Color(.systemGray6))
+                            .stroke(Color.black, lineWidth: 2)
                             .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
                 )
             }

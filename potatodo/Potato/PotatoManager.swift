@@ -28,6 +28,13 @@ class PotatoManager: ObservableObject {
             level = newLevel
         }
     }
+    
+    func showRandomMessage() {
+        // Get all messages and pick a random one
+        if let randomMessage = messageManager.messages.randomElement() {
+            messageManager.showMessageForCompletionLevel(randomMessage.level)
+        }
+    }
 }
 
 #Preview {
@@ -46,6 +53,6 @@ class PotatoManager: ObservableObject {
             }
         }
     }
-    .padding()
+//    .padding()
     .background(Color(.green))
 }

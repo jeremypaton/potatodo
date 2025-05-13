@@ -7,9 +7,11 @@
 
 import SwiftUI
 
-struct TaskListDay_V: View {
+struct PageDay_VM: View {
     @ObservedObject var taskManager: TaskManager
     @ObservedObject var navManager: NavManager
+    @ObservedObject var potatoManager: PotatoManager
+
     
     private var tasksForCurrentDay: [Task] {
         taskManager.tasks.filter { task in
@@ -18,6 +20,12 @@ struct TaskListDay_V: View {
     }
     
     var body: some View {
+        TopNav_V(navManager: navManager)
+        
+        if navManager.isToday{
+            Potato_V(potatoManager: potatoManager)
+        }
+
         VStack(spacing: 12) {
             ForEach(0..<3, id: \.self) { index in
                 if index < tasksForCurrentDay.count {
@@ -34,19 +42,23 @@ struct TaskListDay_V: View {
 #Preview {
     let taskManager = TaskManager()
     let navManager = NavManager()
-    
+    let potatoManager = PotatoManager()
     // Add some test tasks
-    taskManager.loadTestTasks()
+    taskManager.loadCSVTestTasks()
     
     return VStack {
         // Top navigation bar
-        TopNav_V(navManager: navManager)
+//        TopNav_V(navManager: navManager)
         
-        TaskListDay_V(taskManager: taskManager, navManager: navManager)
+//        Potato_V(potatoManager: potatoManager)
+        
+        PageDay_VM(taskManager: taskManager,
+                   navManager: navManager,
+                   potatoManager: potatoManager)
         
         Spacer()
 
-        BottomNav_V(navManager: navManager)
+//        BottomNav_V(navManager: navManager)
     }
     .background(Color(.systemGroupedBackground))
 }

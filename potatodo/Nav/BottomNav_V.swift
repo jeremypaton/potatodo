@@ -2,6 +2,7 @@ import SwiftUI
 
 struct BottomNav_V: View {
     @ObservedObject var navManager: NavManager
+    var onPotatoClick: () -> Void = {}
     
     var body: some View {
         ZStack {
@@ -30,6 +31,7 @@ struct BottomNav_V: View {
             // Floating potato button
             Button(action: {
                 navManager.moveToToday()
+                onPotatoClick()
             }) {
                 Text("🥔")
                     .font(.system(size: 45))

@@ -99,6 +99,54 @@ class TaskManager: ObservableObject {
         
         tasks = testTasks
     }
+    
+    func loadCSVTestTasks() {
+        guard let csvURL = Bundle.main.url(forResource: "test_tasks", withExtension: "csv") else {
+            errorMessage = "Could not find test_tasks.csv"
+            return
+        }
+        
+        do {
+            let csvString = try String(contentsOf: csvURL, encoding: .utf8)
+            let rows = csvString.components(separatedBy: .newlines)
+            
+            var loadedTasks: [Task] = []
+            let calendar = Calendar.current
+            let today = calendar.startOfDay(for: Date())
+            
+            for row in rows where !row.isEmpty {
+                let columns = row.components(separatedBy: ",")
+                guard columns.count >= 4 else { continue }
+                
+                let title = columns[0].trimmingCharacters(in: .whitespaces)
+                let isCompletedString = columns[1].trimmingCharacters(in: .whitespaces).lowercased()
+                let isCompleted = isCompletedString == "true" || isCompletedString == "1" || isCompletedString == "yes"
+                let colorString = columns[2].trimmingCharacters(in: .whitespaces)
+                let offsetString = columns[3].trimmingCharacters(in: .whitespaces)
+                
+                let color: TaskColor
+                switch colorString.lowercased() {
+                case "red": color = .red
+                case "blue": color = .blue
+                case "yellow": color = .yellow
+                case "purple": color = .purple
+                default: color = .green
+                }
+                
+                guard let offset = Int(offsetString) else { continue }
+                
+                let date = calendar.date(byAdding: .day, value: offset, to: today) ?? today
+                
+                let task = Task(title: title, isCompleted: isCompleted, color: color, date: date)
+                loadedTasks.append(task)
+            }
+            
+            tasks = loadedTasks
+            errorMessage = nil
+        } catch {
+            errorMessage = "Failed to load CSV tasks: \(error.localizedDescription)"
+        }
+    }
 }
 
 #Preview {

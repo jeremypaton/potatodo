@@ -1,0 +1,53 @@
+Buy groceries,false,green,0
+Call mom,false,blue,0
+Finish project,false,purple,0
+Schedule dentist,false,yellow,1
+Pay bills,false,red,1
+Clean house,false,blue,2
+Read book,false,purple,2
+Go to gym,false,green,3
+Make dinner,false,yellow,3
+Water plants,false,red,4
+Check emails,false,blue,4
+Take out trash,false,purple,5
+Walk dog,false,green,5
+Buy birthday gift,true,yellow,-1
+Return library books,false,red,-1
+Schedule haircut,true,blue,-2
+Update resume,true,purple,-2
+Plan weekend trip,true,green,-3
+Call insurance,false,yellow,-3
+Fix bike,true,red,-4
+Do laundry,true,blue,-4
+Order new shoes,false,purple,-5
+Send thank you cards,true,green,-5
+Review budget,true,yellow,-6
+Clean car,false,red,-6
+Update portfolio,true,blue,-7
+Research vacation spots,true,purple,-7
+Book flight tickets,true,green,-8
+Pack suitcase,false,yellow,-8
+Cancel gym membership,true,red,-9
+Return library books,true,blue,-9
+Buy new phone,true,purple,-10
+Set up new phone,false,green,-10
+Backup old phone,true,yellow,-11
+Transfer contacts,true,red,-11
+Update apps,false,blue,-12
+Configure settings,true,purple,-12
+Test new phone,true,green,-13
+Buy phone case,false,yellow,-13
+Install screen protector,true,red,-14
+Set up email,true,blue,-14
+Configure notifications,false,purple,-15
+Set up Face ID,true,green,-15
+Transfer photos,true,yellow,-16
+Sync calendar,false,red,-16
+Update passwords,true,blue,-17
+Install essential apps,true,purple,-17
+Set up Apple Pay,false,green,-18
+Configure iCloud,true,yellow,-18
+Set up Find My,true,red,-19
+Configure Siri,false,blue,-19
+Set up Apple Watch,true,purple,-20
+Configure Health app,true,green,-20 

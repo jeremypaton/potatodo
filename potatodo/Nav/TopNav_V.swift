@@ -29,7 +29,7 @@ struct TopNav_V: View {
                     .font(.system(size: 24))
                     .frame(width: 60)
             }
-        }.background(Color(.systemGray6))
+        }.background(Color(.white))
 
     }
 }

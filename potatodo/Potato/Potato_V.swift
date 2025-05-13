@@ -23,7 +23,7 @@ struct Potato_V: View {
                 
                 VStack {
                     Message_V(messageManager: potatoManager.messageManager)
-                        .padding(.top, geometry.size.width * 0.15)
+                        .padding(.top, geometry.size.width * 0.1)
                     Spacer()
                 }
             }

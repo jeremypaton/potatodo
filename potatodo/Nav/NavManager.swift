@@ -154,7 +154,7 @@ class NavManager: ObservableObject {
         Spacer()
         
         BottomNav_V(
-            navManager: navManager
+            navManager: navManager,
         )
     }
     .background(Color(.green))

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TaskListWeek_V: View {
+struct PageWeek_VM: View {
     @ObservedObject var taskManager: TaskManager
     @ObservedObject var navManager: NavManager
     
@@ -83,6 +83,8 @@ struct TaskListWeek_V: View {
     }
     
     var body: some View {
+        TopNav_V(navManager: navManager)
+
         GeometryReader { geometry in
             ZStack {
                 Color(.systemGray6)
@@ -123,12 +125,12 @@ struct TaskListWeek_V: View {
     navManager.setInterval(.week)
     
     // Add some test tasks
-    taskManager.loadTestTasks()
+    taskManager.loadCSVTestTasks()
     
     return VStack {
-        TopNav_V(navManager: navManager)
-        TaskListWeek_V(taskManager: taskManager, navManager: navManager)
-        BottomNav_V(navManager: navManager)
+//        TopNav_V(navManager: navManager)
+        PageWeek_VM(taskManager: taskManager, navManager: navManager)
+//        BottomNav_V(navManager: navManager)
     }
     .background(Color(.systemGroupedBackground))
 }
