@@ -62,6 +62,23 @@ class TaskManager: ObservableObject {
         updateTask(updatedTask)
     }
     
+    func cycleTaskColorFromID(_ id: UUID) {
+        if let index = tasks.firstIndex(where: { $0.id == id }) {
+            
+            var tc : TaskColor = tasks[index].color
+            
+            switch tc {
+                case .green: tc = .blue
+                case .blue: tc = .yellow
+                case .yellow: tc = .purple
+                case .purple: tc = .red
+                case .red: tc = .green
+            }
+            
+            tasks[index].color = tc
+        }
+    }
+    
     // MARK: - Persistence
     
     private func setupAutoSave() {

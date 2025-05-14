@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D1C503142DD48A9C0022FC52 /* MILESTONES.txt in Resources */ = {isa = PBXBuildFile; fileRef = D1C503132DD48A960022FC52 /* MILESTONES.txt */; };
+		D1C503162DD490E90022FC52 /* v0.1.TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = D1C503152DD490E40022FC52 /* v0.1.TODO.txt */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		D1900CCE2DD1A82300C53EEF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +32,8 @@
 		D1900CC02DD1A82200C53EEF /* potatodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = potatodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1900CCD2DD1A82300C53EEF /* potatodoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = potatodoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1900CD72DD1A82300C53EEF /* potatodoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = potatodoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1C503132DD48A960022FC52 /* MILESTONES.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MILESTONES.txt; sourceTree = "<group>"; };
+		D1C503152DD490E40022FC52 /* v0.1.TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = v0.1.TODO.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +82,8 @@
 		D1900CB72DD1A82200C53EEF = {
 			isa = PBXGroup;
 			children = (
+				D1C503132DD48A960022FC52 /* MILESTONES.txt */,
+				D1C503152DD490E40022FC52 /* v0.1.TODO.txt */,
 				D1900CC22DD1A82200C53EEF /* potatodo */,
 				D1900CD02DD1A82300C53EEF /* potatodoTests */,
 				D1900CDA2DD1A82300C53EEF /* potatodoUITests */,
@@ -212,6 +221,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1C503162DD490E90022FC52 /* v0.1.TODO.txt in Resources */,
+				D1C503142DD48A9C0022FC52 /* MILESTONES.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,7 +406,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = JS3JFCX9RV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -409,7 +420,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -426,7 +437,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = JS3JFCX9RV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -440,7 +451,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -117,13 +117,13 @@ struct Task_V: View {
         
         return AnyView(
             HStack {
-                // Delete button
+                // Color cycle button
                 Button {
-                    taskManager.deleteTask(task)
+                    taskManager.cycleTaskColorFromID(taskId)
                 } label: {
-                    Image(systemName: "trash")
-                        .foregroundColor(.gray)
-                        .font(.system(size: style.fontSize * 0.8))
+                    Image(systemName: "star.fill")
+                        .foregroundColor(TaskStyle.fullColor(for: task))
+                        .font(.system(size: style.fontSize * 1.2))
                 }
                 .frame(width: style.circleSize)
                 
