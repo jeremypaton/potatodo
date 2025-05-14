@@ -37,12 +37,36 @@ struct CompactTaskRowStyle: BaseTaskRowStyle {
 
 // MARK: - Task Style
 struct TaskStyle {
+    static func blendColor(_ color1: Color, with color2: Color, by amount: Double) -> Color {
+        let uiColor1 = UIColor(color1)
+        let uiColor2 = UIColor(color2)
+        
+        var red1: CGFloat = 0
+        var green1: CGFloat = 0
+        var blue1: CGFloat = 0
+        var alpha1: CGFloat = 0
+        uiColor1.getRed(&red1, green: &green1, blue: &blue1, alpha: &alpha1)
+        
+        var red2: CGFloat = 0
+        var green2: CGFloat = 0
+        var blue2: CGFloat = 0
+        var alpha2: CGFloat = 0
+        uiColor2.getRed(&red2, green: &green2, blue: &blue2, alpha: &alpha2)
+        
+        let blendedRed = red1 + (red2 - red1) * amount
+        let blendedGreen = green1 + (green2 - green1) * amount
+        let blendedBlue = blue1 + (blue2 - blue1) * amount
+        let blendedAlpha = alpha1 + (alpha2 - alpha1) * amount
+        
+        return Color(UIColor(red: blendedRed, green: blendedGreen, blue: blendedBlue, alpha: blendedAlpha))
+    }
+    
     static func partialColor(for task: Task) -> Color {
-        return TaskStyle.fullColor(for: task).mix(with: Color.white, by: 0.4)
+        return blendColor(TaskStyle.fullColor(for: task), with: .white, by: 0.4)
     }
     
     static func hintColor(for task: Task) -> Color {
-        return TaskStyle.fullColor(for: task).mix(with: Color.white, by: 0.7)
+        return blendColor(TaskStyle.fullColor(for: task), with: .white, by: 0.7)
     }
     
     static func fullColor(for task: Task) -> Color {
@@ -70,7 +94,6 @@ struct TaskStyle {
             return Color.white
         }
     }
-    
 }
 
 
@@ -121,9 +144,12 @@ struct Task_V: View {
                             .frame(width: style.circleSize, height: style.circleSize)
                             .shadow(color: Color.black.opacity(0.2), radius: style.shadowRadius, x: 0, y: 1)
                         if task.isCompleted {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(.white)
-                                .font(.system(size: style.fontSize * 0.7, weight: .semibold))
+//                            Image(systemName: "checkmark")
+//                                .foregroundColor(.white)
+//                                .font(.system(size: style.fontSize * 0.7, weight: .semibold))
+                            Text("🥔")
+                                .font(.system(size: style.fontSize*1.1, weight: .medium))
+                                .shadow(color: Color.black.opacity(0.3), radius: style.shadowRadius*2, x: 0, y: 1)
                         }
                     }
                 }

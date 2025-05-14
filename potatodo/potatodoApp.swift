@@ -7,6 +7,16 @@
 
 import SwiftUI
 
+enum AppMode: String, Codable {
+    case debug
+    case test
+    case prod
+}
+
+class Settings: ObservableObject {
+    @Published var mode : AppMode = .test
+}
+
 @main
 struct potatodoApp: App {
     var body: some Scene {

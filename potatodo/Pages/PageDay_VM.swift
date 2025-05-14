@@ -1,10 +1,3 @@
-//
-//  TaskListDay_V.swift
-//  potatodo
-//
-//  Created by Jeremy Paton on 13/5/2025.
-//
-
 import SwiftUI
 
 struct PageDay_VM: View {
@@ -64,22 +57,12 @@ struct PageDay_VM: View {
     let taskManager = TaskManager()
     let navManager = NavManager()
     let potatoManager = PotatoManager()
-    // Add some test tasks
-//    taskManager.loadCSVTestTasks()
     
     return VStack {
-        // Top navigation bar
-//        TopNav_V(navManager: navManager)
-        
-//        Potato_V(potatoManager: potatoManager)
-        
         PageDay_VM(taskManager: taskManager,
                    navManager: navManager,
                    potatoManager: potatoManager)
-        
         Spacer()
-
-//        BottomNav_V(navManager: navManager)
     }
     .background(Color(.systemGroupedBackground))
 }

@@ -9,16 +9,6 @@ import Foundation
 import SwiftUI
 import Combine
 
-enum AppMode: String, Codable {
-    case debug
-    case test
-    case prod
-}
-
-class Settings: ObservableObject {
-    @Published var mode : AppMode = .prod
-}
-
 @MainActor
 class TaskManager: ObservableObject {
     let settings: Settings = Settings()

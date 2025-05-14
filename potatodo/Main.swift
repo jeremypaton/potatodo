@@ -6,15 +6,18 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 struct Main: View {
     @StateObject private var taskManager = TaskManager()
     @StateObject private var navManager = NavManager()
     @StateObject private var potatoManager = PotatoManager()
+    @StateObject private var notificationsManager = NotificationsManager()
     @State private var showSplash = true
     
     
     var body: some View {
+
         ZStack {
             if showSplash {
                 Splash(showingSplash: $showSplash)
@@ -22,6 +25,7 @@ struct Main: View {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
                             withAnimation {
                                 showSplash = false
+                                notificationsManager.requestPermissions()
                             }
                         }
                     }
