@@ -56,8 +56,8 @@ struct PageDay_VM: View {
 #Preview {
     let taskManager = TaskManager()
     let navManager = NavManager()
-    let potatoManager = PotatoManager()
     let overlayManager = OverlayManager(taskManager: taskManager)
+    let potatoManager = PotatoManager(overlayManager: overlayManager)
     
     return ZStack {
         VStack {
@@ -71,5 +71,6 @@ struct PageDay_VM: View {
         Overlay_V()
     }
     .environmentObject(overlayManager)
+    .environmentObject(Settings())
 }
 

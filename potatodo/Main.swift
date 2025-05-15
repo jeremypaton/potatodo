@@ -11,15 +11,17 @@ import UserNotifications
 struct Main: View {
     @StateObject private var taskManager = TaskManager()
     @StateObject private var navManager = NavManager()
-    @StateObject private var potatoManager = PotatoManager()
     @StateObject private var notificationsManager = NotificationsManager()
     @StateObject private var overlayManager: OverlayManager
+    @StateObject private var potatoManager: PotatoManager
     @State private var showSplash = true
     
     init() {
         let taskManager = TaskManager()
         _taskManager = StateObject(wrappedValue: taskManager)
-        _overlayManager = StateObject(wrappedValue: OverlayManager(taskManager: taskManager))
+        let overlayManager = OverlayManager(taskManager: taskManager)
+        _overlayManager = StateObject(wrappedValue: overlayManager)
+        _potatoManager = StateObject(wrappedValue: PotatoManager(overlayManager: overlayManager))
     }
     
     var body: some View {

@@ -33,9 +33,11 @@ struct Potato_V: View {
 }
 
 #Preview {
-    let potatoManager = PotatoManager()
+    let taskManager = TaskManager()
+    let overlayManager = OverlayManager(taskManager: taskManager)
+    let potatoManager = PotatoManager(overlayManager: overlayManager)
 
-    return VStack(spacing: 20) {
+    VStack(spacing: 20) {
         Potato_V(potatoManager: potatoManager)
         
         HStack{
@@ -47,7 +49,9 @@ struct Potato_V: View {
                 }
             }
         }
+        Overlay_V()
     }
     .padding()
     .background(Color(.green))
+    .environmentObject(overlayManager)
 }

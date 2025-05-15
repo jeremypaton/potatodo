@@ -9,10 +9,13 @@ import SwiftUI
 class PotatoManager: ObservableObject {
     @Published var level: Int = 0
     @Published var isCelebrating: Bool = false
-    @Published var messageManager: MessageManager = MessageManager()
+    @Published var messageManager: MessageManager
+    var overlayManager: OverlayManager
     
-    init() {
-        messageManager.loadMessages()
+    init(overlayManager: OverlayManager) {
+        self.overlayManager = overlayManager
+        self.messageManager = MessageManager()
+        self.messageManager.loadMessages()
     }
     
     func setLevel(_ newLevel: Int) {
@@ -24,6 +27,9 @@ class PotatoManager: ObservableObject {
         
         if newLevel == 3 {
             isCelebrating = true
+            DispatchQueue.main.async {
+                self.overlayManager.showPotatoRain(isSinglePotato: false)
+            }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
                 self?.isCelebrating = false
                 self?.setLevel(newLevel)
@@ -42,21 +48,27 @@ class PotatoManager: ObservableObject {
 }
 
 #Preview {
-    let potatoManager = PotatoManager()
-
-    return VStack(spacing: 20) {
-        Potato_V(potatoManager: potatoManager)
-        
-        HStack{
-            ForEach(0..<4) { level in
-                Button(action: {
-                    potatoManager.celebrateLevel(level)
-                }) {
-                    Text("Level \(level)")
+    let taskManager = TaskManager()
+    let overlayManager = OverlayManager(taskManager: taskManager)
+    let potatoManager = PotatoManager(overlayManager: overlayManager)
+    ZStack{
+        VStack(spacing: 20) {
+            Potato_V(potatoManager: potatoManager)
+            
+            HStack{
+                ForEach(0..<4) { level in
+                    Button(action: {
+                        potatoManager.celebrateLevel(level)
+                    }) {
+                        Text("Level \(level)")
+                    }
                 }
             }
         }
+        Overlay_V()
     }
 //    .padding()
     .background(Color(.green))
+    .environmentObject(overlayManager)
+
 }

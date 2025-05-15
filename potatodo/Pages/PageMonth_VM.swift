@@ -1,5 +1,43 @@
 import SwiftUI
 
+struct PotatoCounterMonth_V: View {
+    let completedTasks: Int
+    
+    var body: some View {
+        VStack {
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1)
+            ], spacing: 1) {
+                ForEach(0..<completedTasks, id: \.self) { _ in
+                    Text("🥔")
+                        .font(.system(size: 28))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
+            .padding(2)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.white)
+        .overlay(
+            Rectangle()
+                .frame(height: 1)
+                .foregroundColor(.gray.opacity(0.3)),
+            alignment: .top
+        )
+    }
+}
+
 struct PageMonth_VM: View {
     @ObservedObject var taskManager: TaskManager
     @ObservedObject var navManager: NavManager
@@ -197,20 +235,8 @@ struct PageMonth_VM: View {
                     .frame(height: geometry.size.height * 0.5)
                     
                     // Month completion counter
-                    VStack {
-//                        PotatoCounter_V(
-//                            completedCount: completedTasksThisMonth,
-//                            totalCount: 93
-//                        )
-                    }
-                    .frame(height: geometry.size.height * 0.5)
-                    .background(Color.white)
-                    .overlay(
-                        Rectangle()
-                            .frame(height: 1)
-                            .foregroundColor(.gray.opacity(0.3)),
-                        alignment: .top
-                    )
+                    PotatoCounterMonth_V(completedTasks: completedTasksThisMonth)
+                        .frame(height: geometry.size.height * 0.5)
                 }
             }
         }

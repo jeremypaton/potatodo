@@ -7,6 +7,38 @@
 
 import SwiftUI
 
+struct PotatoCounterWeek_V: View {
+    let completedTasks: Int
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1)
+            ], spacing: 1) {
+                ForEach(0..<completedTasks, id: \.self) { _ in
+                    Text("🥔")
+                        .font(.system(size: 24))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
+            .padding(2)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+        )
+    }
+}
+
 struct PageWeek_VM: View {
     @ObservedObject var taskManager: TaskManager
     @ObservedObject var navManager: NavManager
@@ -101,16 +133,8 @@ struct PageWeek_VM: View {
                         }
                         
                         // Potato Counter as 8th box
-                        VStack(alignment: .leading) {
-                            Spacer()
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color.white)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                        )
-                        .frame(height: (geometry.size.height - 32) / 4)
+                        PotatoCounterWeek_V(completedTasks: completedTasksThisWeek)
+                            .frame(height: (geometry.size.height - 32) / 4)
                     }
                 }
                 .padding(8)
