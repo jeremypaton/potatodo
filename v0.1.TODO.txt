@@ -2,27 +2,39 @@ v0.1 - function/UI MVP
     v0.1.x - iterate features
     
 FUNCTIONALITY
-    [ ] task colors
-    [ ] task edit
-    [ ] task notes
-    [ ] task delete
+    v0.1.1
+        [X] task colors
+            [X] add grey
+            [X] task edit
+            [X] task delete
 
-    [ ] rain animations sync
-    [ ] potato counters
+    v0.1.2
+        [ ] rain animations sync
+        [ ] potato counters
+    
+    v0.1.3
+        [ ] propper test/debug/prod system
+        [ ] debug load screen before launching app
+        [ ] robust save/load/archive system
+        [ ] toggle modes on iphone
 
-    [ ] notification system
-
-    [ ] task drag drop
-    [ ] task swipe delete
+    v0.1.4
+        [ ] notification system
+            [ ] daily reminder
+            [ ] post-accomplishment congrats reminder (like strave)
+            [ ] weekly recap / email
+        
+    v0.1.5
+        [ ] basic task edit UI
+        [ ] task drag drop
+        [ ] task swipe delete
+        [ ] task notes
 
 UI
+    v0.1.6
     [ ] fix dynamic layouts
     [ ] UI design pass / alts
     
 WORKFLOW
-    [ ] propper test/debug/prod system
-        [ ] debug load screen before launching app
-        [ ] robust save/load/archive system
-        [ ] toggle modes on iphone
-    
+    v0.1.7
     [ ] code cleanup
