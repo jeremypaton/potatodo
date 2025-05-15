@@ -76,6 +76,7 @@ struct TaskStyle {
         case .yellow: return Color.yellow
         case .purple: return Color.purple
         case .red: return Color.red
+        case .gray: return Color.gray
         }
     }
     
@@ -99,6 +100,7 @@ struct TaskStyle {
 
 struct Task_V: View {
     @ObservedObject var taskManager: TaskManager
+    @EnvironmentObject var taskEditOverlay: TaskEditOverlay
     let taskId: UUID
     let isCompact: Bool
     
@@ -116,55 +118,59 @@ struct Task_V: View {
         }
         
         return AnyView(
-            HStack {
-                // Color cycle button
-                Button {
-                    taskManager.cycleTaskColorFromID(taskId)
-                } label: {
-                    Image(systemName: "star.fill")
-                        .foregroundColor(TaskStyle.fullColor(for: task))
-                        .font(.system(size: style.fontSize * 1.2))
-                }
-                .frame(width: style.circleSize)
-                
-                // Task text
-                Text(task.title.uppercased())
-                    .font(.system(size: style.fontSize, weight: .medium))
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .frame(maxWidth: .infinity)
-                
-                // Completion circle
-                Button {
-                    taskManager.toggleTaskCompletion(task)
-                } label: {
-                    ZStack {
-                        Circle()
-                            .fill(TaskStyle.toggleColor(for: task))
-                            .frame(width: style.circleSize, height: style.circleSize)
-                            .shadow(color: Color.black.opacity(0.2), radius: style.shadowRadius, x: 0, y: 1)
-                        if task.isCompleted {
-//                            Image(systemName: "checkmark")
-//                                .foregroundColor(.white)
-//                                .font(.system(size: style.fontSize * 0.7, weight: .semibold))
-                            Text("🥔")
-                                .font(.system(size: style.fontSize*1.1, weight: .medium))
-                                .shadow(color: Color.black.opacity(0.3), radius: style.shadowRadius*2, x: 0, y: 1)
+            GeometryReader { geometry in
+                HStack {
+                    // Color cycle button
+                    Button {
+                        taskManager.cycleTaskColorFromID(taskId)
+                    } label: {
+                        Image(systemName: "star.fill")
+                            .foregroundColor(TaskStyle.fullColor(for: task))
+                            .font(.system(size: style.fontSize * 1.2))
+                    }
+                    .frame(width: style.circleSize)
+                    
+                    // Task text
+                    Button {
+                        taskEditOverlay.show(for: taskId, title: task.title)
+                    } label: {
+                        Text(task.title.uppercased())
+                            .font(.system(size: style.fontSize, weight: .medium))
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(.black)
+                    }
+                    
+                    // Completion circle
+                    Button {
+                        taskManager.toggleTaskCompletion(task)
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .fill(TaskStyle.toggleColor(for: task))
+                                .frame(width: style.circleSize, height: style.circleSize)
+                                .shadow(color: Color.black.opacity(0.2), radius: style.shadowRadius, x: 0, y: 1)
+                            if task.isCompleted {
+                                Text("🥔")
+                                    .font(.system(size: style.fontSize*1.1, weight: .medium))
+                                    .shadow(color: Color.black.opacity(0.3), radius: style.shadowRadius*2, x: 0, y: 1)
+                            }
                         }
                     }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(width: style.circleSize)
                 }
-                .buttonStyle(PlainButtonStyle())
-                .frame(width: style.circleSize)
+                .padding(style.padding)
+                .frame(height: style.height)
+                .background(TaskStyle.bgColor(for: task))
+                .cornerRadius(style.cornerRadius)
+                .overlay(
+                    RoundedRectangle(cornerRadius: style.cornerRadius)
+                        .stroke(TaskStyle.fullColor(for: task), lineWidth: style.strokeWidth)
+                )
+                .shadow(color: Color.black.opacity(0.1), radius: style.shadowRadius, x: 0, y: 2)
             }
-            .padding(style.padding)
-            .frame(height: style.height)
-            .background(TaskStyle.bgColor(for: task))
-            .cornerRadius(style.cornerRadius)
-            .overlay(
-                RoundedRectangle(cornerRadius: style.cornerRadius)
-                    .stroke(TaskStyle.fullColor(for: task), lineWidth: style.strokeWidth)
-            )
-            .shadow(color: Color.black.opacity(0.1), radius: style.shadowRadius, x: 0, y: 2)
         )
     }
 }

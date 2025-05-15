@@ -72,7 +72,8 @@ class TaskManager: ObservableObject {
                 case .blue: tc = .yellow
                 case .yellow: tc = .purple
                 case .purple: tc = .red
-                case .red: tc = .green
+                case .red: tc = .gray
+                case .gray: tc = .green
             }
             
             tasks[index].color = tc

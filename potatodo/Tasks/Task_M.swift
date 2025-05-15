@@ -7,6 +7,7 @@ enum TaskColor: String, Codable {
     case yellow
     case purple
     case red
+    case gray
 }
 
 struct Task: Identifiable, Equatable, Codable {
