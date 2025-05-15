@@ -220,16 +220,18 @@ struct PageMonth_VM: View {
 #Preview {
     let taskManager = TaskManager()
     let navManager = NavManager()
+    let overlayManager = OverlayManager(taskManager: taskManager)
     navManager.setInterval(.month)
     
-    // Add some test tasks
-    
-    return VStack {
-//        TopNav_V(navManager: navManager)
-        PageMonth_VM(taskManager: taskManager, navManager: navManager)
-        Spacer()
-//        BottomNav_V(navManager: navManager)
+    return ZStack {
+        VStack {
+            PageMonth_VM(taskManager: taskManager, navManager: navManager)
+            Spacer()
+        }
+        .background(Color(.systemGroupedBackground))
+        
+        Overlay_V()
     }
-    .background(Color(.systemGroupedBackground))
+    .environmentObject(overlayManager)
 }
 

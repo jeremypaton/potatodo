@@ -57,13 +57,19 @@ struct PageDay_VM: View {
     let taskManager = TaskManager()
     let navManager = NavManager()
     let potatoManager = PotatoManager()
+    let overlayManager = OverlayManager(taskManager: taskManager)
     
-    return VStack {
-        PageDay_VM(taskManager: taskManager,
-                   navManager: navManager,
-                   potatoManager: potatoManager)
-        Spacer()
+    return ZStack {
+        VStack {
+            PageDay_VM(taskManager: taskManager,
+                       navManager: navManager,
+                       potatoManager: potatoManager)
+            Spacer()
+        }
+        .background(Color(.systemGroupedBackground))
+        
+        Overlay_V()
     }
-    .background(Color(.systemGroupedBackground))
+    .environmentObject(overlayManager)
 }
 

@@ -28,16 +28,20 @@ class TaskManager: ObservableObject {
     
     // MARK: - Task Management
     
-    func addNewTask(title: String, color: TaskColor = .green, date: Date = Date()) -> Bool {
-        let task = Task(title: title, color: color, date: date)
-        guard task.isValid else {
-            errorMessage = "Task text cannot be empty"
-            return false
-        }
+    func addNewTask(title: String, color: TaskColor = .green, date: Date = Date()) -> Task {
+        var task = Task(title: title, color: color, date: date)
+//        guard task.isValid else {
+//            errorMessage = "Task text cannot be empty"
+//            return nil
+//        }
         
+        if task.isValid == false {
+            task.title = "?"
+        }
+//
         tasks.append(task)
-        errorMessage = nil
-        return true
+//        errorMessage = nil
+        return task
     }
     
     func updateTask(_ task: Task) {
@@ -187,24 +191,31 @@ class TaskManager: ObservableObject {
     settings.mode = .debug
     
     let taskManager = TaskManager()
+    let overlayManager = OverlayManager(taskManager: taskManager)
     
-    return VStack {
-        ForEach(taskManager.tasks) { task in
-            Task_V(taskManager: taskManager, taskId: task.id, isCompact: false)
-        }
-        
-        AddTaskButton_V(taskManager: taskManager, isCompact: false, date: Date())
-        
-        HStack {
-            VStack {
-                ForEach(taskManager.tasks) { task in
-                    Task_V(taskManager: taskManager, taskId: task.id, isCompact: true)
-                }
+    return ZStack {
+        VStack {
+            ForEach(taskManager.tasks) { task in
+                Task_V(taskManager: taskManager, taskId: task.id, isCompact: false)
             }
-            .frame(width: UIScreen.main.bounds.width / 2)
             
-            Spacer()
+            AddTaskButton_V(taskManager: taskManager, isCompact: false, date: Date())
+            
+            HStack {
+                VStack {
+                    ForEach(taskManager.tasks) { task in
+                        Task_V(taskManager: taskManager, taskId: task.id, isCompact: true)
+                    }
+                }
+                .frame(width: UIScreen.main.bounds.width / 2)
+                
+                Spacer()
+            }
         }
+        Overlay_V()
+
     }
     .environmentObject(settings)
+    .environmentObject(overlayManager)
+
 }

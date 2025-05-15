@@ -11,10 +11,6 @@ v0.1 - function/UI MVP
 [21 MAY]
 v0.2 - animation/onboard update
     v0.2.x - iterate animation
-    
-[28 MAY]
-v0.3 - freemium scaffold
-    v0.3.x - iterate freemium
 
 === BETA ===
 
@@ -29,13 +25,22 @@ v0.5 - open beta
     v0.5.x - iterate
     
 [JUNE 14]
-v0.9 - feature lock
-    v0.9.x - test / fix bugs
+v0.6 - feature lock
+    v0.6.x - test / fix bugs
         
 === PUBLIC ===
 
-v1.0 [JULY 1]
+[JULY 1]
+v0.9 - early access
+    - product hunt launch etc.
+    
+[AUGUST 1]
+v1.0 - full launch
 
-=== PAID ===
+=== MONETIZE ===
 
-v2.0 [AUGUST 1]
+GOAL: 1000 Daily Active Users
+    -> then monetize
+
+[SEPTEMBER 1]
+HBS / YC APPS

@@ -122,15 +122,17 @@ struct PageWeek_VM: View {
 #Preview {
     let taskManager = TaskManager()
     let navManager = NavManager()
+    let overlayManager = OverlayManager(taskManager: taskManager)
     navManager.setInterval(.week)
     
-    // Add some test tasks
-    
-    return VStack {
-//        TopNav_V(navManager: navManager)
-        PageWeek_VM(taskManager: taskManager, navManager: navManager)
-//        BottomNav_V(navManager: navManager)
+    return ZStack {
+        VStack {
+            PageWeek_VM(taskManager: taskManager, navManager: navManager)
+        }
+        .background(Color(.systemGroupedBackground))
+        
+        Overlay_V()
     }
-    .background(Color(.systemGroupedBackground))
+    .environmentObject(overlayManager)
 }
 

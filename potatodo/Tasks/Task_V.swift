@@ -100,7 +100,7 @@ struct TaskStyle {
 
 struct Task_V: View {
     @ObservedObject var taskManager: TaskManager
-    @EnvironmentObject var taskEditOverlay: TaskEditOverlay
+    @EnvironmentObject var overlayManager: OverlayManager
     let taskId: UUID
     let isCompact: Bool
     
@@ -132,7 +132,7 @@ struct Task_V: View {
                     
                     // Task text
                     Button {
-                        taskEditOverlay.show(for: taskId, title: task.title)
+                        overlayManager.showTaskEdit(for: taskId, title: task.title)
                     } label: {
                         Text(task.title.uppercased())
                             .font(.system(size: style.fontSize, weight: .medium))
@@ -145,6 +145,9 @@ struct Task_V: View {
                     // Completion circle
                     Button {
                         taskManager.toggleTaskCompletion(task)
+                        if task.isCompleted {
+                            overlayManager.showPotatoRain(isSinglePotato: true)
+                        }
                     } label: {
                         ZStack {
                             Circle()
@@ -179,61 +182,54 @@ struct Task_V: View {
 // MARK: - Add Task Button View
 struct AddTaskButton_V: View {
     @ObservedObject var taskManager: TaskManager
+    @EnvironmentObject var overlayManager: OverlayManager
     let isCompact: Bool
     let date: Date
-    @State private var showingAddTask = false
-    @State private var newTaskText = ""
     
     var body: some View {
-        Button(action: { showingAddTask = true }) {
-            HStack {
-                Text("➕")
-                    .font(.system(size: isCompact ? 20 : 24, weight: .semibold))
-            }
-            .foregroundColor(.blue)
-            .frame(maxWidth: .infinity)
-            .frame(height: isCompact ? CompactTaskRowStyle().height : DefaultTaskRowStyle().height)
-            .background(Color.gray.opacity(0.2))
-            .cornerRadius(isCompact ? 8 : 12)
-            .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+        Button {
+            let newTask = taskManager.addNewTask(title: "", date: date)
+            overlayManager.showTaskEdit(for: newTask.id, title: newTask.title)
+        } label: {
+            Text("➕")
+                .font(.system(size: isCompact ? 20 : 24, weight: .semibold))
         }
-        .alert("Add New Task", isPresented: $showingAddTask) {
-            TextField("Task description", text: $newTaskText)
-            Button("Cancel", role: .cancel){
-                newTaskText = ""
-            }
-            Button("Add") {
-                if taskManager.addNewTask(title: newTaskText, date: date) {
-                    newTaskText = ""
-                }
-            }
-        }
+        .foregroundColor(.blue)
+        .frame(maxWidth: .infinity)
+        .frame(height: isCompact ? CompactTaskRowStyle().height : DefaultTaskRowStyle().height)
+        .background(Color.gray.opacity(0.2))
+        .cornerRadius(isCompact ? 8 : 12)
+        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
     }
 }
 
 #Preview {
     let taskManager = TaskManager()
+    let overlayManager = OverlayManager(taskManager: taskManager)
 
-    return VStack {
-        ForEach(taskManager.tasks) { task in
-            Task_V(taskManager: taskManager, taskId: task.id, isCompact: false)
-        }
-        
-        AddTaskButton_V(taskManager: taskManager, isCompact: false, date: Date())
-        
-        HStack {
-            VStack {
-                ForEach(taskManager.tasks) { task in
-                    Task_V(taskManager: taskManager, taskId: task.id, isCompact: true)
-                }
-                
-                AddTaskButton_V(taskManager: taskManager, isCompact: true, date: Date())
-
+    return ZStack {
+        VStack() {
+            ForEach(taskManager.tasks) { task in
+                Task_V(taskManager: taskManager, taskId: task.id, isCompact: false)
             }
-            .frame(width: UIScreen.main.bounds.width / 2)
             
+            AddTaskButton_V(taskManager: taskManager, isCompact: false, date: Date())
             
-            Spacer()
+            HStack {
+                VStack() {
+                    ForEach(taskManager.tasks) { task in
+                        Task_V(taskManager: taskManager, taskId: task.id, isCompact: true)
+                    }
+                    
+                    AddTaskButton_V(taskManager: taskManager, isCompact: true, date: Date())
+                }
+                .frame(width: UIScreen.main.bounds.width / 2)
+                
+                Spacer()
+            }
         }
+        
+        Overlay_V()
     }
+    .environmentObject(overlayManager)
 }

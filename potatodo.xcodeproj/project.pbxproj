@@ -36,9 +36,22 @@
 		D1C503152DD490E40022FC52 /* v0.1.TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = v0.1.TODO.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D1C503922DD586120022FC52 /* Exceptions for "potatodo" folder in "potatodo" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D1900CBF2DD1A82200C53EEF /* potatodo */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D1900CC22DD1A82200C53EEF /* potatodo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D1C503922DD586120022FC52 /* Exceptions for "potatodo" folder in "potatodo" target */,
+			);
 			path = potatodo;
 			sourceTree = "<group>";
 		};
@@ -410,6 +423,7 @@
 				DEVELOPMENT_TEAM = JS3JFCX9RV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = potatodo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -441,6 +455,7 @@
 				DEVELOPMENT_TEAM = JS3JFCX9RV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = potatodo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
