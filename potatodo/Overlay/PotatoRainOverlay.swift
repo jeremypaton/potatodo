@@ -14,15 +14,20 @@ class PotatoRainOverlay: ObservableObject {
     // MARK: - Properties
     
     @Published private(set) var activePotatoes: [Star] = []
+    @Published var isVisible = false
     private var timer: Timer?
+    private var spawnTimer: Timer?
+    private var isSpawning = true
     
     // MARK: - Constants
     
     private enum Constants {
-        static let starSize: CGFloat = 60
-        static let fallSpeed: CGFloat = 2
-        static let rotationSpeed: Double = 1
-        static let animationInterval: TimeInterval = 0.05
+        static let starSize: CGFloat = 40
+        static let fallSpeed: CGFloat = 6
+        static let rotationSpeed: Double = 2
+        static let spawnInterval: TimeInterval = 0.2
+        static let animationInterval: TimeInterval = 0.016
+        static let spawnDuration: TimeInterval = 3
         static let starLifetime: TimeInterval = 10
         static let screenBuffer: CGFloat = 100
     }
@@ -31,7 +36,6 @@ class PotatoRainOverlay: ObservableObject {
     
     init() {
         print("🎯 PotatoRainOverlay initialized")
-        startAnimation()
     }
     
     deinit {
@@ -43,62 +47,96 @@ class PotatoRainOverlay: ObservableObject {
     
     func spawnPotato(isSinglePotato: Bool = false) {
         print("🎯 Spawning potato, isSinglePotato: \(isSinglePotato)")
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
+        isVisible = true
+        isSpawning = true
+        startAnimation()
         
-        // Always spawn in the middle of the screen
-        let newPotato = Star(
-            x: screenWidth / 2,
-            y: screenHeight / 2,
-            rotation: Double.random(in: 0...360),
-            creationTime: Date()
-        )
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.activePotatoes.append(newPotato)
-            print("🎯 Added potato, total count: \(self.activePotatoes.count)")
-            self.objectWillChange.send()
+        if isSinglePotato {
+            spawnSinglePotato()
+        } else {
+            spawnMultiplePotatoes()
         }
     }
     
     // MARK: - View
     
     var view: some View {
-        ZStack {
-            // Debug background
-            Color.red.opacity(0.3)
-                .edgesIgnoringSafeArea(.all)
-            
-            // Test text to verify view is visible
-            Text("TEST VIEW")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            
-            // Potatoes
-            ForEach(self.activePotatoes) { star in
-                Text("🥔")
-                    .font(.system(size: Constants.starSize))
-                    .rotationEffect(.degrees(star.rotation))
-                    .position(x: star.x, y: star.y)
-                    .shadow(color: .black, radius: 5, x: 0, y: 0)
+        Group {
+            if isVisible {
+                ZStack {
+                    // Debug background
+                    Color.clear
+                        .edgesIgnoringSafeArea(.all)
+                    
+                    // Potatoes
+                    ForEach(self.activePotatoes) { star in
+                        Text("🥔")
+                            .font(.system(size: Constants.starSize))
+                            .rotationEffect(.degrees(star.rotation))
+                            .position(x: star.x, y: star.y)
+                            .shadow(color: .black, radius: 5, x: 0, y: 0)
+                    }
+                }
             }
         }
     }
     
     // MARK: - Private Methods
     
+    private func spawnSinglePotato() {
+        let screenWidth = UIScreen.main.bounds.width
+        let middleThirdStart = screenWidth / 3
+        let middleThirdEnd = screenWidth * 2 / 3
+        
+        let isLeftSide = Bool.random()
+        let x = isLeftSide ?
+            CGFloat.random(in: 0...middleThirdStart) :
+            CGFloat.random(in: middleThirdEnd...screenWidth)
+        
+        let newStar = Star(
+            x: x,
+            y: CGFloat(-20),
+            rotation: Double.random(in: 0...360),
+            creationTime: Date()
+        )
+        activePotatoes.append(newStar)
+        isSpawning = false
+    }
+    
+    private func spawnMultiplePotatoes() {
+        spawnTimer = Timer.scheduledTimer(withTimeInterval: Constants.spawnInterval, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            if self.isSpawning {
+                let screenWidth = UIScreen.main.bounds.width
+                let newStar = Star(
+                    x: CGFloat.random(in: 0...screenWidth),
+                    y: CGFloat(-20),
+                    rotation: Double.random(in: 0...360),
+                    creationTime: Date()
+                )
+                self.activePotatoes.append(newStar)
+            }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.spawnDuration) { [weak self] in
+            self?.isSpawning = false
+            self?.spawnTimer?.invalidate()
+        }
+    }
+    
     private func startAnimation() {
         print("🎯 Starting animation")
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.timer = Timer.scheduledTimer(withTimeInterval: Constants.animationInterval, repeats: true) { [weak self] _ in
+        if timer == nil {
+            DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                self.updateStars()
-                self.objectWillChange.send()
+                self.timer = Timer.scheduledTimer(withTimeInterval: Constants.animationInterval, repeats: true) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.updateStars()
+                    self.objectWillChange.send()
+                }
+                RunLoop.current.add(self.timer!, forMode: .common)
+                print("🎯 Timer started")
             }
-            RunLoop.current.add(self.timer!, forMode: .common)
-            print("🎯 Timer started")
         }
     }
     
@@ -123,12 +161,20 @@ class PotatoRainOverlay: ObservableObject {
         if oldCount != activePotatoes.count {
             print("🎯 Updated potatoes, count: \(activePotatoes.count)")
         }
+        
+        // Hide overlay if no more potatoes and not spawning
+        if activePotatoes.isEmpty && !isSpawning {
+            isVisible = false
+            cleanup()
+        }
     }
     
     private func cleanup() {
         print("🎯 Cleaning up animation")
         timer?.invalidate()
         timer = nil
+        spawnTimer?.invalidate()
+        spawnTimer = nil
     }
 }
 
@@ -159,7 +205,6 @@ struct PotatoRainTestView: View {
                     .foregroundColor(.white)
                     .cornerRadius(8)
                 }
-                .padding(.bottom, 100)
             }
         }
     }
