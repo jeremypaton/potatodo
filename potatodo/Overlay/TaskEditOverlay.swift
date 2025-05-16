@@ -8,7 +8,6 @@
 import SwiftUI
 
 class TaskEditOverlay: ObservableObject {
-//class OverlayTaskManager: ObservableObject {
     @Published var isShowing = false
     @Published var taskId: UUID?
     @Published var editedTitle = ""
@@ -41,6 +40,14 @@ struct TaskEditOverlay_V: View {
         case .red: return .red
         case .gray: return .gray
         }
+    }
+    
+    private var tasksForCurrentDay: [Task] {
+        overlayManager.taskManager.tasks
+            .filter { task in
+                Calendar.current.isDate(task.date, inSameDayAs: overlayManager.navManager.currentDate)
+            }
+            .sorted { $0.position < $1.position }
     }
     
     var body: some View {
@@ -143,17 +150,3 @@ struct TaskEditOverlay_V: View {
         }
     }
 }
-//
-//#Preview {
-//    let taskManager = TaskManager()
-//    let overlayManager = OverlayManager(taskManager: taskManager)
-//    
-//    // Create and add a sample task
-//    let sampleTask = taskManager.addNewTask(title: "Sample Task")
-//    
-//    // Show the overlay for the sample task
-//    overlayManager.taskEditOverlay.show(for: sampleTask.id, title: sampleTask.title)
-//    
-//    return TaskEditOverlay_V()
-//        .environmentObject(overlayManager)
-//}

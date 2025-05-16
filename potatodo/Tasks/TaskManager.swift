@@ -84,6 +84,23 @@ class TaskManager: ObservableObject {
         }
     }
     
+    func swapTaskIDs(_ id1: UUID, _ id2: UUID) {
+        guard let index1 = tasks.firstIndex(where: { $0.id == id1 }),
+              let index2 = tasks.firstIndex(where: { $0.id == id2 }) else {
+            return
+        }
+        
+        // Swap the tasks
+        let temp = tasks[index1]
+        tasks[index1] = tasks[index2]
+        tasks[index2] = temp
+    }
+    
+    func updateTaskDate(_ taskId: UUID, newDate: Date) {
+        guard let index = tasks.firstIndex(where: { $0.id == taskId }) else { return }
+        tasks[index].date = newDate
+    }
+    
     // MARK: - Persistence
     
     private func setupAutoSave() {
@@ -191,7 +208,8 @@ class TaskManager: ObservableObject {
     settings.mode = .debug
     
     let taskManager = TaskManager()
-    let overlayManager = OverlayManager(taskManager: taskManager)
+    let navManager = NavManager()
+    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
     
     return ZStack {
         VStack {

@@ -12,10 +12,12 @@ final class OverlayManager: ObservableObject {
     let taskEditOverlay = TaskEditOverlay()
     let potatoRainOverlay = PotatoRainOverlay()
     @ObservedObject var taskManager: TaskManager
+    @ObservedObject var navManager: NavManager
     private var cancellables = Set<AnyCancellable>()
     
-    init(taskManager: TaskManager) {
+    init(taskManager: TaskManager, navManager: NavManager) {
         self.taskManager = taskManager
+        self.navManager = navManager
         
         // Observe potato rain overlay changes
         potatoRainOverlay.objectWillChange
@@ -84,8 +86,8 @@ struct Overlay_V: View {
 
 #Preview {
     let taskManager = TaskManager()
-    let overlayManager = OverlayManager(taskManager: taskManager)
-    
+    let navManager = NavManager()
+    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
     return ZStack {
         // Background content
         VStack {

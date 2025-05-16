@@ -49,7 +49,8 @@ class PotatoManager: ObservableObject {
 
 #Preview {
     let taskManager = TaskManager()
-    let overlayManager = OverlayManager(taskManager: taskManager)
+    let navManager = NavManager()
+    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
     let potatoManager = PotatoManager(overlayManager: overlayManager)
     ZStack{
         VStack(spacing: 20) {

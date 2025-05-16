@@ -103,6 +103,7 @@ struct Task_V: View {
     @EnvironmentObject var overlayManager: OverlayManager
     let taskId: UUID
     let isCompact: Bool
+    @State private var isTargeted = false
     
     private var task: Task {
         taskManager.tasks.first(where: { $0.id == taskId }) ?? Task(title: "ERROR", color: .red)
@@ -128,6 +129,8 @@ struct Task_V: View {
                             .foregroundColor(TaskStyle.fullColor(for: task))
                             .font(.system(size: style.fontSize * 1.2))
                     }
+                    .buttonStyle(PlainButtonStyle())
+                    .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
                     .frame(width: style.circleSize)
                     
                     // Task text
@@ -141,6 +144,8 @@ struct Task_V: View {
                             .frame(maxWidth: .infinity)
                             .foregroundColor(.black)
                     }
+                    .buttonStyle(PlainButtonStyle())
+                    .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
                     
                     // Completion circle
                     Button {
@@ -162,6 +167,7 @@ struct Task_V: View {
                         }
                     }
                     .buttonStyle(PlainButtonStyle())
+                    .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
                     .frame(width: style.circleSize)
                 }
                 .padding(style.padding)
@@ -173,11 +179,50 @@ struct Task_V: View {
                         .stroke(TaskStyle.fullColor(for: task), lineWidth: style.strokeWidth)
                 )
                 .shadow(color: Color.black.opacity(0.1), radius: style.shadowRadius, x: 0, y: 2)
+                .scaleEffect(isTargeted ? 1.05 : 1.0)
+                .animation(.easeInOut(duration: 0.2), value: isTargeted)
+                .onDrag {
+                    NSItemProvider(object: taskId.uuidString as NSString)
+                }
+                .onDrop(of: [.text], delegate: TaskDropDelegate(taskId: taskId, taskManager: taskManager, isTargeted: $isTargeted))
             }
         )
     }
 }
 
+struct TaskDropDelegate: DropDelegate {
+    let taskId: UUID
+    let taskManager: TaskManager
+    @Binding var isTargeted: Bool
+    
+    func performDrop(info: DropInfo) -> Bool {
+        isTargeted = false
+        guard let itemProvider = info.itemProviders(for: [.text]).first else { return false }
+        
+        itemProvider.loadObject(ofClass: NSString.self) { string, _ in
+            guard let draggedIdString = string as? String,
+                  let draggedId = UUID(uuidString: draggedIdString) else { return }
+            
+            DispatchQueue.main.async {
+                self.taskManager.swapTaskIDs(self.taskId, draggedId)
+            }
+        }
+        
+        return true
+    }
+    
+    func dropEntered(info: DropInfo) {
+        isTargeted = true
+    }
+    
+    func dropExited(info: DropInfo) {
+        isTargeted = false
+    }
+    
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        return DropProposal(operation: .move)
+    }
+}
 
 // MARK: - Add Task Button View
 struct AddTaskButton_V: View {
@@ -185,6 +230,7 @@ struct AddTaskButton_V: View {
     @EnvironmentObject var overlayManager: OverlayManager
     let isCompact: Bool
     let date: Date
+    @State private var isTargeted = false
     
     var body: some View {
         Button {
@@ -200,13 +246,50 @@ struct AddTaskButton_V: View {
         .background(Color.gray.opacity(0.2))
         .cornerRadius(isCompact ? 8 : 12)
         .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+        .scaleEffect(isTargeted ? 1.05 : 1.0)
+        .animation(.easeInOut(duration: 0.2), value: isTargeted)
+        .onDrop(of: [.text], delegate: AddTaskDropDelegate(taskManager: taskManager, date: date, isTargeted: $isTargeted))
+    }
+}
+
+struct AddTaskDropDelegate: DropDelegate {
+    let taskManager: TaskManager
+    let date: Date
+    @Binding var isTargeted: Bool
+    
+    func performDrop(info: DropInfo) -> Bool {
+        isTargeted = false
+        guard let itemProvider = info.itemProviders(for: [.text]).first else { return false }
+        
+        itemProvider.loadObject(ofClass: NSString.self) { string, _ in
+            guard let draggedIdString = string as? String,
+                  let draggedId = UUID(uuidString: draggedIdString) else { return }
+            
+            DispatchQueue.main.async {
+                self.taskManager.updateTaskDate(draggedId, newDate: self.date)
+            }
+        }
+        
+        return true
+    }
+    
+    func dropEntered(info: DropInfo) {
+        isTargeted = true
+    }
+    
+    func dropExited(info: DropInfo) {
+        isTargeted = false
+    }
+    
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        return DropProposal(operation: .move)
     }
 }
 
 #Preview {
     let taskManager = TaskManager()
-    let overlayManager = OverlayManager(taskManager: taskManager)
-
+    let navManager = NavManager()
+    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
     return ZStack {
         VStack() {
             ForEach(taskManager.tasks) { task in

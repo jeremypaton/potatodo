@@ -19,7 +19,9 @@ struct Main: View {
     init() {
         let taskManager = TaskManager()
         _taskManager = StateObject(wrappedValue: taskManager)
-        let overlayManager = OverlayManager(taskManager: taskManager)
+        let navManager = NavManager()
+        _navManager = StateObject(wrappedValue: navManager)
+        let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
         _overlayManager = StateObject(wrappedValue: overlayManager)
         _potatoManager = StateObject(wrappedValue: PotatoManager(overlayManager: overlayManager))
     }

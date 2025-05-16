@@ -34,7 +34,7 @@ struct PageManager: View {
 #Preview {
     let taskManager = TaskManager()
     let navManager = NavManager()
-    let overlayManager = OverlayManager(taskManager: taskManager)
+    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
     let potatoManager = PotatoManager(overlayManager: overlayManager)
     
     PageManager(taskManager: taskManager,

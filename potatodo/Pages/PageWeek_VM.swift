@@ -146,7 +146,7 @@ struct PageWeek_VM: View {
 #Preview {
     let taskManager = TaskManager()
     let navManager = NavManager()
-    let overlayManager = OverlayManager(taskManager: taskManager)
+    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
     navManager.setInterval(.week)
     
     return ZStack {
