@@ -12,6 +12,7 @@ import Combine
 @MainActor
 class TaskManager: ObservableObject {
     let settings: Settings = Settings()
+    let notificationsManager = NotificationsManager()
 
     @Published private(set) var tasks: [Task] = []
     @Published var errorMessage: String?
@@ -53,6 +54,7 @@ class TaskManager: ObservableObject {
         if let index = tasks.firstIndex(where: { $0.id == task.id }) {
             tasks[index] = task
             errorMessage = nil
+            saveTasks()  // Ensure tasks are saved and reminders are updated
         }
     }
     
@@ -113,11 +115,37 @@ class TaskManager: ObservableObject {
     }
     
     private func saveTasks() {
-        do {
-            let data = try JSONEncoder().encode(tasks)
-            UserDefaults.standard.set(data, forKey: saveKey)
-        } catch {
-            errorMessage = "Failed to save tasks: \(error.localizedDescription)"
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(tasks) {
+            UserDefaults.standard.set(encoded, forKey: saveKey)
+            updateDailyReminders()
+        }
+    }
+    
+    private func updateDailyReminders() {
+        // First, remove all existing reminders to ensure clean state
+        notificationsManager.removeAllReminders()
+        
+        // Get all unique dates from tasks
+        let calendar = Calendar.current
+        let uniqueDates = Set(tasks.map { calendar.startOfDay(for: $0.date) })
+        
+        // Get today and next 7 days
+        let today = calendar.startOfDay(for: Date())
+        let nextWeek = (0...7).compactMap { day in
+            calendar.date(byAdding: .day, value: day, to: today)
+        }
+        
+        // For each date in the next week
+        for date in nextWeek {
+            let tasksForDate = tasks.filter { calendar.isDate($0.date, inSameDayAs: date) }
+            if !tasksForDate.isEmpty {
+                // If there are tasks for this date, create task-specific reminder
+                notificationsManager.updateRemindersForDay(date, tasks: tasksForDate)
+            } else {
+                // If no tasks, create default reminder
+                notificationsManager.setReminderText(for: date, text: notificationsManager.defaultReminderText)
+            }
         }
     }
     
@@ -130,6 +158,7 @@ class TaskManager: ObservableObject {
         case .prod:
             loadRealTasks()
         }
+        updateDailyReminders()
     }
     
     private func loadRealTasks() {

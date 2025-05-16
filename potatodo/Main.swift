@@ -60,7 +60,8 @@ struct Main: View {
                 Debug_V(
                     taskManager: taskManager,
                     messageManager: potatoManager.messageManager,
-                    notificationsManager: notificationsManager
+                    notificationsManager: notificationsManager,
+                    isPresented: $showDebugView
                 )
                 .transition(.move(edge: .bottom))
                 .zIndex(2)
