@@ -14,7 +14,7 @@ enum AppMode: String, Codable {
 }
 
 class Settings: ObservableObject {
-    @Published var mode : AppMode = .debug
+    @Published var mode : AppMode = .prod
 }
 
 @main

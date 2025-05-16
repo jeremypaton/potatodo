@@ -12,10 +12,12 @@ class TaskEditOverlay: ObservableObject {
     @Published var isShowing = false
     @Published var taskId: UUID?
     @Published var editedTitle = ""
+    @Published var selectedColor: TaskColor = .green
     
-    func show(for taskId: UUID, title: String) {
+    func show(for taskId: UUID, title: String, color: TaskColor = .green) {
         self.taskId = taskId
         self.editedTitle = title
+        self.selectedColor = color
         self.isShowing = true
     }
     
@@ -23,11 +25,23 @@ class TaskEditOverlay: ObservableObject {
         self.isShowing = false
         self.taskId = nil
         self.editedTitle = ""
+        self.selectedColor = .green
     }
 }
 
 struct TaskEditOverlay_V: View {
     @EnvironmentObject var overlayManager: OverlayManager
+    
+    private var taskColor: Color {
+        switch overlayManager.taskEditOverlay.selectedColor {
+        case .green: return .green
+        case .blue: return .blue
+        case .yellow: return .yellow
+        case .purple: return .purple
+        case .red: return .red
+        case .gray: return .gray
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -40,9 +54,23 @@ struct TaskEditOverlay_V: View {
                     }
                 
                 VStack(spacing: 16) {
+                    // Color selection stars
+                    HStack(spacing: 12) {
+                        ForEach([TaskColor.green, .blue, .yellow, .purple, .red, .gray], id: \.self) { color in
+                            Button {
+                                overlayManager.taskEditOverlay.selectedColor = color
+                                overlayManager.objectWillChange.send()
+                            } label: {
+                                Image(systemName: "star.fill")
+                                    .foregroundColor(TaskStyle.fullColor(for: Task(title: "", color: color)))
+                                    .font(.system(size: 36))
+                            }
+                        }
+                    }
+                    .padding(.top)
+                    
                     Text("Task name")
                         .font(.headline)
-                        .padding(.top)
                     
                     TextField("Task description", text: Binding(
                         get: { overlayManager.taskEditOverlay.editedTitle },
@@ -86,6 +114,7 @@ struct TaskEditOverlay_V: View {
                                let task = overlayManager.taskManager.tasks.first(where: { $0.id == taskId }) {
                                 var updatedTask = task
                                 updatedTask.title = overlayManager.taskEditOverlay.editedTitle
+                                updatedTask.color = overlayManager.taskEditOverlay.selectedColor
                                 overlayManager.taskManager.updateTask(updatedTask)
                             }
                             overlayManager.taskEditOverlay.hide()
@@ -102,11 +131,29 @@ struct TaskEditOverlay_V: View {
                     .padding(.horizontal)
                     .padding(.bottom)
                 }
-                .background(Color.white)
+                .background(TaskStyle.blendColor(.white, with: taskColor, by: 0.5))
                 .cornerRadius(16)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(taskColor, lineWidth: 3)
+                )
                 .shadow(radius: 20)
                 .padding(.horizontal, 20)
             }
         }
     }
 }
+//
+//#Preview {
+//    let taskManager = TaskManager()
+//    let overlayManager = OverlayManager(taskManager: taskManager)
+//    
+//    // Create and add a sample task
+//    let sampleTask = taskManager.addNewTask(title: "Sample Task")
+//    
+//    // Show the overlay for the sample task
+//    overlayManager.taskEditOverlay.show(for: sampleTask.id, title: sampleTask.title)
+//    
+//    return TaskEditOverlay_V()
+//        .environmentObject(overlayManager)
+//}

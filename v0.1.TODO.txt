@@ -16,29 +16,34 @@ FUNCTIONALITY
         [X] potato counters
     
     v0.1.3
-        [ ] propper test/debug/prod build system
-        [ ] debug load screen before launching app w/ mode toggle
-        [ ] robust save/load/archive profile system
-
+        [X] task add UI (include colors)
+        [X] task edit UI (include colors)
+        [ ] task drag drop / reorder
+        
     v0.1.4
+        [ ] proper test/debug/prod build system
+        [ ] debug screen
+                [ ] small overlay button
+                [ ] repr's for all managers
+                [ ] reload for all managers
+        [ ] robust save/load/archive profile system
+            [ ] profile screen before launching app w/ mode toggle
+            [ ] daily archives
+
+    v0.1.5
         [ ] notification system
             [ ] daily reminder
-            [ ] post-accomplishment congrats reminder (like strave)
+            [ ] post-accomplishment congrats reminder (like strava)
             [ ] weekly recap / email
-        
-    v0.1.5
-        [ ] task add UI (include colors)
-        [ ] task edit UI (include colors)
-        [ ] task drag drop
-        [ ] task swipe delete
-        [ ] task notes
+    
+WORKFLOW
+    v0.1.6
+    [ ] code cleanup
+        [ ] decouple taskmanager from overlay manager
+        [ ] figure out how to pass settings around properly
 
 UI
     v0.1.6
     [ ] fix dynamic layouts
     [ ] UI design pass / alts
-    
-WORKFLOW
-    v0.1.7
-    [ ] code cleanup
-        [ ] decouple taskmanager from overlay manager
+        [ ] try dark mode
