@@ -161,19 +161,13 @@ class NotificationsManager: ObservableObject {
         let calendar = Calendar.current
         let dayStart = calendar.startOfDay(for: date)
         
-        print("Updating reminders for date: \(dayStart)")
-        print("Number of tasks: \(tasks.count)")
-        
         // Remove any existing reminder for this day
         removeReminder(for: dayStart)
         
         // If there are incomplete tasks, create a new reminder
         let incompleteTasks = tasks.filter { !$0.isCompleted }
-        print("Number of incomplete tasks: \(incompleteTasks.count)")
-        
         if !incompleteTasks.isEmpty {
             let reminderText = incompleteTasks.map { "🥔 \($0.title)" }.joined(separator: "\n")
-            print("Setting reminder text: \(reminderText)")
             setReminderText(for: dayStart, text: reminderText)
             // Ensure we update the pending notifications list
             updatePendingNotifications()
@@ -197,10 +191,6 @@ class NotificationsManager: ObservableObject {
         notificationCenter.getPendingNotificationRequests { [weak self] requests in
             DispatchQueue.main.async {
                 self?.pendingNotifications = requests
-                print("Updated pending notifications. Count: \(requests.count)")
-                for request in requests {
-                    print("Pending notification: \(request.identifier) - \(request.content.body)")
-                }
             }
         }
     }

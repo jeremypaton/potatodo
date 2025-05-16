@@ -14,13 +14,15 @@ struct Main: View {
     @StateObject private var notificationsManager = NotificationsManager()
     @StateObject private var overlayManager: OverlayManager
     @StateObject private var potatoManager: PotatoManager
+    @StateObject private var settings = Settings()
     @State private var showSplash = true
     @State private var showDebugView = false
     
     init() {
-//        _ = Settings()
+        let settings = Settings()
+        _settings = StateObject(wrappedValue: settings)
         
-        let taskManager = TaskManager()
+        let taskManager = TaskManager(settings: settings)
         _taskManager = StateObject(wrappedValue: taskManager)
         let navManager = NavManager()
         _navManager = StateObject(wrappedValue: navManager)
@@ -65,9 +67,11 @@ struct Main: View {
                 )
                 .transition(.move(edge: .bottom))
                 .zIndex(2)
+                .environmentObject(settings)
             }
         }
         .environmentObject(overlayManager)
+        .environmentObject(settings)
     }
 }
 

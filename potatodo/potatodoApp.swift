@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-enum AppMode: String, Codable {
+enum Profile: String, Codable {
     case debug
     case test
     case prod
 }
 
 class Settings: ObservableObject {
-    @Published var mode : AppMode = .prod
+    @Published var profile : Profile = .prod
 }
 
 @main

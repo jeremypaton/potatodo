@@ -23,21 +23,17 @@ FUNCTIONALITY
     v0.1.4
         [X] debug screen, accessible via hidden gesture
                 [X] repr's for all managers, appstate
-                [ ] reload for all managers
+                ? reload for all managers
     
     v0.1.5
-    [ ] profile view, accessible via hidden gesture
-        [ ] robust save/load/archive profile system
-            [ ] archives - daily, per vesion etc.
-            [ ] make 1000% sure tasks persist through updates
-                [ ] use file manager not user defaults
-        [ ] autosave toggle
+    [X] profile view, accessible via hidden gesture
+        [X] robust save/load/archive profile system
+        [X] use file manager not user defaults
+        ? archives - daily, per vesion etc.
 
     v0.1.6
         [X] notification system
             [X] daily reminder
-            [ ] post-accomplishment congrats reminder (like strava)
-            [ ] weekly recap / email
     
 REFACTOR
     v0.1.7
@@ -53,3 +49,18 @@ UI
     [ ] fix dynamic layouts
     [ ] UI design pass / alts
         [ ] try dark mode
+
+FUTURE
+    IMPROVE SAVE
+        [ ] make 1000% sure tasks persist through updates
+        [ ] find where data lives on phone / mac
+        [ ] archives - daily, per vesion etc.
+        
+    IMPROVE REMINDERS
+        [ ] nice formatting
+        [ ] post-accomplishment congrats reminder (like strava)
+        [ ] weekly recap / email
+
+    WIDGET
+        [ ] widget
+        [ ] red bubble

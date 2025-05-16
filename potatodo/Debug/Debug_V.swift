@@ -11,6 +11,7 @@ struct Debug_V: View {
     @ObservedObject var taskManager: TaskManager
     @ObservedObject var messageManager: MessageManager
     @ObservedObject var notificationsManager: NotificationsManager
+    @EnvironmentObject var settings: Settings
     @State private var selectedTab = 0
     @Binding var isPresented: Bool
     
@@ -30,6 +31,7 @@ struct Debug_V: View {
                 Text("Tasks").tag(0)
                 Text("Messages").tag(1)
                 Text("Notifications").tag(2)
+                Text("Settings").tag(3)
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
@@ -114,6 +116,33 @@ struct Debug_V: View {
                     .padding()
                 }
                 .tag(2)
+                
+                // Settings Tab
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("App Settings")
+                            .font(.headline)
+                        
+                        VStack(alignment: .leading) {
+                            Text("Profile")
+                                .font(.subheadline)
+                            Picker("Profile", selection: $settings.profile) {
+                                Text("Debug").tag(Profile.debug)
+                                Text("Test").tag(Profile.test)
+                                Text("Production").tag(Profile.prod)
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                            .onChange(of: settings.profile) { oldValue, newValue in
+                                taskManager.loadTasks()
+                            }
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                    }
+                    .padding()
+                }
+                .tag(3)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }

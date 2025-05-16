@@ -11,18 +11,35 @@ import Combine
 
 @MainActor
 class TaskManager: ObservableObject {
-    let settings: Settings = Settings()
+    @ObservedObject var settings: Settings
     let notificationsManager = NotificationsManager()
 
     @Published private(set) var tasks: [Task] = []
     @Published var errorMessage: String?
     
-    private let saveKey = "savedTasks"
+    private var tasksDirectory: URL {
+        let fileManager = FileManager.default
+        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let profileDirectory = documentsDirectory.appendingPathComponent("tasks_\(settings.profile.rawValue)")
+        
+        // Create directory if it doesn't exist
+        if !fileManager.fileExists(atPath: profileDirectory.path) {
+            try? fileManager.createDirectory(at: profileDirectory, withIntermediateDirectories: true)
+        }
+        
+        return profileDirectory
+    }
+    
+    private var tasksFile: URL {
+        tasksDirectory.appendingPathComponent("tasks.json")
+    }
+    
     private var cancellables = Set<AnyCancellable>()
     
-    init() {
+    init(settings: Settings = Settings()) {
+        self.settings = settings
         loadTasks()
-        if settings.mode == .prod {
+        if settings.profile == .prod {
             setupAutoSave()
         }
     }
@@ -31,17 +48,11 @@ class TaskManager: ObservableObject {
     
     func addNewTask(title: String, color: TaskColor = .green, date: Date = Date()) -> Task {
         var task = Task(title: title, color: color, date: date)
-//        guard task.isValid else {
-//            errorMessage = "Task text cannot be empty"
-//            return nil
-//        }
-        
         if task.isValid == false {
             task.title = "?"
         }
-//
         tasks.append(task)
-//        errorMessage = nil
+        saveTasks()  // Explicitly save after adding
         return task
     }
     
@@ -54,23 +65,23 @@ class TaskManager: ObservableObject {
         if let index = tasks.firstIndex(where: { $0.id == task.id }) {
             tasks[index] = task
             errorMessage = nil
-            saveTasks()  // Ensure tasks are saved and reminders are updated
+            saveTasks()  // Explicitly save after updating
         }
     }
     
     func deleteTask(_ task: Task) {
         tasks.removeAll { $0.id == task.id }
+        saveTasks()  // Explicitly save after deleting
     }
     
     func toggleTaskCompletion(_ task: Task) {
         var updatedTask = task
         updatedTask.isCompleted.toggle()
-        updateTask(updatedTask)
+        updateTask(updatedTask)  // This will trigger saveTasks
     }
     
     func cycleTaskColorFromID(_ id: UUID) {
         if let index = tasks.firstIndex(where: { $0.id == id }) {
-            
             var tc : TaskColor = tasks[index].color
             
             switch tc {
@@ -83,6 +94,7 @@ class TaskManager: ObservableObject {
             }
             
             tasks[index].color = tc
+            saveTasks()  // Explicitly save after color change
         }
     }
     
@@ -96,11 +108,13 @@ class TaskManager: ObservableObject {
         let temp = tasks[index1]
         tasks[index1] = tasks[index2]
         tasks[index2] = temp
+        saveTasks()  // Explicitly save after swapping
     }
     
     func updateTaskDate(_ taskId: UUID, newDate: Date) {
         guard let index = tasks.firstIndex(where: { $0.id == taskId }) else { return }
         tasks[index].date = newDate
+        saveTasks()  // Explicitly save after date change
     }
     
     // MARK: - Persistence
@@ -115,10 +129,15 @@ class TaskManager: ObservableObject {
     }
     
     private func saveTasks() {
+        // Only save if we're in production mode
+        guard settings.profile == .prod else { return }
+        
         let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(tasks) {
-            UserDefaults.standard.set(encoded, forKey: saveKey)
-            updateDailyReminders()
+        do {
+            let data = try encoder.encode(tasks)
+            try data.write(to: tasksFile)
+        } catch {
+            errorMessage = "Failed to save tasks: \(error.localizedDescription)"
         }
     }
     
@@ -128,7 +147,7 @@ class TaskManager: ObservableObject {
         
         // Get all unique dates from tasks
         let calendar = Calendar.current
-        let uniqueDates = Set(tasks.map { calendar.startOfDay(for: $0.date) })
+//        let uniqueDates = Set(tasks.map { calendar.startOfDay(for: $0.date) })
         
         // Get today and next 7 days
         let today = calendar.startOfDay(for: Date())
@@ -149,8 +168,11 @@ class TaskManager: ObservableObject {
         }
     }
     
-    private func loadTasks() {
-        switch settings.mode {
+    func loadTasks() {
+        // Clear current tasks before loading new ones
+        tasks = []
+        
+        switch settings.profile {
         case .debug:
             loadDebugTasks()
         case .test:
@@ -162,7 +184,9 @@ class TaskManager: ObservableObject {
     }
     
     private func loadRealTasks() {
-        guard let data = UserDefaults.standard.data(forKey: saveKey) else { return }
+        guard let data = try? Data(contentsOf: tasksFile) else {
+            return
+        }
         
         do {
             tasks = try JSONDecoder().decode([Task].self, from: data)
@@ -234,7 +258,7 @@ class TaskManager: ObservableObject {
 
 #Preview {
     let settings = Settings()
-    settings.mode = .debug
+    settings.profile = .debug
     
     let taskManager = TaskManager()
     let navManager = NavManager()
