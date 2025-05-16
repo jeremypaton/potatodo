@@ -18,32 +18,38 @@ FUNCTIONALITY
     v0.1.3
         [X] task add UI (include colors)
         [X] task edit UI (include colors)
-        [ ] task drag drop / reorder
+        [X] task drag drop / reorder
         
     v0.1.4
-        [ ] proper test/debug/prod build system
-        [ ] debug screen
-                [ ] small overlay button
-                [ ] repr's for all managers
+        [ ] debug screen, accessible via hidden gesture
+                [ ] repr's for all managers, appstate
                 [ ] reload for all managers
-        [ ] robust save/load/archive profile system
-            [ ] profile screen before launching app w/ mode toggle
-            [ ] daily archives
-
+    
     v0.1.5
+    [ ] profile view, accessible via hidden gesture
+        [ ] robust save/load/archive profile system
+            [ ] archives - daily, per vesion etc.
+            [ ] make 1000% sure tasks persist through updates
+                [ ] use file manager not user defaults
+        [ ] autosave toggle
+
+    v0.1.6
         [ ] notification system
             [ ] daily reminder
             [ ] post-accomplishment congrats reminder (like strava)
             [ ] weekly recap / email
     
-WORKFLOW
-    v0.1.6
+REFACTOR
+    v0.1.7
     [ ] code cleanup
-        [ ] decouple taskmanager from overlay manager
+        [ ] decouple taskmanager/navmanager from overlay manager
+        [ ] figure out better / simpler global manager system so preview setup is simple but code is also isolated
+            [ ] Global AppState? static methods?
         [ ] figure out how to pass settings around properly
+        [ ] proper test/debug/prod build system
 
 UI
-    v0.1.6
+    v0.1.8
     [ ] fix dynamic layouts
     [ ] UI design pass / alts
         [ ] try dark mode
