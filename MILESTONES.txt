@@ -9,8 +9,12 @@ v0.1 - function/UI MVP
     v0.1.x - iterate features
 
 [21 MAY]
-v0.2 - animation/onboard update
+v0.2 - UI/animation update
     v0.2.x - iterate animation
+    
+[28 MAY]
+v0.3 - splash/onboard update
+    v03.x - iterate animation
 
 === BETA ===
 

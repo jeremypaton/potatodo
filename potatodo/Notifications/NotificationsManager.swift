@@ -112,9 +112,13 @@ class NotificationsManager: ObservableObject {
         content.body = text
         content.sound = .default
         
-        // Create trigger for specific date
+        // Create trigger for specific date using the daily time
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        var components = calendar.dateComponents([.year, .month, .day], from: date)
+        let dailyComponents = calendar.dateComponents([.hour, .minute], from: dailyTime)
+        components.hour = dailyComponents.hour
+        components.minute = dailyComponents.minute
+        
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         
         // Create request

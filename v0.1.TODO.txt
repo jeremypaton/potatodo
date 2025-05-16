@@ -37,20 +37,41 @@ FUNCTIONALITY
     
 REFACTOR
     v0.1.7
-    [ ] code cleanup
-        [ ] decouple taskmanager/navmanager from overlay manager
-        [ ] figure out better / simpler global manager system so preview setup is simple but code is also isolated
-            [ ] Global AppState? static methods?
-        [ ] figure out how to pass settings around properly
+        [ ] BIG REFACTOR - one manager at a time
+        
+        convert to service model to clean up manager codependencies...
+        
+        Here's the simplified step-by-step plan:
+            
+            Create AppService
+                Create a central service coordinator
+                This will be the single source of truth for all services
+            
+            For Each Manager (TaskManager, NavManager, etc.)
+                Create a new Service class
+                Move all business logic from Manager to Service
+                Remove all @Published properties from Service
+                Remove all direct dependencies on other managers from Service
+                Create a new (View?)Manager class that wraps the Service
+                Move all UI state management to the new Manager
+                Make Manager delegate to Service for business logic
+            
+            Update Views
+                Update views to use the new Managers
+                Inject AppService where needed
+                Remove direct manager-to-manager dependencies
+            
+            Clean Up
+                Remove old Manager classes
+                Remove any remaining direct dependencies between services
+                Update any tests to use the new structure
+            
+            The key principle is: Services handle business logic, (View?)Managers handle UI state, and AppService coordinates everything.
+
         [ ] proper test/debug/prod build system
 
-UI
+REFINE
     v0.1.8
-    [ ] fix dynamic layouts
-    [ ] UI design pass / alts
-        [ ] try dark mode
-
-FUTURE
     IMPROVE SAVE
         [ ] make 1000% sure tasks persist through updates
         [ ] find where data lives on phone / mac
@@ -64,3 +85,11 @@ FUTURE
     WIDGET
         [ ] widget
         [ ] red bubble
+        
+=== FEATURE LOCK ===
+
+UI
+    v0.1.9
+    [ ] fix dynamic layouts
+    [ ] UI design pass / alts
+        [ ] try dark mode
