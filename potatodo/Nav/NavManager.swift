@@ -14,13 +14,37 @@ enum DateInterval: String, Codable {
     case month
 }
 
+enum PageType: String, Codable {
+    case backlog
+    case day
+    case week
+    case month
+    case settings
+}
 
 @MainActor
 class NavManager: ObservableObject {
     @Published private(set) var interval: DateInterval = .day
     @Published private(set) var currentDate: Date = Date()
+    @Published private(set) var currentPage: PageType = .day
     
     init() {
+    }
+    
+    func setPage(_ page: PageType) {
+        currentPage = page
+        if page != .backlog && page != .settings {
+            switch page {
+            case .day:
+                setInterval(.day)
+            case .week:
+                setInterval(.week)
+            case .month:
+                setInterval(.month)
+            default:
+                break
+            }
+        }
     }
     
     func setDate(_ date: Date) {

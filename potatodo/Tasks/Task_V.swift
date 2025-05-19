@@ -135,7 +135,7 @@ struct Task_V: View {
                     
                     // Task text
                     Button {
-                        overlayManager.showTaskEdit(for: taskId, title: task.title, color: task.color)
+                        overlayManager.showTaskEdit(for: taskId, title: task.title)
                     } label: {
                         Text(task.title.uppercased())
                             .font(.system(size: style.fontSize, weight: .medium))
@@ -145,6 +145,7 @@ struct Task_V: View {
                             .foregroundColor(.black)
                     }
                     .buttonStyle(PlainButtonStyle())
+                    .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
                     
                     // Completion circle
                     Button {
@@ -228,7 +229,7 @@ struct AddTaskButton_V: View {
     @ObservedObject var taskManager: TaskManager
     @EnvironmentObject var overlayManager: OverlayManager
     let isCompact: Bool
-    let date: Date
+    let date: Date?
     @State private var isTargeted = false
     
     var body: some View {
@@ -253,7 +254,7 @@ struct AddTaskButton_V: View {
 
 struct AddTaskDropDelegate: DropDelegate {
     let taskManager: TaskManager
-    let date: Date
+    let date: Date?
     @Binding var isTargeted: Bool
     
     func performDrop(info: DropInfo) -> Bool {
@@ -265,7 +266,9 @@ struct AddTaskDropDelegate: DropDelegate {
                   let draggedId = UUID(uuidString: draggedIdString) else { return }
             
             DispatchQueue.main.async {
-                self.taskManager.updateTaskDate(draggedId, newDate: self.date)
+                if let date = self.date {
+                    self.taskManager.updateTaskDate(draggedId, newDate: date)
+                }
             }
         }
         

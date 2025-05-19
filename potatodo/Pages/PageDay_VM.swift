@@ -8,7 +8,10 @@ struct PageDay_VM: View {
     
     private var tasksForCurrentDay: [Task] {
         taskManager.tasks.filter { task in
-            Calendar.current.isDate(task.date, inSameDayAs: navManager.currentDate)
+            if let date = task.date {
+                return Calendar.current.isDate(date, inSameDayAs: navManager.currentDate)
+            }
+            return false
         }
     }
     
@@ -17,24 +20,22 @@ struct PageDay_VM: View {
     }
     
     var body: some View {
-        VStack(spacing: 12) {
-            if navManager.isToday {
-                Potato_V(potatoManager: potatoManager)
-            }
+        TopNav_V(navManager: navManager)
+        
+        if navManager.isToday {
+            Potato_V(potatoManager: potatoManager)
+        }
 
-            VStack(spacing: 12) {
-                ForEach(0..<3, id: \.self) { index in
-                    if index < tasksForCurrentDay.count {
-                        Task_V(taskManager: taskManager, taskId: tasksForCurrentDay[index].id, isCompact: false)
-                    } else if index == 2 {
-                        AddTaskButton_V(taskManager: taskManager, isCompact: false, date: navManager.currentDate)
-                    }
+        VStack(spacing: 12) {
+            ForEach(0..<3, id: \.self) { index in
+                if index < tasksForCurrentDay.count {
+                    Task_V(taskManager: taskManager, taskId: tasksForCurrentDay[index].id, isCompact: false)
+                } else if index == 2 {
+                    AddTaskButton_V(taskManager: taskManager, isCompact: false, date: navManager.currentDate)
                 }
             }
-            .padding(.horizontal)
-            
-            Spacer()
         }
+        .padding(.horizontal)
         .onChange(of: completedTasksCount) { oldCount, newCount in
             // Update potato level based on completed tasks
             potatoManager.setLevel(newCount)
@@ -66,6 +67,7 @@ struct PageDay_VM: View {
             PageDay_VM(taskManager: taskManager,
                        navManager: navManager,
                        potatoManager: potatoManager)
+            Spacer()
         }
         .background(Color(.systemGroupedBackground))
         

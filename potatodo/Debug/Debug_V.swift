@@ -46,7 +46,11 @@ struct Debug_V: View {
                                 Text("Title: \(task.title)")
                                 Text("Completed: \(task.isCompleted ? "Yes" : "No")")
                                 Text("Color: \(task.color.rawValue)")
-                                Text("Date: \(task.date.formatted())")
+                                if let date = task.date {
+                                    Text("Date: \(date.formatted())")
+                                } else {
+                                    Text("Date: Unscheduled")
+                                }
                             }
                             .padding()
                             .background(Color.gray.opacity(0.1))

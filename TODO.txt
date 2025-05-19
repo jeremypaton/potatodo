@@ -46,7 +46,7 @@ REFINE
         
     IMPROVE REMINDERS
         [ ] nice formatting
-        [ ] post-accomplishment congrats reminder (like strava) / summarize progress
+        ? post-accomplishment congrats reminder (like strava) / summarize progress
         [ ] weekly recap
         [ ] fix double reminder bug
             reminders should only ever schedule for future days (not today) and only one per day

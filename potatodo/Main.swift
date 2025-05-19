@@ -56,6 +56,8 @@ struct Main: View {
                 }
             }
             
+            Overlay_V()
+            
             if showDebugView {
                 Debug_V(
                     taskManager: taskManager,
@@ -67,13 +69,10 @@ struct Main: View {
                 .zIndex(2)
                 .environmentObject(settings)
             }
-            
-            // Overlay should be on top of everything
-            Overlay_V()
-                .zIndex(100)
         }
         .environmentObject(overlayManager)
         .environmentObject(settings)
+        .environmentObject(notificationsManager)
     }
 }
 

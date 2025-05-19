@@ -55,10 +55,12 @@ struct PageWeek_VM: View {
     
     private var completedTasksThisWeek: Int {
         taskManager.tasks.filter { task in
-            let taskDate = task.date
-            return task.isCompleted && weekDays.contains { day in
-                Calendar.current.isDate(taskDate, inSameDayAs: day)
+            if let taskDate = task.date {
+                return task.isCompleted && weekDays.contains { day in
+                    Calendar.current.isDate(taskDate, inSameDayAs: day)
+                }
             }
+            return false
         }.count
     }
     
@@ -76,7 +78,10 @@ struct PageWeek_VM: View {
     
     private func tasksForDay(_ date: Date) -> [Task] {
         taskManager.tasks.filter { task in
-            Calendar.current.isDate(task.date, inSameDayAs: date)
+            if let taskDate = task.date {
+                return Calendar.current.isDate(taskDate, inSameDayAs: date)
+            }
+            return false
         }
     }
     
@@ -110,12 +115,13 @@ struct PageWeek_VM: View {
         .background(Color.white)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Calendar.current.isDateInToday(date) ? Color.brown : Color.gray.opacity(0.3), 
-                       lineWidth: Calendar.current.isDateInToday(date) ? 4 : 1)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
         )
     }
     
     var body: some View {
+        TopNav_V(navManager: navManager)
+
         GeometryReader { geometry in
             ZStack {
                 Color(.systemGray6)

@@ -17,6 +17,10 @@ class TaskManager: ObservableObject {
     @Published private(set) var tasks: [Task] = []
     @Published var errorMessage: String?
     
+    var unscheduledTasks: [Task] {
+        tasks.filter { $0.date == nil }
+    }
+    
     private var tasksDirectory: URL {
         let fileManager = FileManager.default
         let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -48,14 +52,13 @@ class TaskManager: ObservableObject {
     
     // MARK: - Task Management
     
-    func addNewTask(title: String, color: TaskColor = .green, date: Date = Date()) -> Task {
+    func addNewTask(title: String, color: TaskColor = .green, date: Date? = Date()) -> Task {
         var task = Task(title: title, color: color, date: date)
         if task.isValid == false {
             task.title = "?"
         }
         tasks.append(task)
         saveTasks()  // Explicitly save after adding
-        notifyTaskChange()
         return task
     }
     
@@ -69,26 +72,24 @@ class TaskManager: ObservableObject {
             tasks[index] = task
             errorMessage = nil
             saveTasks()  // Explicitly save after updating
-            notifyTaskChange()
         }
     }
     
     func deleteTask(_ task: Task) {
         tasks.removeAll { $0.id == task.id }
         saveTasks()  // Explicitly save after deleting
-        notifyTaskChange()
     }
     
     func toggleTaskCompletion(_ task: Task) {
-        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
-            tasks[index].isCompleted.toggle()
-            notifyTaskChange()
-        }
+        var updatedTask = task
+        updatedTask.isCompleted.toggle()
+        updateTask(updatedTask)  // This will trigger saveTasks
     }
     
-    func cycleTaskColorFromID(_ taskId: UUID) {
-        if let index = tasks.firstIndex(where: { $0.id == taskId }) {
-            var tc = tasks[index].color
+    func cycleTaskColorFromID(_ id: UUID) {
+        if let index = tasks.firstIndex(where: { $0.id == id }) {
+            var tc : TaskColor = tasks[index].color
+            
             switch tc {
                 case .green: tc = .blue
                 case .blue: tc = .yellow
@@ -97,8 +98,9 @@ class TaskManager: ObservableObject {
                 case .red: tc = .gray
                 case .gray: tc = .green
             }
+            
             tasks[index].color = tc
-            notifyTaskChange()
+            saveTasks()  // Explicitly save after color change
         }
     }
     
@@ -113,21 +115,12 @@ class TaskManager: ObservableObject {
         tasks[index1] = tasks[index2]
         tasks[index2] = temp
         saveTasks()  // Explicitly save after swapping
-        notifyTaskChange()
     }
     
     func updateTaskDate(_ taskId: UUID, newDate: Date) {
-        if let index = tasks.firstIndex(where: { $0.id == taskId }) {
-            tasks[index].date = newDate
-            notifyTaskChange()
-        }
-    }
-    
-    func updateTaskTitle(_ taskId: UUID, newTitle: String) {
-        if let index = tasks.firstIndex(where: { $0.id == taskId }) {
-            tasks[index].title = newTitle
-            notifyTaskChange()
-        }
+        guard let index = tasks.firstIndex(where: { $0.id == taskId }) else { return }
+        tasks[index].date = newDate
+        saveTasks()  // Explicitly save after date change
     }
     
     // MARK: - Persistence
@@ -158,11 +151,8 @@ class TaskManager: ObservableObject {
         // First, remove all existing reminders to ensure clean state
         notificationsManager.removeAllReminders()
         
-        // Get all unique dates from tasks
-        let calendar = Calendar.current
-//        let uniqueDates = Set(tasks.map { calendar.startOfDay(for: $0.date) })
-        
         // Get today and next 7 days
+        let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         let nextWeek = (0...7).compactMap { day in
             calendar.date(byAdding: .day, value: day, to: today)
@@ -170,7 +160,12 @@ class TaskManager: ObservableObject {
         
         // For each date in the next week
         for date in nextWeek {
-            let tasksForDate = tasks.filter { calendar.isDate($0.date, inSameDayAs: date) }
+            let tasksForDate = tasks.filter { task in
+                if let taskDate = task.date {
+                    return calendar.isDate(taskDate, inSameDayAs: date)
+                }
+                return false
+            }
             if !tasksForDate.isEmpty {
                 // If there are tasks for this date, create task-specific reminder
                 notificationsManager.updateRemindersForDay(date, tasks: tasksForDate)
@@ -266,10 +261,6 @@ class TaskManager: ObservableObject {
         } catch {
             errorMessage = "Failed to load CSV tasks: \(error.localizedDescription)"
         }
-    }
-    
-    private func notifyTaskChange() {
-        NotificationCenter.default.post(name: NSNotification.Name("TaskDidChange"), object: nil)
     }
 }
 

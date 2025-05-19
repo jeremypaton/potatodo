@@ -30,6 +30,7 @@ struct TopNav_V: View {
                     .frame(width: 60)
             }
         }.background(Color(.white))
+
     }
 }
 

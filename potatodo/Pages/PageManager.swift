@@ -4,16 +4,17 @@ struct PageManager: View {
     @ObservedObject var taskManager: TaskManager
     @ObservedObject var navManager: NavManager
     @ObservedObject var potatoManager: PotatoManager
-    @State private var dragOffset: CGFloat = 0
+    @EnvironmentObject var settings: Settings
+    @EnvironmentObject var notificationsManager: NotificationsManager
     
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                TopNav_V(navManager: navManager)
-                
                 // Main content area
-                ZStack {
-                    switch navManager.interval {
+                Group {
+                    switch navManager.currentPage {
+                    case .backlog:
+                        PageBacklog_VM(taskManager: taskManager)
                     case .day:
                         PageDay_VM(taskManager: taskManager, navManager: navManager,
                         potatoManager: potatoManager)
@@ -21,10 +22,10 @@ struct PageManager: View {
                         PageWeek_VM(taskManager: taskManager, navManager: navManager)
                     case .month:
                         PageMonth_VM(taskManager: taskManager, navManager: navManager)
+                    case .settings:
+                        PageSettings_VM()
                     }
                 }
-                .offset(x: dragOffset)
-                
                 Spacer()
                 BottomNav_V(navManager: navManager, onPotatoClick: {
                     potatoManager.showRandomMessage()
@@ -32,26 +33,6 @@ struct PageManager: View {
             }
             .background(Color(.systemGroupedBackground))
         }
-        .gesture(
-            DragGesture()
-                .onChanged { gesture in
-                    dragOffset = gesture.translation.width
-                }
-                .onEnded { gesture in
-                    let threshold: CGFloat = 50
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                        if gesture.translation.width > threshold {
-                            navManager.movePrev()
-                            dragOffset = 0
-                        } else if gesture.translation.width < -threshold {
-                            navManager.moveNext()
-                            dragOffset = 0
-                        } else {
-                            dragOffset = 0
-                        }
-                    }
-                }
-        )
     }
 }
 
@@ -60,8 +41,12 @@ struct PageManager: View {
     let navManager = NavManager()
     let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
     let potatoManager = PotatoManager(overlayManager: overlayManager)
+    let settings = Settings()
+    let notificationsManager = NotificationsManager()
     
-    PageManager(taskManager: taskManager,
+    return PageManager(taskManager: taskManager,
                        navManager: navManager,
                        potatoManager: potatoManager)
+        .environmentObject(settings)
+        .environmentObject(notificationsManager)
 }

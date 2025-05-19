@@ -50,11 +50,21 @@ struct PageMonth_VM: View {
     
     private var completedDates: Set<Date> {
         let completedTasks = taskManager.tasks.filter { $0.isCompleted }
-        return Set(completedTasks.map { Calendar.current.startOfDay(for: $0.date) })
+        return Set(completedTasks.compactMap { task in
+            if let date = task.date {
+                return Calendar.current.startOfDay(for: date)
+            }
+            return nil
+        })
     }
     
     private func completionPercentage(for date: Date) -> Double {
-        let dayTasks = taskManager.tasks.filter { Calendar.current.isDate($0.date, inSameDayAs: date) }
+        let dayTasks = taskManager.tasks.filter { task in
+            if let taskDate = task.date {
+                return Calendar.current.isDate(taskDate, inSameDayAs: date)
+            }
+            return false
+        }
         guard !dayTasks.isEmpty else { return 0 }
         let completedCount = dayTasks.filter { $0.isCompleted }.count
         return Double(completedCount) / Double(dayTasks.count)
@@ -72,7 +82,10 @@ struct PageMonth_VM: View {
         let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth)!
         
         let monthTasks = taskManager.tasks.filter { task in
-            task.date >= startOfMonth && task.date <= endOfMonth
+            if let taskDate = task.date {
+                return taskDate >= startOfMonth && taskDate <= endOfMonth
+            }
+            return false
         }
         return monthTasks.filter { $0.isCompleted }.count
     }
@@ -130,7 +143,12 @@ struct PageMonth_VM: View {
                 // Task bars
                 VStack(spacing: 0) {
                     ForEach(0..<3) { index in
-                        let tasksForDate = taskManager.tasks.filter { Calendar.current.isDate($0.date, inSameDayAs: date) }
+                        let tasksForDate = taskManager.tasks.filter { task in
+                            if let taskDate = task.date {
+                                return Calendar.current.isDate(taskDate, inSameDayAs: date)
+                            }
+                            return false
+                        }
                         if index < tasksForDate.count {
                             let task = tasksForDate[index]
                             Rectangle()
@@ -166,10 +184,6 @@ struct PageMonth_VM: View {
                 .foregroundColor(.gray.opacity(0.3)),
             alignment: .bottom
         )
-        .overlay(
-            Rectangle()
-                .stroke(Color.brown, lineWidth: Calendar.current.isDateInToday(date) ? 2 : 0)
-        )
     }
     
     private func emptyDayView() -> some View {
@@ -191,6 +205,8 @@ struct PageMonth_VM: View {
     }
     
     var body: some View {
+        TopNav_V(navManager: navManager)
+
         VStack(spacing: 0) {
             GeometryReader { geometry in
                 VStack(spacing: 0) {
