@@ -110,13 +110,12 @@ struct PageWeek_VM: View {
         .background(Color.white)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                .stroke(Calendar.current.isDateInToday(date) ? Color.brown : Color.gray.opacity(0.3), 
+                       lineWidth: Calendar.current.isDateInToday(date) ? 4 : 1)
         )
     }
     
     var body: some View {
-        TopNav_V(navManager: navManager)
-
         GeometryReader { geometry in
             ZStack {
                 Color(.systemGray6)

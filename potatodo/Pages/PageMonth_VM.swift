@@ -166,6 +166,10 @@ struct PageMonth_VM: View {
                 .foregroundColor(.gray.opacity(0.3)),
             alignment: .bottom
         )
+        .overlay(
+            Rectangle()
+                .stroke(Color.brown, lineWidth: Calendar.current.isDateInToday(date) ? 2 : 0)
+        )
     }
     
     private func emptyDayView() -> some View {
@@ -187,8 +191,6 @@ struct PageMonth_VM: View {
     }
     
     var body: some View {
-        TopNav_V(navManager: navManager)
-
         VStack(spacing: 0) {
             GeometryReader { geometry in
                 VStack(spacing: 0) {

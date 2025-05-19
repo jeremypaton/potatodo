@@ -25,10 +25,17 @@ final class OverlayManager: ObservableObject {
                 self?.objectWillChange.send()
             }
             .store(in: &cancellables)
+            
+        // Observe task edit overlay changes
+        taskEditOverlay.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
     }
     
-    func showTaskEdit(for taskId: UUID, title: String) {
-        taskEditOverlay.show(for: taskId, title: title)
+    func showTaskEdit(for taskId: UUID, title: String, color: TaskColor = .green) {
+        taskEditOverlay.show(for: taskId, title: title, color: color)
         objectWillChange.send()
     }
     

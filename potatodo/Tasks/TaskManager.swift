@@ -22,6 +22,8 @@ class TaskManager: ObservableObject {
         let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let profileDirectory = documentsDirectory.appendingPathComponent("tasks_\(settings.profile.rawValue)")
         
+        print("Documents Directory: \(documentsDirectory.path)")
+
         // Create directory if it doesn't exist
         if !fileManager.fileExists(atPath: profileDirectory.path) {
             try? fileManager.createDirectory(at: profileDirectory, withIntermediateDirectories: true)
@@ -53,6 +55,7 @@ class TaskManager: ObservableObject {
         }
         tasks.append(task)
         saveTasks()  // Explicitly save after adding
+        notifyTaskChange()
         return task
     }
     
@@ -66,24 +69,26 @@ class TaskManager: ObservableObject {
             tasks[index] = task
             errorMessage = nil
             saveTasks()  // Explicitly save after updating
+            notifyTaskChange()
         }
     }
     
     func deleteTask(_ task: Task) {
         tasks.removeAll { $0.id == task.id }
         saveTasks()  // Explicitly save after deleting
+        notifyTaskChange()
     }
     
     func toggleTaskCompletion(_ task: Task) {
-        var updatedTask = task
-        updatedTask.isCompleted.toggle()
-        updateTask(updatedTask)  // This will trigger saveTasks
+        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+            tasks[index].isCompleted.toggle()
+            notifyTaskChange()
+        }
     }
     
-    func cycleTaskColorFromID(_ id: UUID) {
-        if let index = tasks.firstIndex(where: { $0.id == id }) {
-            var tc : TaskColor = tasks[index].color
-            
+    func cycleTaskColorFromID(_ taskId: UUID) {
+        if let index = tasks.firstIndex(where: { $0.id == taskId }) {
+            var tc = tasks[index].color
             switch tc {
                 case .green: tc = .blue
                 case .blue: tc = .yellow
@@ -92,9 +97,8 @@ class TaskManager: ObservableObject {
                 case .red: tc = .gray
                 case .gray: tc = .green
             }
-            
             tasks[index].color = tc
-            saveTasks()  // Explicitly save after color change
+            notifyTaskChange()
         }
     }
     
@@ -109,12 +113,21 @@ class TaskManager: ObservableObject {
         tasks[index1] = tasks[index2]
         tasks[index2] = temp
         saveTasks()  // Explicitly save after swapping
+        notifyTaskChange()
     }
     
     func updateTaskDate(_ taskId: UUID, newDate: Date) {
-        guard let index = tasks.firstIndex(where: { $0.id == taskId }) else { return }
-        tasks[index].date = newDate
-        saveTasks()  // Explicitly save after date change
+        if let index = tasks.firstIndex(where: { $0.id == taskId }) {
+            tasks[index].date = newDate
+            notifyTaskChange()
+        }
+    }
+    
+    func updateTaskTitle(_ taskId: UUID, newTitle: String) {
+        if let index = tasks.firstIndex(where: { $0.id == taskId }) {
+            tasks[index].title = newTitle
+            notifyTaskChange()
+        }
     }
     
     // MARK: - Persistence
@@ -253,6 +266,10 @@ class TaskManager: ObservableObject {
         } catch {
             errorMessage = "Failed to load CSV tasks: \(error.localizedDescription)"
         }
+    }
+    
+    private func notifyTaskChange() {
+        NotificationCenter.default.post(name: NSNotification.Name("TaskDidChange"), object: nil)
     }
 }
 

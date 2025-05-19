@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D1C503142DD48A9C0022FC52 /* MILESTONES.txt in Resources */ = {isa = PBXBuildFile; fileRef = D1C503132DD48A960022FC52 /* MILESTONES.txt */; };
-		D1C503162DD490E90022FC52 /* v0.1.TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = D1C503152DD490E40022FC52 /* v0.1.TODO.txt */; };
+		D1C503162DD490E90022FC52 /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = D1C503152DD490E40022FC52 /* TODO.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,7 +33,7 @@
 		D1900CCD2DD1A82300C53EEF /* potatodoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = potatodoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1900CD72DD1A82300C53EEF /* potatodoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = potatodoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1C503132DD48A960022FC52 /* MILESTONES.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MILESTONES.txt; sourceTree = "<group>"; };
-		D1C503152DD490E40022FC52 /* v0.1.TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = v0.1.TODO.txt; sourceTree = "<group>"; };
+		D1C503152DD490E40022FC52 /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -96,7 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				D1C503132DD48A960022FC52 /* MILESTONES.txt */,
-				D1C503152DD490E40022FC52 /* v0.1.TODO.txt */,
+				D1C503152DD490E40022FC52 /* TODO.txt */,
 				D1900CC22DD1A82200C53EEF /* potatodo */,
 				D1900CD02DD1A82300C53EEF /* potatodoTests */,
 				D1900CDA2DD1A82300C53EEF /* potatodoUITests */,
@@ -234,7 +234,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D1C503162DD490E90022FC52 /* v0.1.TODO.txt in Resources */,
+				D1C503162DD490E90022FC52 /* TODO.txt in Resources */,
 				D1C503142DD48A9C0022FC52 /* MILESTONES.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

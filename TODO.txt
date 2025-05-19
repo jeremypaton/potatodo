@@ -34,12 +34,41 @@ FUNCTIONALITY
     v0.1.6
         [X] notification system
             [X] daily reminder
-    
-REFACTOR
+            
+REFINE
     v0.1.7
+    IMPROVE SAVE
+        [ ] make 1000% sure tasks persist through updates
+            [ ] use CoreData to store?
+            [ ] find + understand where data lives on phone / mac
+                [ ] open in finder while iphone plugin
+            [ ] archives - daily, per version etc... export from phone etc.
+        
+    IMPROVE REMINDERS
+        [ ] nice formatting
+        [ ] post-accomplishment congrats reminder (like strava) / summarize progress
+        [ ] weekly recap
+        [ ] fix double reminder bug
+            reminders should only ever schedule for future days (not today) and only one per day
+
+    WIDGET
+        [ ] widget
+        [X] red bubble badge
+        
+    IMPROVE TASKS
+        [X] sideswipe to shift date
+        [X] black outline around today in week / month view
+        [ ] list view for unscheduled tasks / backlog
+            medicare,glasses,passport,license
+        [ ] make drag and drop more robust
+        [ ] spacer for day view
+        [X] make sure task color retained when editing
+
+REFACTOR
+    v0.1.8
         [ ] BIG REFACTOR - one manager at a time
         
-        convert to service model to clean up manager codependencies...
+        convert to service model to clean up manager codependencies...4rtg
         
         Here's the simplified step-by-step plan:
             
@@ -70,26 +99,42 @@ REFACTOR
 
         [ ] proper test/debug/prod build system
 
-REFINE
-    v0.1.8
-    IMPROVE SAVE
-        [ ] make 1000% sure tasks persist through updates
-        [ ] find where data lives on phone / mac
-        [ ] archives - daily, per vesion etc.
-        
-    IMPROVE REMINDERS
-        [ ] nice formatting
-        [ ] post-accomplishment congrats reminder (like strava)
-        [ ] weekly recap / email
 
-    WIDGET
-        [ ] widget
-        [ ] red bubble
-        
-=== FEATURE LOCK ===
+=== ENGINEERING BETA LOCK === [MON 19 MAY]
+=== START DESIGN WORK ===
 
-UI
-    v0.1.9
-    [ ] fix dynamic layouts
+v0.2.0 - UI layout
+    [ ] fix layouts + dynamic
+
+v0.2.1 - UI styles
     [ ] UI design pass / alts
         [ ] try dark mode
+        [ ] mock up built in elements vs hand drawn etc.
+        
+v0.2.2 - potato character lookdev
+    [ ] still frames for each level
+    [ ] 3 character variations
+
+v0.2.3 - potato speech
+    [ ] generate good speech for each level
+    [ ] figure out timing / triggers
+    [ ] 3 character variations speech
+    [ ] improve notifications speech
+
+v0.2.4 - potato aim
+    [ ] keep alive / idle
+    [ ] speaking
+    [ ] potato celebration anim
+    [ ] overlay elements / fx
+
+=== DESIGN BETA LOCK === [MON 26 MAY]
+=== START FLOW WORK ===
+
+v0.3.0 - splash screen
+
+v0.3.1 - day 1 intro
+
+v0.3.2 - basic advertizing
+
+=== FLOW BETA LOCK === [SUN 01 JUN]
+=== BETA READY ===

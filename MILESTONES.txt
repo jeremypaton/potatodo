@@ -1,50 +1,44 @@
+open /Users/wombleman/Library/Developer/CoreSimulator/Devices/F5B62CD8-1CFD-438A-8BF5-61F8FBB4BA91/data/Containers/Data/Application/8397454B-D32F-4F57-BE08-BD4CD9446F93/Documents
+
 MILESTONES:
 
 === MVP ===
 
 ... prototyping
 
-[14 MAY]
-v0.1 - function/UI MVP
+v0.1 - feature MVP
     v0.1.x - iterate features
 
-[21 MAY]
 v0.2 - UI/animation update
-    v0.2.x - iterate animation
+    v0.2.x - iterate UI/animation
     
-[28 MAY]
 v0.3 - splash/onboard update
     v03.x - iterate animation
 
-=== BETA ===
+=== BETA === [JUNE 1]
 
 ... start socials
 
-[JUNE 1]
 v0.4 - closed beta
     v0.4.x - iterate
     
-[JUNE 7]
 v0.5 - open beta
     v0.5.x - iterate
     
-[JUNE 14]
 v0.6 - feature lock
     v0.6.x - test / fix bugs
         
-=== PUBLIC ===
+=== EARLY ACCESS === [JULY 1]
 
-[JULY 1]
-v0.9 - early access
+v0.9 - free early access
     - product hunt launch etc.
-    
-[AUGUST 1]
-v1.0 - full launch
-
-=== MONETIZE ===
 
 GOAL: 1000 Daily Active Users
     -> then monetize
+    
+=== FULL LAUNCH ===
+
+v1.0 - full launch w/ monetization
 
 [SEPTEMBER 1]
 HBS / YC APPS

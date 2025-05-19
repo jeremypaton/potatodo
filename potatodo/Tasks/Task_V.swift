@@ -135,7 +135,7 @@ struct Task_V: View {
                     
                     // Task text
                     Button {
-                        overlayManager.showTaskEdit(for: taskId, title: task.title)
+                        overlayManager.showTaskEdit(for: taskId, title: task.title, color: task.color)
                     } label: {
                         Text(task.title.uppercased())
                             .font(.system(size: style.fontSize, weight: .medium))
@@ -145,7 +145,6 @@ struct Task_V: View {
                             .foregroundColor(.black)
                     }
                     .buttonStyle(PlainButtonStyle())
-                    .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
                     
                     // Completion circle
                     Button {
