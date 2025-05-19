@@ -95,26 +95,26 @@ struct TaskEditOverlay_V: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal)
                     
-                    // Date picker
-                    DatePicker("Schedule Date", selection: Binding(
-                        get: { overlayManager.taskEditOverlay.selectedDate ?? Date() },
-                        set: { newValue in
-                            overlayManager.taskEditOverlay.selectedDate = newValue
-                            overlayManager.objectWillChange.send()
-                        }
-                    ), displayedComponents: [.date])
-                    .datePickerStyle(CompactDatePickerStyle())
-                    .padding(.horizontal)
-                    
-                    // Toggle for unscheduled tasks
-                    Toggle("Unscheduled Task", isOn: Binding(
-                        get: { overlayManager.taskEditOverlay.selectedDate == nil },
-                        set: { newValue in
-                            overlayManager.taskEditOverlay.selectedDate = newValue ? nil : Date()
-                            overlayManager.objectWillChange.send()
-                        }
-                    ))
-                    .padding(.horizontal)
+//                    // Date picker
+//                    DatePicker("Schedule Date", selection: Binding(
+//                        get: { overlayManager.taskEditOverlay.selectedDate ?? Date() },
+//                        set: { newValue in
+//                            overlayManager.taskEditOverlay.selectedDate = newValue
+//                            overlayManager.objectWillChange.send()
+//                        }
+//                    ), displayedComponents: [.date])
+//                    .datePickerStyle(CompactDatePickerStyle())
+//                    .padding(.horizontal)
+//                    
+//                    // Toggle for unscheduled tasks
+//                    Toggle("Unscheduled Task", isOn: Binding(
+//                        get: { overlayManager.taskEditOverlay.selectedDate == nil },
+//                        set: { newValue in
+//                            overlayManager.taskEditOverlay.selectedDate = newValue ? nil : Date()
+//                            overlayManager.objectWillChange.send()
+//                        }
+//                    ))
+//                    .padding(.horizontal)
                     
                     HStack(spacing: 20) {
                         Button {
