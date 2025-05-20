@@ -65,6 +65,11 @@
 			path = potatodoUITests;
 			sourceTree = "<group>";
 		};
+		D1C504052DDB1C350022FC52 /* phonedata_archive */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = phonedata_archive;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +100,7 @@
 		D1900CB72DD1A82200C53EEF = {
 			isa = PBXGroup;
 			children = (
+				D1C504052DDB1C350022FC52 /* phonedata_archive */,
 				D1C503132DD48A960022FC52 /* MILESTONES.txt */,
 				D1C503152DD490E40022FC52 /* TODO.txt */,
 				D1900CC22DD1A82200C53EEF /* potatodo */,
@@ -131,6 +137,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				D1900CC22DD1A82200C53EEF /* potatodo */,
+				D1C504052DDB1C350022FC52 /* phonedata_archive */,
 			);
 			name = potatodo;
 			packageProductDependencies = (
@@ -434,7 +441,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.6;
+				MARKETING_VERSION = 0.1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -466,7 +473,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.6;
+				MARKETING_VERSION = 0.1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

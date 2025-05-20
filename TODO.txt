@@ -38,37 +38,26 @@ FUNCTIONALITY
 REFINE
     v0.1.7
     IMPROVE SAVE
-        [ ] make 1000% sure tasks persist through updates
-            [ ] use CoreData to store?
-            [ ] find + understand where data lives on phone / mac
-                [ ] open in finder while iphone plugin
-            [ ] archives - daily, per version etc... export from phone etc.
+        [X] make sure tasks persist through updates
+        [ ] find + understand where data lives on phone / mac
+            [ ] open in finder while iphone plugin
+        [ ] make an archive
         
-    IMPROVE REMINDERS
-        [ ] nice formatting
-        ? post-accomplishment congrats reminder (like strava) / summarize progress
-        [ ] weekly recap
-        [ ] fix double reminder bug
-            reminders should only ever schedule for future days (not today) and only one per day
-
     WIDGET
-        [ ] widget
         [X] red bubble badge
         
     IMPROVE TASKS
         [X] sideswipe to shift date
         [X] black outline around today in week / month view
-        [ ] list view for unscheduled tasks / backlog
-            medicare,glasses,passport,license
-        [ ] make drag and drop more robust
-        [ ] spacer for day view
+        [X] list view for unscheduled tasks / backlog
+            [ ] medicare,glasses,passport,license
         [X] make sure task color retained when editing
 
 REFACTOR
     v0.1.8
         [ ] BIG REFACTOR - one manager at a time
         
-        convert to service model to clean up manager codependencies...4rtg
+        convert to service model to clean up manager codependencies...
         
         Here's the simplified step-by-step plan:
             
@@ -99,13 +88,23 @@ REFACTOR
 
         [ ] proper test/debug/prod build system
 
+REMINDERS
+    v0.1.9
+    overall reminder system
+        [ ] nice formatting
+        [ ] single source of truth
+                [ ] fix double reminder bug
+        [ ] daily + weekly
+        [ ] settings page
+
 
 === ENGINEERING BETA LOCK === [MON 19 MAY]
 === START DESIGN WORK ===
 
 v0.2.0 - UI layout
     [ ] fix layouts + dynamic
-
+    [ ] make drag and drop more robust
+    
 v0.2.1 - UI styles
     [ ] UI design pass / alts
         [ ] try dark mode
@@ -138,3 +137,10 @@ v0.3.2 - basic advertizing
 
 === FLOW BETA LOCK === [SUN 01 JUN]
 === BETA READY ===
+
+FUTURE:
+    widget
+    emails
+    weekly recaps
+    progress charts
+    medicare,glasses,passport,license
