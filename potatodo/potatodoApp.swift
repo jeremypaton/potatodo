@@ -14,7 +14,7 @@ enum Profile: String, Codable {
 }
 
 class Settings: ObservableObject {
-    @Published var profile: Profile = .prod
+    @Published var profile: Profile = .test
     @Published var notificationsEnabled: Bool = false {
         didSet {
             UserDefaults.standard.set(notificationsEnabled, forKey: "notificationsEnabled")
