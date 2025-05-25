@@ -122,6 +122,15 @@ class AppDataStore: ObservableObject {
         taskData.objectWillChange
             .sink { [weak self] _ in self?.objectWillChange.send() }
             .store(in: &cancellables)
+        
+        // Auto-save tasks when they change
+        taskData.$tasks
+            .dropFirst() // Ignore initial value
+            .sink { [weak self] tasks in
+                guard let self = self else { return }
+                PersistenceUtils.saveTasksForProfile(tasks, profile: self.userSettings.profile)
+            }
+            .store(in: &cancellables)
     }
     
     // save()
@@ -222,7 +231,7 @@ class AppManager: ObservableObject {
     
     // BASIC TASK MANAGEMENT
     private func setTasks(_ tasks: [Task]) { self.appDataStore.taskData.tasks = tasks }
-    private func loadTasks(){ self.setTasks(PersistinceUtils.getTaskArrayForProfile(self.appDataStore.userSettings.profile))}
+    private func loadTasks(){ self.setTasks(PersistenceUtils.getTaskArrayForProfile(self.appDataStore.userSettings.profile))}
     func addTask(_ task: Task) { self.appDataStore.taskData.tasks.append(task) }
     func deleteTaskByID(_ id: UUID) { self.appDataStore.taskData.tasks.removeAll { $0.id == id } }
 

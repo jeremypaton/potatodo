@@ -55,22 +55,28 @@ REFINE
 
 REFACTOR
     v0.1.8
-        [ ] BIG REFACTOR
+        [] BIG REFACTOR
             [X] centralize AppManager
             [X] centralize task data
-            [X] PersistenceUtils
-        [ ] proper test/debug/prod build system
+            [ ] PersistenceUtils for tasks
+                [X] loading tasks
+                [ ] saving tasks
+                [ ] auto-save
+        [X] proper test/debug/prod build system
 
 REMINDERS
     v0.1.9
         [ ] overhaul reminder system
             [ ] nice formatting
             [ ] daily + weekly
-            [ ] reminder persistenceutils
+            [ ] persistenceutils for reminders (hook into tasks?)
         [ ] fix widget / badge
         [ ] make drag and drop more robust
         [ ] basic settings page
+            [ ] move profile dropdown to settings
         [ ] basic stats
+        [ ] basic backlog page
+            [ ] add backlog tasks to test data
     
 CLEANUP
     [ ] clean up files 1-by-1

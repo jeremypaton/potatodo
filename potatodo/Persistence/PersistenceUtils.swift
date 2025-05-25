@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-struct PersistinceUtils {
+struct PersistenceUtils {
     
     static private func tasksDirectoryForProfile(_ profile: Profile) -> URL {
         let fileManager = FileManager.default
@@ -113,6 +113,20 @@ struct PersistinceUtils {
             // errorMessage = "Failed to load CSV tasks: \(error.localizedDescription)"
         }
         return tasks
+    }
+    
+    static func saveTasksForProfile(_ tasks: [Task], profile: Profile) {
+        guard profile.name != "DEBUG" && profile.name != "TEST" else {
+            print("Cannot save tasks for DEBUG or TEST profiles")
+            return
+        }
+        
+        do {
+            let data = try JSONEncoder().encode(tasks)
+            try data.write(to: tasksFileForProfile(profile))
+        } catch {
+            print("Failed to save tasks: \(error.localizedDescription)")
+        }
     }
     
 }
