@@ -108,9 +108,9 @@ struct NotificationsSettingsView: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Settings")
                 .font(.headline)
-            Text("Notifications Enabled: \(notificationsManager.isEnabled ? "Yes" : "No")")
-            Text("Daily Time: \(notificationsManager.dailyTime.formatted(date: .omitted, time: .shortened))")
-            Text("Default Reminder Text: \(notificationsManager.defaultReminderText)")
+//            Text("Notifications Enabled: \(notificationsManager.isEnabled ? "Yes" : "No")")
+//            Text("Daily Time: \(notificationsManager.dailyTime.formatted(date: .omitted, time: .shortened))")
+//            Text("Default Reminder Text: \(notificationsManager.defaultReminderText)")
         }
     }
 }

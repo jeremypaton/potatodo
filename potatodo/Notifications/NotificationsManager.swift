@@ -1,66 +1,62 @@
 import Foundation
 import UserNotifications
+import Combine
 
 class NotificationsManager: ObservableObject {
-    @Published var isEnabled: Bool = false
-    @Published var dailyTime: Date = Calendar.current.date(from: DateComponents(hour: 9, minute: 0)) ?? Date()
     @Published var defaultReminderText: String = "🥔 Time to plan your day!"
     @Published var pendingNotifications: [UNNotificationRequest] = []
     
     private let notificationCenter = UNUserNotificationCenter.current()
     private let dailyReminderIdentifier = "dailyReminder"
+    private var cancellables = Set<AnyCancellable>()
+    private let appDataStore: AppDataStore
     
-    init() {
-        // Load saved settings
-        loadSettings()
+    init(appDataStore: AppDataStore) {
+        self.appDataStore = appDataStore
+        
+        // Observe changes to notification settings
+        appDataStore.userSettings.$notificationsEnabled
+            .sink { [weak self] enabled in
+                self?.updateRemindersIfNeeded()
+            }
+            .store(in: &cancellables)
+        
+        appDataStore.userSettings.$notificationTime
+            .sink { [weak self] time in
+                self?.updateRemindersIfNeeded()
+            }
+            .store(in: &cancellables)
+        
         updatePendingNotifications()
     }
     
     // MARK: - Permission Management
     
     func requestPermissions() {
-        notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            DispatchQueue.main.async {
-                self.isEnabled = granted
-                if granted {
-                    self.saveSettings()
-                    self.scheduleDailyReminder()
-                }
-            }
-        }
-    }
-    
-    // MARK: - Settings Management
-    
-    func setDailyTime(_ time: Date) {
-        dailyTime = time
-        saveSettings()
-        if isEnabled {
-            scheduleDailyReminder()
-        }
-    }
-    
-    func setDefaultReminderText(_ text: String) {
-        defaultReminderText = text
-        saveSettings()
-    }
-    
-    func enableNotifications() {
-        isEnabled = true
-        saveSettings()
-        scheduleDailyReminder()
-    }
-    
-    func disableNotifications() {
-        isEnabled = false
-        saveSettings()
-        removeAllReminders()
+//        notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, error in
+//            DispatchQueue.main.async {
+//                self?.appDataStore.userSettings.notificationsEnabled = granted
+//                if granted {
+//                    self?.updateRemindersIfNeeded()
+//                } else {
+//                    self?.removeAllReminders()
+//                }
+//            }
+//        }
     }
     
     // MARK: - Daily Reminder Management
     
+    private func updateRemindersIfNeeded() {
+        if appDataStore.userSettings.notificationsEnabled {
+            scheduleDailyReminder()
+        } else {
+            removeAllReminders()
+        }
+    }
+    
     func scheduleDailyReminder() {
-        guard isEnabled else { return }
+        guard appDataStore.userSettings.notificationsEnabled else { return }
         
         // Remove existing daily reminder
         notificationCenter.removePendingNotificationRequests(withIdentifiers: [dailyReminderIdentifier])
@@ -71,9 +67,9 @@ class NotificationsManager: ObservableObject {
         content.body = defaultReminderText
         content.sound = .default
         
-        // Get hour and minute from dailyTime
+        // Get hour and minute from notificationTime
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.hour, .minute], from: dailyTime)
+        let components = calendar.dateComponents([.hour, .minute], from: appDataStore.userSettings.notificationTime)
         
         // Create trigger for daily notification
         var triggerComponents = DateComponents()
@@ -90,11 +86,11 @@ class NotificationsManager: ObservableObject {
         )
         
         // Schedule notification
-        notificationCenter.add(request) { error in
+        notificationCenter.add(request) { [weak self] error in
             if let error = error {
                 print("Error scheduling daily reminder: \(error.localizedDescription)")
             }
-            self.updatePendingNotifications()
+            self?.updatePendingNotifications()
         }
     }
     
@@ -115,7 +111,7 @@ class NotificationsManager: ObservableObject {
         // Create trigger for specific date using the daily time
         let calendar = Calendar.current
         var components = calendar.dateComponents([.year, .month, .day], from: date)
-        let dailyComponents = calendar.dateComponents([.hour, .minute], from: dailyTime)
+        let dailyComponents = calendar.dateComponents([.hour, .minute], from: appDataStore.userSettings.notificationTime)
         components.hour = dailyComponents.hour
         components.minute = dailyComponents.minute
         
@@ -129,11 +125,11 @@ class NotificationsManager: ObservableObject {
         )
         
         // Schedule notification
-        notificationCenter.add(request) { error in
+        notificationCenter.add(request) { [weak self] error in
             if let error = error {
                 print("Error scheduling reminder: \(error.localizedDescription)")
             }
-            self.updatePendingNotifications()
+            self?.updatePendingNotifications()
         }
     }
     
@@ -173,7 +169,6 @@ class NotificationsManager: ObservableObject {
         if !incompleteTasks.isEmpty {
             let reminderText = incompleteTasks.map { "🥔 \($0.title)" }.joined(separator: "\n")
             setReminderText(for: dayStart, text: reminderText)
-            // Ensure we update the pending notifications list
             updatePendingNotifications()
         }
     }
@@ -197,25 +192,5 @@ class NotificationsManager: ObservableObject {
                 self?.pendingNotifications = requests
             }
         }
-    }
-    
-    // MARK: - Persistence
-    
-    private func saveSettings() {
-        let defaults = UserDefaults.standard
-        defaults.set(isEnabled, forKey: "notificationsEnabled")
-        defaults.set(dailyTime, forKey: "dailyNotificationTime")
-//        defaults.set(defaultReminderText, forKey: "defaultReminderText")
-    }
-    
-    private func loadSettings() {
-        let defaults = UserDefaults.standard
-        isEnabled = defaults.bool(forKey: "notificationsEnabled")
-        if let savedTime = defaults.object(forKey: "dailyNotificationTime") as? Date {
-            dailyTime = savedTime
-        }
-//        if let savedText = defaults.string(forKey: "defaultReminderText") {
-//            defaultReminderText = savedText
-//        }
     }
 } 

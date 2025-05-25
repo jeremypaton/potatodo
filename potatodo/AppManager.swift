@@ -138,9 +138,9 @@ class AppDataStore: ObservableObject {
 
 @MainActor
 class AppManager: ObservableObject {
-    private var taskManager: TaskManager!
+//    private var taskManager: TaskManager
     private var navManager: NavManager
-    private var notificationsManager: NotificationsManager
+    private var notificationsManager: NotificationsManager!
     private var overlayManager: OverlayManager
     private var potatoManager: PotatoManager
     private var messageManager: MessageManager
@@ -159,9 +159,6 @@ class AppManager: ObservableObject {
         let navManager = NavManager()
         self.navManager = navManager
         
-        let notificationsManager = NotificationsManager()
-        self.notificationsManager = notificationsManager
-        
         let overlayManager = OverlayManager()
         self.overlayManager = overlayManager
         
@@ -169,9 +166,12 @@ class AppManager: ObservableObject {
         self.potatoManager = potatoManager
         
         self.messageManager = potatoManager.messageManager
+//        
+//        let taskManager = TaskManager()
+//        self.taskManager = taskManager
         
-        let taskManager = TaskManager(appManager: self)
-        self.taskManager = taskManager
+        let notificationsManager = NotificationsManager(appDataStore: appDataStore)
+        self.notificationsManager = notificationsManager
         
         // Observe all manager changes
         observeManagerChanges()
@@ -180,7 +180,7 @@ class AppManager: ObservableObject {
     }
     
     private func observeManagerChanges() {
-        observe(taskManager)
+//        observe(taskManager)
         observe(navManager)
         observe(notificationsManager)
         observe(overlayManager)
@@ -222,7 +222,7 @@ class AppManager: ObservableObject {
         messageManager.showMessageForCompletionLevel(appDataStore.uiState.level)
     }
     
-    func getTaskManagerForTaskView() -> TaskManager { return taskManager }
+//    func getTaskManagerForTaskView() -> TaskManager { return taskManager }
     func getNavManagerForNavView() -> NavManager { return navManager }
     func getNotificationsManagerForNotificationsView() -> NotificationsManager { return notificationsManager}
     func getOverlayManagerForOverlayView() -> OverlayManager { return overlayManager }
@@ -249,13 +249,17 @@ class AppManager: ObservableObject {
         self.loadTasks()
     }
     
-    func setNotificationsEnabled(_ enabled: Bool) {
-        self.appDataStore.userSettings.notificationsEnabled = enabled
-    }
-    
-    func setNotificationTime(_ time: Date) {
-        self.appDataStore.userSettings.notificationTime = time
-    }
+//    func setNotificationsEnabled(_ enabled: Bool) {
+//        self.appDataStore.userSettings.notificationsEnabled = enabled
+//    }
+//    
+//    func toggleNotificationsEnabled() {
+//        self.appDataStore.userSettings.notificationsEnabled.toggle()
+//    }
+//    
+//    func setNotificationTime(_ time: Date) {
+//        self.appDataStore.userSettings.notificationTime = time
+//    }
     
     func saveTaskEditOverlay(){
         guard let taskId = overlayManager.taskEditOverlay.taskId,

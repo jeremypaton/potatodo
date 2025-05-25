@@ -58,10 +58,10 @@ REFACTOR
         [] BIG REFACTOR
             [X] centralize AppManager
             [X] centralize task data
-            [ ] PersistenceUtils for tasks
+            [X] PersistenceUtils for tasks
                 [X] loading tasks
-                [ ] saving tasks
-                [ ] auto-save
+                [X] saving tasks
+                [X] auto-save
         [X] proper test/debug/prod build system
 
 REMINDERS

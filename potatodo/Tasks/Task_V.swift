@@ -101,14 +101,14 @@ struct TaskStyle {
 
 struct Task_V: View {
     @ObservedObject var appManager: AppManager
-    @ObservedObject var taskManager: TaskManager
+//    @ObservedObject var taskManager: TaskManager
     @ObservedObject var task: Task
     let isCompact: Bool
     @State private var isTargeted = false
     
     init(appManager: AppManager, task: Task, isCompact: Bool, isTargeted: Bool = false) {
         self.appManager = appManager
-        self.taskManager = appManager.getTaskManagerForTaskView()
+//        self.taskManager = appManager.getTaskManagerForTaskView()
         self.task = task
         self.isCompact = isCompact
         self.isTargeted = isTargeted
@@ -184,14 +184,14 @@ struct Task_V: View {
             .onDrag {
                 NSItemProvider(object: task.id.uuidString as NSString)
             }
-            .onDrop(of: [.text], delegate: TaskDropDelegate(taskId: task.id, taskManager: taskManager, isTargeted: $isTargeted))
+            .onDrop(of: [.text], delegate: TaskDropDelegate(taskId: task.id,isTargeted: $isTargeted))
         }
     }
 }
 
 struct TaskDropDelegate: DropDelegate {
     let taskId: UUID
-    let taskManager: TaskManager
+//    let taskManager: TaskManager
     @Binding var isTargeted: Bool
     
     func performDrop(info: DropInfo) -> Bool {
@@ -203,7 +203,7 @@ struct TaskDropDelegate: DropDelegate {
                   let draggedId = UUID(uuidString: draggedIdString) else { return }
             
             DispatchQueue.main.async {
-                self.taskManager.swapTaskIDs(self.taskId, draggedId)
+//                self.taskManager.swapTaskIDs(self.taskId, draggedId)
             }
         }
         
@@ -226,7 +226,7 @@ struct TaskDropDelegate: DropDelegate {
 // MARK: - Add Task Button View
 struct AddTaskButton_V: View {
     @ObservedObject var appManager: AppManager
-    @ObservedObject var taskManager: TaskManager
+//    @ObservedObject var taskManager: TaskManager
 //    @EnvironmentObject var overlayManager: OverlayManager
     let isCompact: Bool
     let date: Date?
@@ -234,7 +234,7 @@ struct AddTaskButton_V: View {
     
     init(appManager: AppManager, isCompact: Bool, date: Date? = nil) {
         self.appManager = appManager
-        self.taskManager = appManager.getTaskManagerForTaskView()
+//        self.taskManager = appManager.getTaskManagerForTaskView()
 //        self.taskId = taskId
         self.isCompact = isCompact
         self.date = date
