@@ -11,8 +11,8 @@ import Combine
 
 @MainActor
 class TaskManager: ObservableObject {
-    @ObservedObject var settings: Settings
-    let notificationsManager = NotificationsManager()
+    @ObservedObject var appManager: AppManager
+//    let notificationsManager = NotificationsManager()
 
     @Published private(set) var tasks: [Task] = []
     @Published var errorMessage: String?
@@ -24,7 +24,7 @@ class TaskManager: ObservableObject {
     private var tasksDirectory: URL {
         let fileManager = FileManager.default
         let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let profileDirectory = documentsDirectory.appendingPathComponent("tasks_\(settings.profile.rawValue)")
+        let profileDirectory = documentsDirectory.appendingPathComponent("tasks_\(appManager.appDataStore.userSettings.profile.rawValue)")
         
         print("Documents Directory: \(documentsDirectory.path)")
 
@@ -42,10 +42,10 @@ class TaskManager: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(settings: Settings = Settings()) {
-        self.settings = settings
+    init(appManager: AppManager) {
+        self.appManager = appManager
         loadTasks()
-        if settings.profile == .prod {
+        if appManager.appDataStore.userSettings.profile == .prod {
             setupAutoSave()
         }
     }
@@ -136,7 +136,7 @@ class TaskManager: ObservableObject {
     
     private func saveTasks() {
         // Only save if we're in production mode
-        guard settings.profile == .prod else { return }
+        guard appManager.appDataStore.userSettings.profile == .prod else { return }
         
         let encoder = JSONEncoder()
         do {
@@ -147,40 +147,40 @@ class TaskManager: ObservableObject {
         }
     }
     
-    private func updateDailyReminders() {
-        // First, remove all existing reminders to ensure clean state
-        notificationsManager.removeAllReminders()
-        
-        // Get today and next 7 days
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        let nextWeek = (0...7).compactMap { day in
-            calendar.date(byAdding: .day, value: day, to: today)
-        }
-        
-        // For each date in the next week
-        for date in nextWeek {
-            let tasksForDate = tasks.filter { task in
-                if let taskDate = task.date {
-                    return calendar.isDate(taskDate, inSameDayAs: date)
-                }
-                return false
-            }
-            if !tasksForDate.isEmpty {
-                // If there are tasks for this date, create task-specific reminder
-                notificationsManager.updateRemindersForDay(date, tasks: tasksForDate)
-            } else {
-                // If no tasks, create default reminder
-                notificationsManager.setReminderText(for: date, text: notificationsManager.defaultReminderText)
-            }
-        }
-    }
+//    private func updateDailyReminders() {
+//        // First, remove all existing reminders to ensure clean state
+//        notificationsManager.removeAllReminders()
+//        
+//        // Get today and next 7 days
+//        let calendar = Calendar.current
+//        let today = calendar.startOfDay(for: Date())
+//        let nextWeek = (0...7).compactMap { day in
+//            calendar.date(byAdding: .day, value: day, to: today)
+//        }
+//        
+//        // For each date in the next week
+//        for date in nextWeek {
+//            let tasksForDate = tasks.filter { task in
+//                if let taskDate = task.date {
+//                    return calendar.isDate(taskDate, inSameDayAs: date)
+//                }
+//                return false
+//            }
+//            if !tasksForDate.isEmpty {
+//                // If there are tasks for this date, create task-specific reminder
+//                notificationsManager.updateRemindersForDay(date, tasks: tasksForDate)
+//            } else {
+//                // If no tasks, create default reminder
+//                notificationsManager.setReminderText(for: date, text: notificationsManager.defaultReminderText)
+//            }
+//        }
+//    }
     
     func loadTasks() {
         // Clear current tasks before loading new ones
         tasks = []
         
-        switch settings.profile {
+        switch appManager.appDataStore.userSettings.profile {
         case .debug:
             loadDebugTasks()
         case .test:
@@ -188,7 +188,7 @@ class TaskManager: ObservableObject {
         case .prod:
             loadRealTasks()
         }
-        updateDailyReminders()
+//        updateDailyReminders()
     }
     
     private func loadRealTasks() {
@@ -265,25 +265,26 @@ class TaskManager: ObservableObject {
 }
 
 #Preview {
-    let settings = Settings()
-    settings.profile = .debug
+//    let settings = Settings()
+//    settings.profile = .debug
+//    
+//    let taskManager = TaskManager()
+//    let navManager = NavManager()
+//    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
+    let appManager = AppManager()
     
-    let taskManager = TaskManager()
-    let navManager = NavManager()
-    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
-    
-    return ZStack {
+     ZStack {
         VStack {
-            ForEach(taskManager.tasks) { task in
-                Task_V(taskManager: taskManager, taskId: task.id, isCompact: false)
+            ForEach(appManager.getTasks()) { task in
+                Task_V(appManager: appManager, taskId: task.id, isCompact: false)
             }
             
-            AddTaskButton_V(taskManager: taskManager, isCompact: false, date: Date())
+            AddTaskButton_V(appManager: appManager, isCompact: false, date: Date())
             
             HStack {
                 VStack {
-                    ForEach(taskManager.tasks) { task in
-                        Task_V(taskManager: taskManager, taskId: task.id, isCompact: true)
+                    ForEach(appManager.getTasks()) { task in
+                        Task_V(appManager: appManager, taskId: task.id, isCompact: true)
                     }
                 }
                 .frame(width: UIScreen.main.bounds.width / 2)
@@ -291,10 +292,7 @@ class TaskManager: ObservableObject {
                 Spacer()
             }
         }
-        Overlay_V()
+        Overlay_V(appManager: appManager)
 
     }
-    .environmentObject(settings)
-    .environmentObject(overlayManager)
-
 }

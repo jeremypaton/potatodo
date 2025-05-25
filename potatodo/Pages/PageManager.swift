@@ -1,35 +1,31 @@
 import SwiftUI
 
 struct PageManager: View {
-    @ObservedObject var taskManager: TaskManager
-    @ObservedObject var navManager: NavManager
-    @ObservedObject var potatoManager: PotatoManager
-    @EnvironmentObject var settings: Settings
-    @EnvironmentObject var notificationsManager: NotificationsManager
-    
+    @ObservedObject var appManager: AppManager
+
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
                 // Main content area
                 Group {
-                    switch navManager.currentPage {
+                    switch appManager.getCurrentPage() {
                     case .backlog:
-                        PageBacklog_VM(taskManager: taskManager)
+                        PageBacklog_VM(appManager: appManager)
                     case .day:
-                        PageDay_VM(taskManager: taskManager, navManager: navManager,
-                        potatoManager: potatoManager)
+                        PageDay_VM(appManager: appManager)
                     case .week:
-                        PageWeek_VM(taskManager: taskManager, navManager: navManager)
+                        PageWeek_VM(appManager: appManager)
                     case .month:
-                        PageMonth_VM(taskManager: taskManager, navManager: navManager)
+                        PageMonth_VM(appManager: appManager)
                     case .settings:
-                        PageSettings_VM()
+                        PageSettings_VM(appManager: appManager)
                     }
                 }
+                .onChange(of: appManager.getCurrentPage()) { oldValue, newValue in
+                    print("🎯 PageManager: Page changed from \(oldValue) to \(newValue)")
+                }
                 Spacer()
-                BottomNav_V(navManager: navManager, onPotatoClick: {
-                    potatoManager.showRandomMessage()
-                })
+                BottomNav_V(appManager: appManager)
             }
             .background(Color(.systemGroupedBackground))
         }
@@ -37,16 +33,6 @@ struct PageManager: View {
 }
 
 #Preview {
-    let taskManager = TaskManager()
-    let navManager = NavManager()
-    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
-    let potatoManager = PotatoManager(overlayManager: overlayManager)
-    let settings = Settings()
-    let notificationsManager = NotificationsManager()
-    
-    return PageManager(taskManager: taskManager,
-                       navManager: navManager,
-                       potatoManager: potatoManager)
-        .environmentObject(settings)
-        .environmentObject(notificationsManager)
+    let appManager = AppManager()
+    return PageManager(appManager: appManager)
 }

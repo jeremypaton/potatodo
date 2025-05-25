@@ -7,69 +7,40 @@
 import SwiftUI
 
 class PotatoManager: ObservableObject {
-    @Published var level: Int = 0
-    @Published var isCelebrating: Bool = false
     @Published var messageManager: MessageManager
-    var overlayManager: OverlayManager
     
-    init(overlayManager: OverlayManager) {
-        self.overlayManager = overlayManager
+    init() {
         self.messageManager = MessageManager()
         self.messageManager.loadMessages()
     }
     
-    func setLevel(_ newLevel: Int) {
-        level = newLevel
-    }
-    
-    func celebrateLevel(_ newLevel: Int) {
-        messageManager.showMessageForCompletionLevel(newLevel)
-        
-        if newLevel == 3 {
-            isCelebrating = true
-            DispatchQueue.main.async {
-                self.overlayManager.showPotatoRain(isSinglePotato: false)
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-                self?.isCelebrating = false
-                self?.setLevel(newLevel)
-            }
-        } else {
-            setLevel(newLevel)
-        }
-    }
-    
-    func showRandomMessage() {
+    func showRandomMessageForLevel(level: Int) {
         // Get all messages and pick a random one
-        if let randomMessage = messageManager.messages.randomElement() {
-            messageManager.showMessageForCompletionLevel(randomMessage.level)
+        if messageManager.messages.randomElement() != nil {
+            messageManager.showMessageForCompletionLevel(level)
         }
     }
 }
 
 #Preview {
-    let taskManager = TaskManager()
-    let navManager = NavManager()
-    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
-    let potatoManager = PotatoManager(overlayManager: overlayManager)
+    let appManager = AppManager()
+
     ZStack{
         VStack(spacing: 20) {
-            Potato_V(potatoManager: potatoManager)
+            Potato_V(appManager: appManager)
             
             HStack{
                 ForEach(0..<4) { level in
                     Button(action: {
-                        potatoManager.celebrateLevel(level)
+                        appManager.celebrateLevel(level)
                     }) {
                         Text("Level \(level)")
                     }
                 }
             }
         }
-        Overlay_V()
+        Overlay_V(appManager: appManager)
     }
-//    .padding()
+    .padding()
     .background(Color(.green))
-    .environmentObject(overlayManager)
-
 }

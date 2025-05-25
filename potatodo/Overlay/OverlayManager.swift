@@ -11,14 +11,9 @@ import Combine
 final class OverlayManager: ObservableObject {
     let taskEditOverlay = TaskEditOverlay()
     let potatoRainOverlay = PotatoRainOverlay()
-    @ObservedObject var taskManager: TaskManager
-    @ObservedObject var navManager: NavManager
     private var cancellables = Set<AnyCancellable>()
     
-    init(taskManager: TaskManager, navManager: NavManager) {
-        self.taskManager = taskManager
-        self.navManager = navManager
-        
+    init(){
         // Observe potato rain overlay changes
         potatoRainOverlay.objectWillChange
             .sink { [weak self] _ in
@@ -40,7 +35,13 @@ final class OverlayManager: ObservableObject {
 }
 
 struct Overlay_V: View {
-    @EnvironmentObject var overlayManager: OverlayManager
+    @ObservedObject var appManager: AppManager
+    @ObservedObject var overlayManager: OverlayManager
+    
+    init(appManager: AppManager) {
+        self.appManager = appManager
+        self.overlayManager = appManager.getOverlayManagerForOverlayView()
+    }
     
     var body: some View {
         ZStack {
@@ -49,100 +50,17 @@ struct Overlay_V: View {
                 .edgesIgnoringSafeArea(.all)
             
             // Task edit overlay
-            TaskEditOverlay_V()
+            TaskEditOverlay_V(appManager: appManager)
             
             // Potato rain overlay
             overlayManager.potatoRainOverlay.view
                 .zIndex(1) // Ensure it's on top
-            
-//            // Test buttons
-//            VStack {
-//                Spacer()
-//                HStack {
-//                    Button("Spawn One 🥔") {
-//                        print("🎯 Button: Spawn One")
-//                        overlayManager.showPotatoRain(isSinglePotato: true)
-//                    }
-//                    .padding()
-//                    .background(Color.blue)
-//                    .foregroundColor(.white)
-//                    .cornerRadius(8)
-//                    
-//                    Button("Spawn Many 🥔") {
-//                        print("🎯 Button: Spawn Many")
-//                        overlayManager.showPotatoRain(isSinglePotato: false)
-//                    }
-//                    .padding()
-//                    .background(Color.green)
-//                    .foregroundColor(.white)
-//                    .cornerRadius(8)
-//                }
-//                .padding(.bottom, 100)
-//            }
-//            .zIndex(2) // Ensure buttons are on top
         }
     }
 }
 
 #Preview {
-    let taskManager = TaskManager()
-    let navManager = NavManager()
-    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
-    return ZStack {
-        // Background content
-        VStack {
-            Text("Main Content")
-                .font(.largeTitle)
-                .padding()
-            
-            Button("Show Task Edit") {
-                overlayManager.showTaskEdit(for: UUID(), title: "Test Task")
-            }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(8)
-            
-            Button("Show Potato Rain") {
-                overlayManager.showPotatoRain(isSinglePotato: true)
-            }
-            .padding()
-            .background(Color.green)
-            .foregroundColor(.white)
-            .cornerRadius(8)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemGroupedBackground))
-        
-                    // Test buttons
-                    VStack {
-                        Spacer()
-                        HStack {
-                            Button("Spawn One 🥔") {
-                                print("🎯 Button: Spawn One")
-                                overlayManager.showPotatoRain(isSinglePotato: true)
-                            }
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-        
-                            Button("Spawn Many 🥔") {
-                                print("🎯 Button: Spawn Many")
-                                overlayManager.showPotatoRain(isSinglePotato: false)
-                            }
-                            .padding()
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                        }
-                        .padding(.bottom, 100)
-                    }
-                    .zIndex(2) // Ensure buttons are on top
-        
-        // Overlays
-        Overlay_V()
-    }
-    .environmentObject(overlayManager)
+    let appManager = AppManager()
+    return Overlay_V(appManager: appManager)
 }
             
