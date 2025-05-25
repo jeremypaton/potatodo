@@ -22,8 +22,8 @@ final class OverlayManager: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func showTaskEdit(for taskId: UUID, title: String) {
-        taskEditOverlay.show(for: taskId, title: title)
+    func showTaskEdit(task: Task) {
+        taskEditOverlay.show(task: task)
         objectWillChange.send()
     }
     

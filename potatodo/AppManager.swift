@@ -422,8 +422,8 @@ class AppManager: ObservableObject {
         //TODO
     }
     
-    func showTaskEdit(taskID: UUID, title: String){
-        overlayManager.showTaskEdit(for: taskID, title: title)
+    func showTaskEdit(task: Task){
+        overlayManager.showTaskEdit(task: task)
     }
     
     func celebrateTaskComplete(){

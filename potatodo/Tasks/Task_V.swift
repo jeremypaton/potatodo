@@ -135,7 +135,7 @@ struct Task_V: View {
                 
                 // Task text
                 Button {
-                    appManager.showTaskEdit(taskID: task.id, title: task.title)
+                    appManager.showTaskEdit(task: task)
                 } label: {
                     Text(task.title.uppercased())
                         .font(.system(size: style.fontSize, weight: .medium))
@@ -244,7 +244,7 @@ struct AddTaskButton_V: View {
         Button {
             let templateTask = Task(title: "TODO", date: date)
             appManager.addTask(templateTask)
-            appManager.showTaskEdit(taskID: templateTask.id, title: templateTask.title)
+            appManager.showTaskEdit(task: templateTask)
         } label: {
             Text("➕")
                 .font(.system(size: isCompact ? 20 : 24, weight: .semibold))

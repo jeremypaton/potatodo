@@ -61,6 +61,9 @@ struct PersistenceUtils {
             Task(title: "Buy groceries", isCompleted: true, color: .green, date: Date()),
             Task(title: "Call mom", isCompleted: true, color: .blue, date: Date()),
             Task(title: "Finish project", isCompleted: false, color: .red, date: Date()),
+            Task(title: "Procrastinate", isCompleted: true, color: .green),
+            Task(title: "Boring stuff", isCompleted: true, color: .blue),
+            Task(title: "Eat broccoli", isCompleted: false, color: .red),
         ]
         
         return testTasks
@@ -100,9 +103,12 @@ struct PersistenceUtils {
                 default: color = .green
                 }
                 
-                guard let offset = Int(offsetString) else { continue }
-                
-                let date = calendar.date(byAdding: .day, value: offset, to: today) ?? today
+                var date: Date? = nil
+                if offsetString != "X" {
+                   if let offset = Int(offsetString) {
+                       date = calendar.date(byAdding: .day, value: offset, to: today)
+                   }
+                }
                 
                 let task = Task(title: title, isCompleted: isCompleted, color: color, date: date)
                 loadedTasks.append(task)

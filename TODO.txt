@@ -86,12 +86,14 @@ REMINDERS
         
         [X] build version, config flags in settings
             
-        [ ] basic backlog page
-            [ ] add backlog tasks to test data
+        [X] basic backlog page
+            [X] add backlog tasks to test data
                 
         [ ] basic widget
 
         [ ] drag and drop
+        
+        [X] fix task edit color bug
             
         [ ] open in finder while iphone plugin
             [ ] make an archive
@@ -102,6 +104,7 @@ CLEANUP
     [ ] clean up overall signal logic
         [ ] learn deeply the theory behind publish, observable, cancellables, forced sends etc.
         [ ] use simple published / observable object... remove the manual sends
+        [ ] reminder recalc only on structural edits (name, date) not modal edits (color, completed)
         
     [ ] understand async / main actor / await deeply
         

@@ -2,35 +2,73 @@ import SwiftUI
 
 struct PageBacklog_VM: View {
     @ObservedObject var appManager: AppManager
+    @State private var filterOption: FilterOption = .all
     
-    private var unscheduledTasks: [Task] {
-        appManager.getTasks().filter { $0.date == nil }
+    enum FilterOption: String, CaseIterable {
+        case all = "All"
+        case incomplete = "Incomplete"
+        case complete = "Complete"
+    }
+    
+    private var filteredTasks: [Task] {
+        let unscheduled = appManager.getUnscheduledTasks()
+        switch filterOption {
+        case .all:
+            return unscheduled
+        case .incomplete:
+            return unscheduled.filter { !$0.isCompleted }
+        case .complete:
+            return unscheduled.filter { $0.isCompleted }
+        }
     }
     
     var body: some View {
-        VStack(spacing: 20) {
-            // Header
-            Text("Backlog")
-                .font(.title)
-                .bold()
+        VStack(spacing: 0) {
+            // Title and Subtitle
+            VStack(spacing: 4) {
+                Text("BACKLOG")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                Text("unscheduled tasks")
+                    .font(.headline)
+                    .foregroundColor(.gray)
+            }
+            .padding(.vertical)
             
-            // Task list
+            // Filter Picker
+            Picker("Filter", selection: $filterOption) {
+                ForEach(FilterOption.allCases, id: \.self) { option in
+                    Text(option.rawValue).tag(option)
+                }
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding(.horizontal)
+            
+            // Task List
             ScrollView {
-                LazyVStack(spacing: 8) {
-                    ForEach(unscheduledTasks) { task in
+                VStack(spacing: 55) {
+                    ForEach(filteredTasks) { task in
                         Task_V(appManager: appManager, task: task, isCompact: false)
+
                     }
-                    
-                    // Add task button
-                    AddTaskButton_V(appManager: appManager, isCompact: false, date: nil)
                 }
                 .padding()
             }
+            
+            // Add Task Button (outside ScrollView)
+            AddTaskButton_V(appManager: appManager, isCompact: false, date: nil)
+                .padding()
         }
     }
 }
 
 #Preview {
     let appManager = AppManager()
-    return PageBacklog_VM(appManager: appManager)
-} 
+//    let navManager = NavManager()
+//    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
+    
+    return ZStack {
+        PageBacklog_VM(appManager: appManager)
+        Overlay_V(appManager: appManager)
+    }
+}

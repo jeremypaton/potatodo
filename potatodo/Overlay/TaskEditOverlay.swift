@@ -38,13 +38,13 @@ class TaskEditOverlay: ObservableObject {
     /// - Parameters:
     ///   - taskId: The UUID of the task to edit
     ///   - title: The current title of the task
-    ///   - color: The current color of the task (defaults to green)
+    ///   - color: The current color of the task
     ///   - date: The current date of the task (optional)
-    func show(for taskId: UUID, title: String, color: TaskColor = .green, date: Date? = nil) {
-        self.taskId = taskId
-        self.editedTitle = title
-        self.selectedColor = color
-        self.selectedDate = date
+    func show(task : Task) {
+        self.taskId = task.id
+        self.editedTitle = task.title
+        self.selectedColor = task.color
+        self.selectedDate = task.date
         self.isShowing = true
     }
     
