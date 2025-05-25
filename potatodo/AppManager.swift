@@ -85,13 +85,34 @@ class UIState: ObservableObject {
 
 class TaskData: ObservableObject {
     @Published fileprivate(set) var tasks: [Task] = []
-    private var cancellables = Set<AnyCancellable>()
+    private var arrayCancellables = Set<AnyCancellable>()
+    private var taskCancellables = Set<AnyCancellable>()
     
     init() {
-        // Connect all @Published properties to objectWillChange
+        // Observe the tasks array itself
         $tasks
-            .sink { [weak self] _ in self?.objectWillChange.send() }
-            .store(in: &cancellables)
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+                self?.updateTaskObservations()
+            }
+            .store(in: &arrayCancellables)
+    }
+    
+    private func updateTaskObservations() {
+        print("[TaskData] updateTaskObservations called") // Debug print
+        // Only clear taskCancellables, not arrayCancellables!
+        taskCancellables.removeAll()
+        // Observe each task
+        for task in tasks {
+            task.objectWillChange
+                .sink { [weak self] _ in
+                    print("[TaskData] Task \(task.id) changed") // Debug print
+                    guard let self = self else { return }
+                    // Force a task array update to trigger auto-save
+                    self.tasks = self.tasks
+                }
+                .store(in: &taskCancellables)
+        }
     }
     //add task
     //edit task
@@ -127,10 +148,27 @@ class AppDataStore: ObservableObject {
         taskData.$tasks
             .dropFirst() // Ignore initial value
             .sink { [weak self] tasks in
+                print("[AppDataStore] taskData.$tasks sink called, tasks count: \(tasks.count)") // Debug print
                 guard let self = self else { return }
                 PersistenceUtils.saveTasksForProfile(tasks, profile: self.userSettings.profile)
+                
+                let numberTasksLeftToday = tasks.filter { task in
+                    !task.isCompleted && task.isToday()
+                }.count
+                ReminderUtils.setBadgeCount(numberTasksLeftToday)
             }
             .store(in: &cancellables)
+            
+//        // Observe individual task changes
+//        for task in taskData.tasks {
+//            task.objectWillChange
+//                .sink { [weak self] _ in
+//                    guard let self = self else { return }
+//                    // Force a task array update to trigger auto-save
+//                    self.taskData.tasks = self.taskData.tasks
+//                }
+//                .store(in: &cancellables)
+//        }
     }
     
     // save()
@@ -232,7 +270,17 @@ class AppManager: ObservableObject {
     // BASIC TASK MANAGEMENT
     private func setTasks(_ tasks: [Task]) { self.appDataStore.taskData.tasks = tasks }
     private func loadTasks(){ self.setTasks(PersistenceUtils.getTaskArrayForProfile(self.appDataStore.userSettings.profile))}
-    func addTask(_ task: Task) { self.appDataStore.taskData.tasks.append(task) }
+    func addTask(_ task: Task) {
+        self.appDataStore.taskData.tasks.append(task)
+        // Observe the new task
+        task.objectWillChange
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                // Force a task array update to trigger auto-save
+                self.appDataStore.taskData.tasks = self.appDataStore.taskData.tasks
+            }
+            .store(in: &cancellables)
+    }
     func deleteTaskByID(_ id: UUID) { self.appDataStore.taskData.tasks.removeAll { $0.id == id } }
 
     func getTasks() -> [Task] { return self.appDataStore.taskData.tasks }

@@ -61,33 +61,50 @@ class Task: Identifiable, Equatable, Codable, ObservableObject {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
+    func isToday() -> Bool {
+        guard let date = date else { return false }
+        return Calendar.current.isDateInToday(date)
+    }
+    
     func toggleCompletion() {
+        print("[Task] \(id) about to toggle completion from \(isCompleted)") // Debug print
         isCompleted.toggle()
+        print("[Task] \(id) completion toggled to: \(isCompleted)")  // Debug print
         objectWillChange.send()
     }
     
     func setTitle(_ newTitle: String) {
+        print("[Task] \(id) about to set title to: \(newTitle)") // Debug print
         title = newTitle
+        print("[Task] \(id) title set to: \(title)") // Debug print
         objectWillChange.send()
     }
     
     func setDate(_ newDate: Date?) {
+        print("[Task] \(id) about to set date to: \(String(describing: newDate))") // Debug print
         date = newDate
+        print("[Task] \(id) date set to: \(String(describing: date))") // Debug print
         objectWillChange.send()
     }
     
     func setPosition(_ newPosition: Int) {
+        print("[Task] \(id) about to set position to: \(newPosition)") // Debug print
         position = newPosition
+        print("[Task] \(id) position set to: \(position)") // Debug print
         objectWillChange.send()
     }
     
     func setColor(_ newColor: TaskColor) {
+        print("[Task] \(id) about to set color to: \(newColor)") // Debug print
         color = newColor
+        print("[Task] \(id) color set to: \(color)") // Debug print
         objectWillChange.send()
     }
     
     func setUnscheduled() {
+        print("[Task] \(id) about to set to unscheduled") // Debug print
         date = nil
+        print("[Task] \(id) set to unscheduled") // Debug print
         objectWillChange.send()
     }
     

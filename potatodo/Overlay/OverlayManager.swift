@@ -28,7 +28,7 @@ final class OverlayManager: ObservableObject {
     }
     
     func showPotatoRain(isSinglePotato: Bool = false) {
-        print("🎯 OverlayManager: Showing potato rain")
+//        print("🎯 OverlayManager: Showing potato rain")
         potatoRainOverlay.spawnPotato(isSinglePotato: isSinglePotato)
         objectWillChange.send()
     }

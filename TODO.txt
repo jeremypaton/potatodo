@@ -69,8 +69,9 @@ REMINDERS
         [ ] fix badge
         
         [ ] basic user settings page
-            [ ] move profile dropdown to settings
-            [ ] reminder settings (persistenceutils load/save userSettings)
+            [X] move profile dropdown to settings
+            [X] reminder settings
+            [ ] persistenceutils load/save userSettings
 
         [ ] overhaul reminder system
             [ ] stateless utils model
@@ -90,6 +91,8 @@ REMINDERS
             [ ] make an archive
     
 CLEANUP
+    [ ] clean up overall signal logic
+        [ ] use simple published / observable object... remove the manual sents
     [ ] clean up files 1-by-1
         [ ] anim
         [ ] debug

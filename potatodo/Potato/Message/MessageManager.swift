@@ -14,9 +14,9 @@ class MessageManager: ObservableObject {
     private var messageTimer: Timer?
     
     func showMessageForCompletionLevel(_ level: Int) {
-        print("🎯 showMessageForCompletionLevel called with level: \(level)")
-        print("📝 Current messages count: \(messages.count)")
-        
+//        print("🎯 showMessageForCompletionLevel called with level: \(level)")
+//        print("📝 Current messages count: \(messages.count)")
+//        
         messageTimer?.invalidate()
         messageTimer = nil
         
@@ -30,17 +30,17 @@ class MessageManager: ObservableObject {
             message.level == level
         }
         
-        print("🎯 Found \(levelMessages.count) messages for level \(level)")
+//        print("🎯 Found \(levelMessages.count) messages for level \(level)")
         
         guard let message = levelMessages.randomElement() else {
-            print("❌ No messages found for level \(level)")
+//            print("❌ No messages found for level \(level)")
             DispatchQueue.main.async {
                 self.isShowingMessage = false
             }
             return
         }
         
-        print("🎯 Selected message: \(message)")
+//        print("🎯 Selected message: \(message)")
         
         // Animate the text
         var charIndex = 0
@@ -54,7 +54,7 @@ class MessageManager: ObservableObject {
                 
                 DispatchQueue.main.async {
                     self.displayedText = String(substring)
-                    print("📝 Updated displayedText: \(self.displayedText)")
+//                    print("📝 Updated displayedText: \(self.displayedText)")
                 }
                 charIndex += 1
             } else {
@@ -64,7 +64,7 @@ class MessageManager: ObservableObject {
                     DispatchQueue.main.async {
                         withAnimation(.easeOut(duration: 0.3)) {
                             self.isShowingMessage = false
-                            print("📝 Hiding message")
+//                            print("📝 Hiding message")
                         }
                     }
                 }
@@ -79,7 +79,7 @@ class MessageManager: ObservableObject {
     }
     
     func loadMessages() {
-        print("🔄 Loading messages...")
+//        print("🔄 Loading messages...")
         loadTestMessages()
     }
     
@@ -93,8 +93,8 @@ class MessageManager: ObservableObject {
         do {
             let csvString = try String(contentsOfFile: csvPath, encoding: .utf8)
             let rows = csvString.components(separatedBy: .newlines)
-            print("📄 Found \(rows.count) rows in CSV")
-            print("📄 First few rows: \(rows.prefix(3))")
+//            print("📄 Found \(rows.count) rows in CSV")
+//            print("📄 First few rows: \(rows.prefix(3))")
                         
             // Skip header row
             for row in rows.dropFirst() where !row.isEmpty {
@@ -104,9 +104,9 @@ class MessageManager: ObservableObject {
                     let message = columns[1].trimmingCharacters(in: CharacterSet(charactersIn: "\""))
                     let level = Int(columns[0]) ?? -1
                     addMessage(message, messageLevel: level)
-                    print("✅ Added message: \(level):\(message)")
+//                    print("✅ Added message: \(level):\(message)")
                 } else {
-                    print("⚠️ Invalid row format: \(row)")
+//                    print("⚠️ Invalid row format: \(row)")
                 }
             }
             print("✅ Finished loading \(messages.count) messages")
