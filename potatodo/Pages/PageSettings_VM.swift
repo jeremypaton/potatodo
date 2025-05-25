@@ -6,23 +6,44 @@ struct PageSettings_VM: View {
     
     var body: some View {
         Form {
-            Text("TODO")
-//            Toggle("Enable Notifications", isOn: $appManager.settings.notificationsEnabled)
-//                .onChange(of: appManager.settings.notificationsEnabled) { oldValue, newValue in
-//                    if newValue {
-//                        appManager.notificationsManager.requestPermissions()
-//                    }
-//                }
-//            
-//            if appManager.settings.notificationsEnabled {
-//                DatePicker("Daily Reminder Time",
-//                         selection: $notificationTime,
-//                         displayedComponents: .hourAndMinute)
-//                    .onChange(of: notificationTime) { oldValue, newValue in
-//                        appManager.settings.notificationTime = newValue
-//                        appManager.notificationsManager.setDailyTime(newValue)
-//                    }
-//            }
+            Section(header: Text("Notifications")) {
+                Toggle("Enable Notifications", isOn: Binding(
+                    get: { appManager.appDataStore.userSettings.notificationsEnabled },
+                    set: { wantEnabled in
+                        if wantEnabled {
+                            let enabled = ReminderUtils.requestPermissions()
+                            appManager.setNotificationsEnabled(enabled)
+                        } else {
+                            ReminderUtils.removeAllReminders()
+                        }
+                    }
+                ))
+                
+                if appManager.appDataStore.userSettings.notificationsEnabled {
+                    DatePicker("Daily Reminder Time",
+                             selection: Binding(
+                                get: { appManager.appDataStore.userSettings.notificationTime },
+                                set: { newValue in
+                                    ReminderUtils.recalcReminders(appManager: appManager)
+                                }
+                             ),
+                             displayedComponents: .hourAndMinute)
+                }
+            }
+            
+            Section(header: Text("Profile")) {
+                Picker("Profile", selection: Binding(
+                    get: { appManager.appDataStore.userSettings.profile.name },
+                    set: { newValue in
+                        appManager.setProfileByName(newValue)
+                    }
+                )) {
+                    Text("DEBUG").tag("DEBUG")
+                    Text("TEST").tag("TEST")
+                    Text("defaultUser").tag("defaultUser")
+                }
+                .pickerStyle(MenuPickerStyle())
+            }
         }
         .onAppear {
             notificationTime = appManager.appDataStore.userSettings.notificationTime
@@ -34,3 +55,5 @@ struct PageSettings_VM: View {
     let appManager = AppManager()
     return PageSettings_VM(appManager: appManager)
 } 
+
+

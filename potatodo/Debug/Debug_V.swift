@@ -153,32 +153,32 @@ struct SettingsDebugView: View {
     @ObservedObject var appManager: AppManager
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("App Settings")
-                    .font(.headline)
-                
-                VStack(alignment: .leading) {
-                    Text("Profile")
-                        .font(.subheadline)
-                    Picker("Profile", selection: Binding(
-                        get: { appManager.appDataStore.userSettings.profile.name },
-                        set: { newValue in
-                            appManager.setProfileByName(newValue)
-                        }
-                    )) {
-                        Text("DEBUG").tag("DEBUG")
-                        Text("TEST").tag("TEST")
-                        Text("defaultUser").tag("defaultUser")
-                    }
-                    .pickerStyle(MenuPickerStyle())
-                }
-                .padding()
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(8)
-            }
-            .padding()
-        }
+//        ScrollView {
+//            VStack(alignment: .leading, spacing: 10) {
+//                Text("App Settings")
+//                    .font(.headline)
+//                
+//                VStack(alignment: .leading) {
+//                    Text("Profile")
+//                        .font(.subheadline)
+//                    Picker("Profile", selection: Binding(
+//                        get: { appManager.appDataStore.userSettings.profile.name },
+//                        set: { newValue in
+//                            appManager.setProfileByName(newValue)
+//                        }
+//                    )) {
+//                        Text("DEBUG").tag("DEBUG")
+//                        Text("TEST").tag("TEST")
+//                        Text("defaultUser").tag("defaultUser")
+//                    }
+//                    .pickerStyle(MenuPickerStyle())
+//                }
+//                .padding()
+//                .background(Color.gray.opacity(0.1))
+//                .cornerRadius(8)
+//            }
+//            .padding()
+//        }
     }
 }
 

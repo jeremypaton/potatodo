@@ -249,17 +249,17 @@ class AppManager: ObservableObject {
         self.loadTasks()
     }
     
-//    func setNotificationsEnabled(_ enabled: Bool) {
-//        self.appDataStore.userSettings.notificationsEnabled = enabled
-//    }
-//    
-//    func toggleNotificationsEnabled() {
-//        self.appDataStore.userSettings.notificationsEnabled.toggle()
-//    }
-//    
-//    func setNotificationTime(_ time: Date) {
-//        self.appDataStore.userSettings.notificationTime = time
-//    }
+    func setNotificationsEnabled(_ enabled: Bool) {
+        self.appDataStore.userSettings.notificationsEnabled = enabled
+    }
+    
+    func toggleNotificationsEnabled() {
+        self.appDataStore.userSettings.notificationsEnabled.toggle()
+    }
+    
+    func setNotificationTime(_ time: Date) {
+        self.appDataStore.userSettings.notificationTime = time
+    }
     
     func saveTaskEditOverlay(){
         guard let taskId = overlayManager.taskEditOverlay.taskId,
