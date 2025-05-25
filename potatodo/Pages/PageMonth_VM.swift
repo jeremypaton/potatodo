@@ -1,6 +1,46 @@
 import SwiftUI
 
+struct PotatoCounterMonth_V: View {
+    let completedTasks: Int
+    
+    var body: some View {
+        VStack {
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1)
+            ], spacing: 1) {
+                ForEach(0..<completedTasks, id: \.self) { _ in
+                    Text("🥔")
+                        .font(.system(size: 28))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
+            .padding(2)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.white)
+        .overlay(
+            Rectangle()
+                .frame(height: 1)
+                .foregroundColor(.gray.opacity(0.3)),
+            alignment: .top
+        )
+    }
+}
+
 struct PageMonth_VM: View {
+//    @ObservedObject var taskManager: TaskManager
+//    @ObservedObject var navManager: NavManager
     @ObservedObject var appManager: AppManager
     
     private var currentMonth: Date {
@@ -51,102 +91,193 @@ struct PageMonth_VM: View {
         return monthTasks.filter { $0.isCompleted }.count
     }
     
-    var body: some View {
-        VStack(spacing: 20) {
-            // Month header
-            Text(monthYearString)
-                .font(.title)
-                .bold()
-            
-            // Month grid
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 8) {
-                // Day headers
-                ForEach(["S", "M", "T", "W", "T", "F", "S"], id: \.self) { day in
-                    Text(day)
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                }
-                
-                // Calendar days
-                ForEach(getDaysInMonth(), id: \.self) { date in
-                    if let date = date {
-                        DayCell(date: date,
-                               isCompleted: completedDates.contains(Calendar.current.startOfDay(for: date)),
-                               completionPercentage: completionPercentage(for: date))
-                            .onTapGesture {
-                                appManager.setDate(date)
-                                appManager.setInterval(.day)
-                            }
-                    } else {
-                        Color.clear
-                    }
-                }
-            }
-            .padding()
-            
-            // Month summary
-            Text("Completed: \(completedTasksThisMonth)")
-                .font(.headline)
-        }
-    }
-    
-    private func getDaysInMonth() -> [Date?] {
+    private func daysInMonth() -> [Date?] {
         let calendar = Calendar.current
-        let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: currentMonth))!
-        let range = calendar.range(of: .day, in: .month, for: startOfMonth)!
+        let range = calendar.range(of: .day, in: .month, for: currentMonth)!
         
-        // Get the first weekday of the month (0 = Sunday, 6 = Saturday)
-        let firstWeekday = calendar.component(.weekday, from: startOfMonth)
+        // Get the first day of the month
+        var components = calendar.dateComponents([.year, .month], from: currentMonth)
+        components.day = 1
+        guard let firstDay = calendar.date(from: components) else { return [] }
         
-        // Create array with empty cells for days before the first of the month
+        // Get the weekday of the first day (1 = Sunday, 7 = Saturday)
+        let firstWeekday = calendar.component(.weekday, from: firstDay)
+        
+        // Add empty slots for days before the first of the month
         var days: [Date?] = Array(repeating: nil, count: firstWeekday - 1)
         
-        // Add all days in the month
+        // Add all days of the month
         for day in range {
-            if let date = calendar.date(byAdding: .day, value: day - 1, to: startOfMonth) {
+            var components = calendar.dateComponents([.year, .month], from: currentMonth)
+            components.day = day
+            if let date = calendar.date(from: components) {
                 days.append(date)
             }
         }
         
-        // Add empty cells to complete the last week
-        while days.count % 7 != 0 {
-            days.append(nil)
+        // Calculate number of weeks needed
+        let totalDays = days.count
+        let weeksNeeded = Int(ceil(Double(totalDays) / 7.0))
+        
+        // Add empty slots at the end if needed to complete the last week
+        let remainingSlots = weeksNeeded * 7 - totalDays
+        if remainingSlots > 0 {
+            days.append(contentsOf: Array(repeating: nil, count: remainingSlots))
         }
         
         return days
     }
+    
+    private var weeksInMonth: Int {
+        let days = daysInMonth()
+        return Int(ceil(Double(days.count) / 7.0))
+    }
+    
+    private let weekDays = ["Su", "M", "Tu", "W", "Th", "F", "Sa"]
+    
+    private func dayView(for date: Date) -> some View {
+        Button(action: {
+            appManager.setDate(date)
+            appManager.setInterval(.day)
+        }) {
+            ZStack {
+                // Task bars
+                VStack(spacing: 0) {
+                    ForEach(0..<3) { index in
+                        let tasksForDate = appManager.getTasks().filter { task in
+                            if let taskDate = task.date {
+                                return Calendar.current.isDate(taskDate, inSameDayAs: date)
+                            }
+                            return false
+                        }
+                        if index < tasksForDate.count {
+                            let task = tasksForDate[index]
+                            Rectangle()
+                                .fill(task.isCompleted ? TaskStyle.fullColor(for: task) :
+                                        Color.white)//TaskStyle.hintColor(for: task))
+                                .strokeBorder(task.isCompleted ? TaskStyle.fullColor(for: task) : TaskStyle.hintColor(for: task), lineWidth: 6)
+                                .frame(maxHeight: .infinity)
+                        } else {
+                            Rectangle()
+                                .fill(Color.clear)
+                                .frame(maxHeight: .infinity)
+                        }
+                    }
+                }
+                .frame(maxHeight: .infinity)
+                
+                // Day number
+                Text("\(Calendar.current.component(.day, from: date))")
+                    .font(.system(size: 14))
+                    .foregroundColor(.black)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay(
+            Rectangle()
+                .frame(width: 1)
+                .foregroundColor(.gray.opacity(0.3)),
+            alignment: .trailing
+        )
+        .overlay(
+            Rectangle()
+                .frame(height: 1)
+                .foregroundColor(.gray.opacity(0.3)),
+            alignment: .bottom
+        )
+    }
+    
+    private func emptyDayView() -> some View {
+        Rectangle()
+            .fill(Color.clear)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .overlay(
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray.opacity(0.3)),
+                alignment: .trailing
+            )
+            .overlay(
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(.gray.opacity(0.3)),
+                alignment: .bottom
+            )
+    }
+    
+    var body: some View {
+        TopNav_V(appManager: appManager)
+
+        VStack(spacing: 0) {
+            GeometryReader { geometry in
+                VStack(spacing: 0) {
+                    // Calendar Container
+                    VStack(spacing: 0) {
+                        // Day headers
+                        HStack(spacing: 0) {
+                            ForEach(weekDays, id: \.self) { day in
+                                Text(day)
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(.gray)
+                                    .frame(maxWidth: .infinity)
+                            }
+                        }
+                        .padding(.horizontal, 4)
+                        .padding(.top, 4)
+                        .padding(.bottom, 2)
+                        
+                        Divider()
+                            .background(Color.gray.opacity(0.5))
+                            .frame(height: 1)
+                        
+                        // Calendar Grid
+                        VStack(spacing: 0) {
+                            ForEach(0..<weeksInMonth, id: \.self) { weekIndex in
+                                HStack(spacing: 0) {
+                                    ForEach(0..<7) { dayIndex in
+                                        let dateIndex = weekIndex * 7 + dayIndex
+                                        if dateIndex < daysInMonth().count, let date = daysInMonth()[dateIndex] {
+                                            dayView(for: date)
+                                        } else {
+                                            emptyDayView()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 4)
+                    }
+                    .background(Color.white)
+                    .cornerRadius(16)
+                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                    .padding(.vertical, 4)
+                    .frame(height: geometry.size.height * 0.5)
+                    
+                    // Month completion counter
+                    PotatoCounterMonth_V(completedTasks: completedTasksThisMonth)
+                        .frame(height: geometry.size.height * 0.5)
+                }
+            }
+        }
+    }
 }
 
-//struct DayCell: View {
-//    let date: Date
-//    let isCompleted: Bool
-//    let completionPercentage: Double
-//    
-//    private var dayNumber: String {
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "d"
-//        return formatter.string(from: date)
-//    }
-//    
-//    var body: some View {
-//        ZStack {
-//            Circle()
-//                .fill(isCompleted ? Color.green : Color.clear)
-//                .opacity(completionPercentage)
-//            
-//            Text(dayNumber)
-//                .font(.system(size: 14))
-//        }
-//        .frame(height: 40)
-//        .overlay(
-//            Circle()
-//                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-//        )
-//    }
-//}
-
 #Preview {
+//    let taskManager = TaskManager()
+//    let navManager = NavManager()
+//    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
     let appManager = AppManager()
-    return PageMonth_VM(appManager: appManager)
+    appManager.setInterval(.month)
+    
+    return ZStack {
+        VStack {
+            PageMonth_VM(appManager: appManager)
+            Spacer()
+        }
+        .background(Color(.systemGroupedBackground))
+        
+        Overlay_V(appManager: appManager)
+    }
+//    .environmentObject(overlayManager)
 }
 
