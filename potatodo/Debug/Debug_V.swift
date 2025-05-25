@@ -88,22 +88,22 @@ struct MessageDebugItemView: View {
 
 // MARK: - Notifications Debug View
 struct NotificationsDebugView: View {
-    @ObservedObject var notificationsManager: NotificationsManager
+//    @ObservedObject var notificationsManager: NotificationsManager
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 10) {
-                NotificationsSettingsView(notificationsManager: notificationsManager)
-                PendingNotificationsView(notifications: notificationsManager.pendingNotifications)
-            }
-            .padding()
-        }
+//        ScrollView {
+//            VStack(alignment: .leading, spacing: 10) {
+//                NotificationsSettingsView(notificationsManager: notificationsManager)
+//                PendingNotificationsView(notifications: notificationsManager.pendingNotifications)
+//            }
+//            .padding()
+//        }
     }
 }
 
 struct NotificationsSettingsView: View {
-    @ObservedObject var notificationsManager: NotificationsManager
-    
+//    @ObservedObject var notificationsManager: NotificationsManager
+//    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Settings")
@@ -217,7 +217,7 @@ struct Debug_V: View {
                 MessageDebugView(messageManager: appManager.getMessageManagerForMessageView())
                     .tag(1)
                 
-                NotificationsDebugView(notificationsManager: appManager.getNotificationsManagerForNotificationsView())
+                NotificationsDebugView()
                     .tag(2)
                 
                 SettingsDebugView(appManager: appManager)

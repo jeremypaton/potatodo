@@ -66,17 +66,28 @@ REFACTOR
 
 REMINDERS
     v0.1.9
+        [ ] fix badge
+        
+        [ ] basic user settings page
+            [ ] move profile dropdown to settings
+            [ ] reminder settings (persistenceutils load/save userSettings)
+
         [ ] overhaul reminder system
+            [ ] stateless utils model
+            [ ] remove update daily reminders from app manager
             [ ] nice formatting
             [ ] daily + weekly
             [ ] persistenceutils for reminders (hook into tasks?)
-        [ ] fix widget / badge
-        [ ] make drag and drop more robust
-        [ ] basic settings page
-            [ ] move profile dropdown to settings
-        [ ] basic stats
+            
         [ ] basic backlog page
             [ ] add backlog tasks to test data
+                
+        [ ] basic widget
+
+        [ ] drag and drop
+            
+        [ ] open in finder while iphone plugin
+            [ ] make an archive
     
 CLEANUP
     [ ] clean up files 1-by-1
@@ -95,8 +106,9 @@ CLEANUP
 === START DESIGN WORK ===
 
 v0.2.0 - UI layout
-    [ ] fix layouts + dynamic
-    [ ] make drag and drop more robust
+    [ ] fix layouts + dynamic scaling
+    [ ] fix previews
+    [ ] setup testing pipeline for auto-screenshot different devices, pages etc.
     
 v0.2.1 - UI styles
     [ ] UI design pass / alts

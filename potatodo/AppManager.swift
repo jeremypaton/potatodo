@@ -140,7 +140,7 @@ class AppDataStore: ObservableObject {
 class AppManager: ObservableObject {
 //    private var taskManager: TaskManager
     private var navManager: NavManager
-    private var notificationsManager: NotificationsManager!
+//    private var notificationsManager: NotificationsManager!
     private var overlayManager: OverlayManager
     private var potatoManager: PotatoManager
     private var messageManager: MessageManager
@@ -170,8 +170,8 @@ class AppManager: ObservableObject {
 //        let taskManager = TaskManager()
 //        self.taskManager = taskManager
         
-        let notificationsManager = NotificationsManager(appDataStore: appDataStore)
-        self.notificationsManager = notificationsManager
+//        let notificationsManager = NotificationsManager(appDataStore: appDataStore)
+//        self.notificationsManager = notificationsManager
         
         // Observe all manager changes
         observeManagerChanges()
@@ -182,7 +182,7 @@ class AppManager: ObservableObject {
     private func observeManagerChanges() {
 //        observe(taskManager)
         observe(navManager)
-        observe(notificationsManager)
+//        observe(notificationsManager)
         observe(overlayManager)
         observe(potatoManager)
         observe(appDataStore)
@@ -224,7 +224,7 @@ class AppManager: ObservableObject {
     
 //    func getTaskManagerForTaskView() -> TaskManager { return taskManager }
     func getNavManagerForNavView() -> NavManager { return navManager }
-    func getNotificationsManagerForNotificationsView() -> NotificationsManager { return notificationsManager}
+//    func getNotificationsManagerForNotificationsView() -> NotificationsManager { return notificationsManager}
     func getOverlayManagerForOverlayView() -> OverlayManager { return overlayManager }
     func getMessageManagerForMessageView() -> MessageManager { return messageManager }
     
@@ -314,7 +314,8 @@ class AppManager: ObservableObject {
     }
     
     func requestPermissions() {
-        notificationsManager.requestPermissions()
+        //TODO
+//        notificationsManager.requestPermissions()
     }
     
     func showTaskEdit(taskID: UUID, title: String){
@@ -337,34 +338,34 @@ class AppManager: ObservableObject {
         appDataStore.uiState.showDebugView = false
     }
     
-    func updateDailyReminders(){
-        //move this into reminder manager
-        
-        // First, remove all existing reminders to ensure clean state
-        notificationsManager.removeAllReminders()
-        
-        // Get today and next 7 days
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        let nextWeek = (0...7).compactMap { day in
-            calendar.date(byAdding: .day, value: day, to: today)
-        }
-        
-        // For each date in the next week
-        for date in nextWeek {
-            let tasksForDate = getTasks().filter { task in
-                if let taskDate = task.date {
-                    return calendar.isDate(taskDate, inSameDayAs: date)
-                }
-                return false
-            }
-            if !tasksForDate.isEmpty {
-                // If there are tasks for this date, create task-specific reminder
-                notificationsManager.updateRemindersForDay(date, tasks: tasksForDate)
-            } else {
-                // If no tasks, create default reminder
-                notificationsManager.setReminderText(for: date, text: notificationsManager.defaultReminderText)
-            }
-        }
-    }
+//    func updateDailyReminders(){
+//        //move this into reminder manager
+//        
+//        // First, remove all existing reminders to ensure clean state
+//        notificationsManager.removeAllReminders()
+//        
+//        // Get today and next 7 days
+//        let calendar = Calendar.current
+//        let today = calendar.startOfDay(for: Date())
+//        let nextWeek = (0...7).compactMap { day in
+//            calendar.date(byAdding: .day, value: day, to: today)
+//        }
+//        
+//        // For each date in the next week
+//        for date in nextWeek {
+//            let tasksForDate = getTasks().filter { task in
+//                if let taskDate = task.date {
+//                    return calendar.isDate(taskDate, inSameDayAs: date)
+//                }
+//                return false
+//            }
+//            if !tasksForDate.isEmpty {
+//                // If there are tasks for this date, create task-specific reminder
+//                notificationsManager.updateRemindersForDay(date, tasks: tasksForDate)
+//            } else {
+//                // If no tasks, create default reminder
+//                notificationsManager.setReminderText(for: date, text: notificationsManager.defaultReminderText)
+//            }
+//        }
+//    }
 } 
