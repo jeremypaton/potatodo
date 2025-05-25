@@ -12,8 +12,10 @@ struct PageSettings_VM: View {
                     get: { appManager.appDataStore.userSettings.notificationsEnabled },
                     set: { wantEnabled in
                         if wantEnabled {
-                            let enabled = ReminderUtils.requestPermissions()
-                            appManager.setNotificationsEnabled(enabled)
+                            _Concurrency.Task {
+                                let enabled = await ReminderUtils.requestPermissions()
+                                appManager.setNotificationsEnabled(enabled)
+                            }
                         } else {
                             appManager.setNotificationsEnabled(false)
                             ReminderUtils.removeAllReminders()
@@ -27,7 +29,6 @@ struct PageSettings_VM: View {
                                 get: { appManager.appDataStore.userSettings.notificationTime },
                                 set: { newValue in
                                     appManager.setNotificationTime(newValue)
-                                    ReminderUtils.recalcReminders(appManager: appManager)
                                 }
                              ),
                              displayedComponents: .hourAndMinute)
