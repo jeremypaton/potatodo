@@ -15,6 +15,7 @@ struct PageSettings_VM: View {
                             let enabled = ReminderUtils.requestPermissions()
                             appManager.setNotificationsEnabled(enabled)
                         } else {
+                            appManager.setNotificationsEnabled(false)
                             ReminderUtils.removeAllReminders()
                         }
                     }
@@ -25,6 +26,7 @@ struct PageSettings_VM: View {
                              selection: Binding(
                                 get: { appManager.appDataStore.userSettings.notificationTime },
                                 set: { newValue in
+                                    appManager.setNotificationTime(newValue)
                                     ReminderUtils.recalcReminders(appManager: appManager)
                                 }
                              ),

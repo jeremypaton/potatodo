@@ -9,7 +9,7 @@ import SwiftUI
 import UserNotifications
 import Combine
 
-class Profile : Hashable, ObservableObject {
+class Profile : Hashable, ObservableObject, Codable {
     var name: String
     
     #if DEBUG
@@ -48,14 +48,42 @@ class Profile : Hashable, ObservableObject {
 //    case settings
 //}
 
-class UserSettings: ObservableObject {
+class UserSettings: ObservableObject, Codable {
     @Published fileprivate(set) var profile: Profile = Profile()
-    @Published fileprivate(set) var notificationsEnabled: Bool = false
-    @Published fileprivate(set) var notificationTime: Date = Calendar.current.date(from: DateComponents(hour: 9, minute: 0)) ?? Date()
+    @Published fileprivate(set) var notificationsEnabled: Bool {
+        didSet {
+            UserDefaults.standard.set(notificationsEnabled, forKey: "notificationsEnabled")
+        }
+    }
+    @Published fileprivate(set) var notificationTime: Date {
+        didSet {
+            UserDefaults.standard.set(notificationTime, forKey: "notificationTime")
+        }
+    }
     
-    // init()
-    // load()
-    // save()
+    enum CodingKeys: String, CodingKey {
+        case profile, notificationsEnabled, notificationTime
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        profile = try container.decode(Profile.self, forKey: .profile)
+        notificationsEnabled = try container.decode(Bool.self, forKey: .notificationsEnabled)
+        notificationTime = try container.decode(Date.self, forKey: .notificationTime)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(profile, forKey: .profile)
+        try container.encode(notificationsEnabled, forKey: .notificationsEnabled)
+        try container.encode(notificationTime, forKey: .notificationTime)
+    }
+    
+    init() {
+        // Load saved settings from UserDefaults
+        self.notificationsEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
+        self.notificationTime = UserDefaults.standard.object(forKey: "notificationTime") as? Date ?? Calendar.current.date(from: DateComponents(hour: 9, minute: 0)) ?? Date()
+    }
 }
 
 class UIState: ObservableObject {
@@ -174,16 +202,30 @@ class AppDataStore: ObservableObject {
             }
             .store(in: &cancellables)
             
-//        // Observe individual task changes
-//        for task in taskData.tasks {
-//            task.objectWillChange
-//                .sink { [weak self] _ in
-//                    guard let self = self else { return }
-//                    // Force a task array update to trigger auto-save
-//                    self.taskData.tasks = self.taskData.tasks
-//                }
-//                .store(in: &cancellables)
-//        }
+        // Auto-save user settings when they change
+        userSettings.$profile
+            .dropFirst()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                PersistenceUtils.saveUserSettings(self.userSettings, profile: self.userSettings.profile)
+            }
+            .store(in: &cancellables)
+            
+        userSettings.$notificationsEnabled
+            .dropFirst()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                PersistenceUtils.saveUserSettings(self.userSettings, profile: self.userSettings.profile)
+            }
+            .store(in: &cancellables)
+            
+        userSettings.$notificationTime
+            .dropFirst()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                PersistenceUtils.saveUserSettings(self.userSettings, profile: self.userSettings.profile)
+            }
+            .store(in: &cancellables)
     }
     
     // save()
@@ -229,7 +271,9 @@ class AppManager: ObservableObject {
         // Observe all manager changes
         observeManagerChanges()
         
+        // Load initial data
         self.loadTasks()
+        self.loadUserSettings()
     }
     
     private func observeManagerChanges() {
@@ -399,6 +443,11 @@ class AppManager: ObservableObject {
     
     func hideDebugView(){
         appDataStore.uiState.showDebugView = false
+    }
+    
+    private func loadUserSettings() {
+        // No longer needed as we're using UserDefaults
+        // The settings are loaded in the UserSettings init()
     }
     
 //    func updateDailyReminders(){

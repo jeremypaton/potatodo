@@ -66,14 +66,12 @@ REFACTOR
 
 REMINDERS
     v0.1.9
-        [ ] fix badge
-            [ ] set up good debug statements
-            [ ] really understand publish / cancellables / will sends / observable etc etc.
+        [X] fix badge
             
-        [ ] basic user settings page
+        [X] basic user settings page
             [X] move profile dropdown to settings
             [X] reminder settings
-            [ ] persistenceutils load/save userSettings
+            [X] persistenceutils load/save userSettings
 
         [ ] overhaul reminder system
             [ ] stateless utils model
@@ -94,7 +92,9 @@ REMINDERS
     
 CLEANUP
     [ ] clean up overall signal logic
-        [ ] use simple published / observable object... remove the manual sents
+        [ ] learn deeply the theory behind publish, observable, cancellables, forced sends etc.
+        [ ] use simple published / observable object... remove the manual sends
+        
     [ ] clean up files 1-by-1
         [ ] anim
         [ ] debug

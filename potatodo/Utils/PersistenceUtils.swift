@@ -116,17 +116,29 @@ struct PersistenceUtils {
     }
     
     static func saveTasksForProfile(_ tasks: [Task], profile: Profile) {
-        guard profile.name != "DEBUG" && profile.name != "TEST" else {
-            print("Cannot save tasks for DEBUG or TEST profiles")
-            return
-        }
-        
+        let encoder = JSONEncoder()
         do {
-            let data = try JSONEncoder().encode(tasks)
-            try data.write(to: tasksFileForProfile(profile))
+            let data = try encoder.encode(tasks)
+            let url = tasksFileForProfile(profile)
+            try data.write(to: url)
         } catch {
-            print("Failed to save tasks: \(error.localizedDescription)")
+            print("Error saving tasks: \(error)")
         }
+    }
+    
+    static func saveUserSettings(_ settings: UserSettings, profile: Profile) {
+        // No longer needed as we're using UserDefaults
+    }
+    
+    static func getUserSettingsForProfile(_ profile: Profile) -> UserSettings {
+        // No longer needed as we're using UserDefaults
+        return UserSettings()
+    }
+    
+    private static func getUserSettingsURLForProfile(_ profile: Profile) -> URL {
+        // No longer needed as we're using UserDefaults
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        return documentsDirectory.appendingPathComponent("\(profile.name)_settings.json")
     }
     
 }
