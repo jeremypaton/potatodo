@@ -5,8 +5,28 @@ struct PageSettings_VM: View {
     @State private var notificationTime = Date()
     @State private var selectedBadgeCount = 0
     
+    var version: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "N/A"
+    }
+
+    var build: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "N/A"
+    }
+    
     var body: some View {
         Form {
+            Section(header: Text("About")) {
+                Text("Version: \(version)")
+                Text("Build: \(build)")
+                #if DEBUG
+                Text("Config: DEBUG")
+                #elseif TEST
+                Text("Config: TEST")
+                #else
+                Text("Config: RELEASE")
+                #endif
+            }
+            
             Section(header: Text("Notifications")) {
                 Toggle("Enable Notifications", isOn: Binding(
                     get: { appManager.appDataStore.userSettings.notificationsEnabled },
@@ -53,17 +73,17 @@ struct PageSettings_VM: View {
                              displayedComponents: .hourAndMinute)
                 }
                 
-                Picker("Badge Count", selection: $selectedBadgeCount) {
-                    Text("0").tag(0)
-                    Text("1").tag(1)
-                    Text("2").tag(2)
-                    Text("3").tag(3)
-                    Text("4").tag(4)
-                    Text("5").tag(5)
-                }
-                .onChange(of: selectedBadgeCount) { oldValue, newValue in
-                    ReminderUtils.setBadgeCount(newValue)
-                }
+//                Picker("Badge Count", selection: $selectedBadgeCount) {
+//                    Text("0").tag(0)
+//                    Text("1").tag(1)
+//                    Text("2").tag(2)
+//                    Text("3").tag(3)
+//                    Text("4").tag(4)
+//                    Text("5").tag(5)
+//                }
+//                .onChange(of: selectedBadgeCount) { oldValue, newValue in
+//                    ReminderUtils.setBadgeCount(newValue)
+//                }
             }
             
             Section(header: Text("Profile")) {

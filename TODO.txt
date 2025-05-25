@@ -73,13 +73,18 @@ REMINDERS
             [X] reminder settings
             [X] persistenceutils load/save userSettings
 
-        [ ] overhaul reminder system
-            [ ] stateless utils model
+        [X] overhaul reminder system
+            [X] stateless utils model
             [X] remove update daily reminders from app manager
-            [ ] nice formatting
-            [ ] persistenceutils for reminders (hook into tasks?)
+            [X] nice formatting
+            [X] persistenceutils for reminders (hook into tasks?)
             
-        [ ] redo basic debug view
+        [X] redo basic debug view
+            [X] notifications
+            [X] tasks
+            [X] messages
+        
+        [X] build version, config flags in settings
             
         [ ] basic backlog page
             [ ] add backlog tasks to test data
@@ -97,6 +102,8 @@ CLEANUP
     [ ] clean up overall signal logic
         [ ] learn deeply the theory behind publish, observable, cancellables, forced sends etc.
         [ ] use simple published / observable object... remove the manual sends
+        
+    [ ] understand async / main actor / await deeply
         
     [ ] clean up files 1-by-1
         [ ] anim

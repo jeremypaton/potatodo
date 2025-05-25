@@ -28,15 +28,21 @@ struct TaskDebugItemView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("ID: \(task.id)")
             Text("Title: \(task.title)")
+                .font(.system(size: 20))
+                .bold()
             Text("Completed: \(task.isCompleted ? "Yes" : "No")")
+                .font(.system(size: 14))
             Text("Color: \(task.color.rawValue)")
+                .font(.system(size: 14))
             if let date = task.date {
                 Text("Date: \(date.formatted())")
+                    .font(.system(size: 14))
             } else {
                 Text("Date: Unscheduled")
+                    .font(.system(size: 14))
             }
+            Text("ID: \(task.id)")                .font(.system(size: 10))
         }
         .padding()
         .background(Color.gray.opacity(0.1))
@@ -53,8 +59,19 @@ struct MessageDebugView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("All Messages")
                     .font(.headline)
-                ForEach(messageManager.messages.indices, id: \.self) { index in
-                    MessageDebugItemView(message: messageManager.messages[index])
+                ForEach(Array(messageManager.messages.grouped(by: { $0.level }).keys.sorted()), id: \.self) { level in
+                    VStack(alignment: .leading) {
+                        Text("Level: \(level)")
+                            .font(.subheadline)
+                            .padding(.bottom, 4)
+                        ForEach(messageManager.messages.filter { $0.level == level }, id: \.text) { message in
+                            Text(message.text)
+                                .padding(.leading, 8)
+                        }
+                    }
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(8)
                 }
                 
                 Text("Recent Messages")
@@ -72,17 +89,18 @@ struct MessageDebugView: View {
     }
 }
 
-struct MessageDebugItemView: View {
-    let message: Message
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("Level: \(message.level)")
-            Text("Text: \(message.text)")
+// MARK: - Helper Extension
+extension Array {
+    func grouped<T: Hashable>(by key: (Element) -> T) -> [T: [Element]] {
+        var result: [T: [Element]] = [:]
+        for element in self {
+            let keyValue = key(element)
+            if result[keyValue] == nil {
+                result[keyValue] = []
+            }
+            result[keyValue]?.append(element)
         }
-        .padding()
-        .background(Color.gray.opacity(0.1))
-        .cornerRadius(8)
+        return result
     }
 }
 
