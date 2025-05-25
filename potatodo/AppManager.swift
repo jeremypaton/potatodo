@@ -207,6 +207,9 @@ class AppManager: ObservableObject {
     func getTasksForToday() -> [Task] { return self.appDataStore.taskData.tasks.filter {$0.date == Date()} }
     func getUnscheduledTasks() -> [Task] { return self.appDataStore.taskData.tasks.filter { $0.date == nil } }
     
+    func createDefaultTask(_ task: Task) { self.appDataStore.taskData.tasks.append(task) }
+
+    
     func setProfile(_ profile: Profile) {
         self.appDataStore.userSettings.profile = profile
         self.loadTasks()
@@ -226,7 +229,7 @@ class AppManager: ObservableObject {
             return
         }
   
-        var updatedTask = task
+        let updatedTask = task
         updatedTask.setTitle(overlayManager.taskEditOverlay.editedTitle)
         updatedTask.setColor(overlayManager.taskEditOverlay.selectedColor)
 //        taskManager.updateTask(updatedTask)
@@ -239,7 +242,7 @@ class AppManager: ObservableObject {
             return
         }
         
-        taskManager.deleteTask(task)
+        self.deleteTaskByID(task.id)
         hideTaskEditOverlay()
     }
     

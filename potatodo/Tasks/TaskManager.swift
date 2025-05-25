@@ -44,116 +44,13 @@ class TaskManager: ObservableObject {
     
     init(appManager: AppManager) {
         self.appManager = appManager
-//        loadTasks()
-//        if appManager.appDataStore.userSettings.profile == .prod {
-//            setupAutoSave()
-//        }
     }
-    
-    // MARK: - Task Management
-    
-    func addNewTask(title: String, color: TaskColor = .green, date: Date? = Date()) -> Task {
-        var task = Task(title: title, color: color, date: date)
-        appManager.addTask(task)
-        return task
-        //        if task.isValid == false {
-        //            task.title = "?"
-        //        }
-        //        tasks.append(task)
-        //        saveTasks()  // Explicitly save after adding
-        //        return task
-    }
-    
-    //    func updateTask(_ task: Task) {
-    //        appManager.updateTask(task)
-    ////        guard task.isValid else {
-    ////            errorMessage = "Task text cannot be empty"
-    ////            return
-    ////        }
-    ////
-    ////        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
-    ////            tasks[index] = task
-    ////            errorMessage = nil
-    ////            saveTasks()  // Explicitly save after updating
-    ////        }
-    //    }
-    
-    func deleteTask(_ task: Task) {
-        appManager.deleteTaskByID(task.id)
-        //        tasks.removeAll { $0.id == task.id }
-        //        saveTasks()  // Explicitly save after deleting
-    }
-    
-    func toggleTaskCompletion(_ task: Task) {
-        task.toggleCompletion()
-        //        updateTask(updatedTask)  // This will trigger saveTasks
-    }
-    
-//    func cycleTaskColorFromID(_ id: UUID) {
-//        if let task = appManager.getTaskByID(id) {
-//            print("Found task: \(task.title), current color: \(task.color)")
-//            switch task.color {
-//            case .green: task.setColor(.blue)
-//            case .blue: task.setColor(.yellow)
-//            case .yellow: task.setColor(.purple)
-//            case .purple: task.setColor(.red)
-//            case .red: task.setColor(.gray)
-//            case .gray: task.setColor(.green)
-//            }
-//            print("New color: \(task.color)")
-//        } else {
-//            print("Task not found for id: \(id)")
-//        }
-//    }
     
     func swapTaskIDs(_ id1: UUID, _ id2: UUID) {
         return
-        
-        
-//        guard let index1 = tasks.firstIndex(where: { $0.id == id1 }),
-//              let index2 = tasks.firstIndex(where: { $0.id == id2 }) else {
-//            return
-//        }
-//        
-//        // Swap the tasks
-//        let temp = tasks[index1]
-//        tasks[index1] = tasks[index2]
-//        tasks[index2] = temp
-//        saveTasks()  // Explicitly save after swapping
     }
-    
-    func updateTaskDate(_ taskId: UUID, newDate: Date) {
-        guard var task = appManager.getTaskByID(taskId) else { return }
-        task.setDate(newDate)
-    }
-    
-    // MARK: - Persistence
-    
-//    private func setupAutoSave() {
-//        $tasks
-//            .debounce(for: .seconds(1), scheduler: RunLoop.main)
-//            .sink { [weak self] _ in
-//                self?.saveTasks()
-//            }
-//            .store(in: &cancellables)
-//    }
-//    
-//    private func saveTasks() {
-//        // Only save if we're in production mode
-//        guard appManager.appDataStore.userSettings.profile == .prod else { return }
-//        
-//        let encoder = JSONEncoder()
-//        do {
-//            let data = try encoder.encode(tasks)
-//            try data.write(to: tasksFile)
-//        } catch {
-//        }
-//    }
     
     func getTasksForProfile() -> [Task] {
-        // Clear current tasks before loading new ones
-//        var tasks : [Task] = []
-        
         switch appManager.appDataStore.userSettings.profile {
         case .debug:
             return loadDebugTasks()
@@ -162,7 +59,6 @@ class TaskManager: ObservableObject {
         case .prod:
             return loadRealTasks()
         }
-//        updateDailyReminders()
     }
     
     private func loadRealTasks() -> [Task] {
@@ -174,7 +70,7 @@ class TaskManager: ObservableObject {
         do {
             tasks = try JSONDecoder().decode([Task].self, from: data)
         } catch {
-//            errorMessage = "Failed to load tasks: \(error.localizedDescription)"
+            // errorMessage = "Failed to load tasks: \(error.localizedDescription)"
         }
         return tasks
     }
@@ -195,7 +91,6 @@ class TaskManager: ObservableObject {
         var tasks : [Task] = []
 
         guard let csvURL = Bundle.main.url(forResource: "test_tasks", withExtension: "csv") else {
-//            errorMessage = "Could not find test_tasks.csv"
             return tasks
         }
         
@@ -235,9 +130,8 @@ class TaskManager: ObservableObject {
             }
             
             tasks = loadedTasks
-//            errorMessage = nil
         } catch {
-//            errorMessage = "Failed to load CSV tasks: \(error.localizedDescription)"
+            // errorMessage = "Failed to load CSV tasks: \(error.localizedDescription)"
         }
         return tasks
     }

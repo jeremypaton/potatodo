@@ -242,8 +242,9 @@ struct AddTaskButton_V: View {
     
     var body: some View {
         Button {
-            let newTask = taskManager.addNewTask(title: "", date: date)
-            appManager.showTaskEdit(taskID: newTask.id, title: newTask.title)
+            let templateTask = Task(title: "TODO", date: date)
+            appManager.addTask(templateTask)
+            appManager.showTaskEdit(taskID: templateTask.id, title: templateTask.title)
         } label: {
             Text("➕")
                 .font(.system(size: isCompact ? 20 : 24, weight: .semibold))
@@ -256,45 +257,45 @@ struct AddTaskButton_V: View {
         .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
         .scaleEffect(isTargeted ? 1.05 : 1.0)
         .animation(.easeInOut(duration: 0.2), value: isTargeted)
-        .onDrop(of: [.text], delegate: AddTaskDropDelegate(taskManager: taskManager, date: date, isTargeted: $isTargeted))
+//        .onDrop(of: [.text], delegate: AddTaskDropDelegate(taskManager: taskManager, date: date, isTargeted: $isTargeted))
     }
 }
 
-struct AddTaskDropDelegate: DropDelegate {
-    let taskManager: TaskManager
-    let date: Date?
-    @Binding var isTargeted: Bool
-    
-    func performDrop(info: DropInfo) -> Bool {
-        isTargeted = false
-        guard let itemProvider = info.itemProviders(for: [.text]).first else { return false }
-        
-        itemProvider.loadObject(ofClass: NSString.self) { string, _ in
-            guard let draggedIdString = string as? String,
-                  let draggedId = UUID(uuidString: draggedIdString) else { return }
-            
-            DispatchQueue.main.async {
-                if let date = self.date {
-                    self.taskManager.updateTaskDate(draggedId, newDate: date)
-                }
-            }
-        }
-        
-        return true
-    }
-    
-    func dropEntered(info: DropInfo) {
-        isTargeted = true
-    }
-    
-    func dropExited(info: DropInfo) {
-        isTargeted = false
-    }
-    
-    func dropUpdated(info: DropInfo) -> DropProposal? {
-        return DropProposal(operation: .move)
-    }
-}
+//struct AddTaskDropDelegate: DropDelegate {
+//    let taskManager: TaskManager
+//    let date: Date?
+//    @Binding var isTargeted: Bool
+//    
+//    func performDrop(info: DropInfo) -> Bool {
+//        isTargeted = false
+//        guard let itemProvider = info.itemProviders(for: [.text]).first else { return false }
+//        
+//        itemProvider.loadObject(ofClass: NSString.self) { string, _ in
+//            guard let draggedIdString = string as? String,
+//                  let draggedId = UUID(uuidString: draggedIdString) else { return }
+//            
+//            DispatchQueue.main.async {
+//                if let date = self.date {
+//                    self.taskManager.updateTaskDate(draggedId, newDate: date)
+//                }
+//            }
+//        }
+//        
+//        return true
+//    }
+//    
+//    func dropEntered(info: DropInfo) {
+//        isTargeted = true
+//    }
+//    
+//    func dropExited(info: DropInfo) {
+//        isTargeted = false
+//    }
+//    
+//    func dropUpdated(info: DropInfo) -> DropProposal? {
+//        return DropProposal(operation: .move)
+//    }
+//}
 
 #Preview {
     let appManager = AppManager()
