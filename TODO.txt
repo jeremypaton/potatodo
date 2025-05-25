@@ -80,6 +80,8 @@ REMINDERS
             [ ] daily + weekly
             [ ] persistenceutils for reminders (hook into tasks?)
             
+        [ ] redo basic debug view
+            
         [ ] basic backlog page
             [ ] add backlog tasks to test data
                 
@@ -91,6 +93,8 @@ REMINDERS
             [ ] make an archive
     
 CLEANUP
+    [ ] add good debug prints throughout code base
+
     [ ] clean up overall signal logic
         [ ] learn deeply the theory behind publish, observable, cancellables, forced sends etc.
         [ ] use simple published / observable object... remove the manual sends
@@ -106,6 +110,9 @@ CLEANUP
         [ ] tasks
         [ ] widget
         [ ] main
+        
+    [ ] make a comprehensive list of all features
+        for testing before major releases etc.
 
 === ENGINEERING BETA LOCK === [MON 16 MAY]
 === START DESIGN WORK ===
