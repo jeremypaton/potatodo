@@ -206,9 +206,7 @@ class AppDataStore: ObservableObject {
                 // Recalculate reminders when tasks change
                 DispatchQueue.main.async {
                     _Concurrency.Task {
-                        await ReminderUtils.recalcReminders(
-                            notificationsEnabled: self.userSettings.notificationsEnabled,
-                            notificationTime: self.userSettings.notificationTime,
+                        await ReminderUtils.recalcReminders(userSettings: self.userSettings,
                             tasks: tasks
                         )
                     }

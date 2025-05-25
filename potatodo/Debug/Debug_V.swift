@@ -88,43 +88,30 @@ struct MessageDebugItemView: View {
 
 // MARK: - Notifications Debug View
 struct NotificationsDebugView: View {
-//    @ObservedObject var notificationsManager: NotificationsManager
+    @State private var pendingNotifications: [UNNotificationRequest] = []
     
     var body: some View {
-//        ScrollView {
-//            VStack(alignment: .leading, spacing: 10) {
-//                NotificationsSettingsView(notificationsManager: notificationsManager)
-//                PendingNotificationsView(notifications: notificationsManager.pendingNotifications)
-//            }
-//            .padding()
-//        }
-    }
-}
-
-struct NotificationsSettingsView: View {
-//    @ObservedObject var notificationsManager: NotificationsManager
-//    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Settings")
-                .font(.headline)
-//            Text("Notifications Enabled: \(notificationsManager.isEnabled ? "Yes" : "No")")
-//            Text("Daily Time: \(notificationsManager.dailyTime.formatted(date: .omitted, time: .shortened))")
-//            Text("Default Reminder Text: \(notificationsManager.defaultReminderText)")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Pending Notifications")
+                    .font(.headline)
+                    .padding(.top)
+                
+                ForEach(pendingNotifications, id: \.identifier) { notification in
+                    NotificationDebugItemView(notification: notification)
+                }
+            }
+            .padding()
+        }
+        .onAppear {
+            updatePendingNotifications()
         }
     }
-}
-
-struct PendingNotificationsView: View {
-    let notifications: [UNNotificationRequest]
     
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Pending Notifications")
-                .font(.headline)
-                .padding(.top)
-            ForEach(notifications, id: \.identifier) { notification in
-                NotificationDebugItemView(notification: notification)
+    private func updatePendingNotifications() {
+        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+            DispatchQueue.main.async {
+                self.pendingNotifications = requests
             }
         }
     }
@@ -133,13 +120,36 @@ struct PendingNotificationsView: View {
 struct NotificationDebugItemView: View {
     let notification: UNNotificationRequest
     
+    private var formattedDate: String? {
+        guard let trigger = notification.trigger as? UNCalendarNotificationTrigger,
+              let date = Calendar.current.date(from: trigger.dateComponents) else {
+            return nil
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE d MMMM yyyy"
+        return formatter.string(from: date)
+    }
+    
+    private var formattedTime: String? {
+        guard let trigger = notification.trigger as? UNCalendarNotificationTrigger,
+              let date = Calendar.current.date(from: trigger.dateComponents) else {
+            return nil
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
+        return formatter.string(from: date)
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
-            Text("ID: \(notification.identifier)")
-            Text("Title: \(notification.content.title)")
-            Text("Body: \(notification.content.body)")
-            if let trigger = notification.trigger as? UNCalendarNotificationTrigger {
-                Text("Next Trigger: \(trigger.nextTriggerDate()?.formatted() ?? "Unknown")")
+            Text("\(notification.content.title)")
+            Text("---")
+            Text("\(notification.content.body)")
+            if let date = formattedDate {
+                Text("Date: \(date)")
+            }
+            if let time = formattedTime {
+                Text("Time: \(time)")
             }
         }
         .padding()
@@ -184,7 +194,7 @@ struct SettingsDebugView: View {
 
 // MARK: - Main Debug View
 struct Debug_V: View {
-    @State private var selectedTab = 0
+    @State private var selectedTab = 2  // Start with notifications tab
     @ObservedObject var appManager: AppManager
 //    @ObservedObject var messageManager: MessageManager
 //    @ObservedObject var notificationsManager: NotificationsManager
@@ -205,7 +215,6 @@ struct Debug_V: View {
                 Text("Tasks").tag(0)
                 Text("Messages").tag(1)
                 Text("Notifications").tag(2)
-                Text("Settings").tag(3)
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
@@ -219,9 +228,6 @@ struct Debug_V: View {
                 
                 NotificationsDebugView()
                     .tag(2)
-                
-                SettingsDebugView(appManager: appManager)
-                    .tag(3)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }

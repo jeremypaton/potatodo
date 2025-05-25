@@ -15,10 +15,23 @@ struct PageSettings_VM: View {
                             _Concurrency.Task {
                                 let enabled = await ReminderUtils.requestPermissions()
                                 appManager.setNotificationsEnabled(enabled)
+                                
+                                _Concurrency.Task {
+                                    await ReminderUtils.recalcReminders(
+                                        userSettings: appManager.appDataStore.userSettings,
+                                        tasks: appManager.getTasks()
+                                    )
+                                }
                             }
                         } else {
                             appManager.setNotificationsEnabled(false)
-                            ReminderUtils.removeAllReminders()
+                            
+                            _Concurrency.Task {
+                                await ReminderUtils.recalcReminders(
+                                    userSettings: appManager.appDataStore.userSettings,
+                                    tasks: appManager.getTasks()
+                                )
+                            }
                         }
                     }
                 ))
@@ -29,10 +42,15 @@ struct PageSettings_VM: View {
                                 get: { appManager.appDataStore.userSettings.notificationTime },
                                 set: { newValue in
                                     appManager.setNotificationTime(newValue)
+                                    _Concurrency.Task {
+                                        await ReminderUtils.recalcReminders(
+                                            userSettings: appManager.appDataStore.userSettings,
+                                            tasks: appManager.getTasks()
+                                        )
+                                    }
                                 }
                              ),
                              displayedComponents: .hourAndMinute)
-                
                 }
                 
                 Picker("Badge Count", selection: $selectedBadgeCount) {

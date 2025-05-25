@@ -75,9 +75,8 @@ REMINDERS
 
         [ ] overhaul reminder system
             [ ] stateless utils model
-            [ ] remove update daily reminders from app manager
+            [X] remove update daily reminders from app manager
             [ ] nice formatting
-            [ ] daily + weekly
             [ ] persistenceutils for reminders (hook into tasks?)
             
         [ ] redo basic debug view

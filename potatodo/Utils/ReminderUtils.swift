@@ -12,6 +12,7 @@ import UIKit
 struct ReminderUtils {
     private static var lastRecalcTime: Date?
     private static let minimumRecalcInterval: TimeInterval = 1.0 // 1 second minimum between recalculations
+    static var reminderSummary : String = ""
     
     static func requestPermissions() async -> Bool {
         do {
@@ -24,9 +25,10 @@ struct ReminderUtils {
     
     static func removeAllReminders() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        reminderSummary = ""
     }
     
-    static func recalcReminders(notificationsEnabled: Bool, notificationTime: Date, tasks: [Task]) async {
+    static func recalcReminders(userSettings : UserSettings, tasks: [Task]) async {
         // Check if we've recalculated too recently
         if let lastRecalc = lastRecalcTime,
            Date().timeIntervalSince(lastRecalc) < minimumRecalcInterval {
@@ -37,7 +39,8 @@ struct ReminderUtils {
         lastRecalcTime = Date()
         removeAllReminders()
         
-        if !notificationsEnabled {
+        if !userSettings.notificationsEnabled || userSettings.profile.name == "DEBUG" || userSettings.profile.name == "TEST" {
+            print("aborting reminder recalculation - notifications disabled or in debug / test mode")
             return
         }
         
@@ -64,18 +67,18 @@ struct ReminderUtils {
             var reminderText = ""
             
             if !tasksForDate.isEmpty {
-                reminderTitle = "Today's todos:"
+                reminderTitle = "today's todos:"
                 for (index, task) in tasksForDate.enumerated() {
-                    reminderText += "\(index + 1). \(task.title)\n"
+                    reminderText += "🥔[\(index + 1)] \(task.title)\n"
                 }
             } else {
-                reminderTitle = "Time to plan your day!"
-                reminderText = ""
+                reminderTitle = "time to plan your day!"
+                reminderText = "🥔[1] ?\n🥔[2] ?\n🥔[3] ?\n"
             }
             
-            print("Weekday: \(weekdayName)")
-            print("Reminder Title: \(reminderTitle)")
-            print("Reminder Text: \(reminderText)")
+            reminderSummary += "Weekday: \(weekdayName)\n"
+            reminderSummary += "Reminder Title: \(reminderTitle)\n"
+            reminderSummary += "Reminder Text: \(reminderText)\n\n"
             
             // Create notification content
             let content = UNMutableNotificationContent()
@@ -84,7 +87,7 @@ struct ReminderUtils {
             content.sound = .default
             
             // Create date components for the trigger
-            var dateComponents = calendar.dateComponents([.hour, .minute], from: notificationTime)
+            var dateComponents = calendar.dateComponents([.hour, .minute], from: userSettings.notificationTime)
             dateComponents.day = calendar.component(.day, from: date)
             dateComponents.month = calendar.component(.month, from: date)
             dateComponents.year = calendar.component(.year, from: date)
@@ -103,6 +106,7 @@ struct ReminderUtils {
                 print("Error scheduling reminder for \(weekdayName): \(error)")
             }
         }
+        print(reminderSummary)
     }
     
     static func setBadgeCount(_ count: Int) {
