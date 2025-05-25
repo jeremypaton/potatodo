@@ -55,50 +55,33 @@ REFINE
 
 REFACTOR
     v0.1.8
-        [ ] BIG REFACTOR - one manager at a time
-        
-        convert to service model to clean up manager codependencies...
-        
-        Here's the simplified step-by-step plan:
-            
-            Create AppService
-                Create a central service coordinator
-                This will be the single source of truth for all services
-            
-            For Each Manager (TaskManager, NavManager, etc.)
-                Create a new Service class
-                Move all business logic from Manager to Service
-                Remove all @Published properties from Service
-                Remove all direct dependencies on other managers from Service
-                Create a new (View?)Manager class that wraps the Service
-                Move all UI state management to the new Manager
-                Make Manager delegate to Service for business logic
-            
-            Update Views
-                Update views to use the new Managers
-                Inject AppService where needed
-                Remove direct manager-to-manager dependencies
-            
-            Clean Up
-                Remove old Manager classes
-                Remove any remaining direct dependencies between services
-                Update any tests to use the new structure
-            
-            The key principle is: Services handle business logic, (View?)Managers handle UI state, and AppService coordinates everything.
-
+        [ ] BIG REFACTOR
+            [X] centralize AppManager
+            [ ] centralize task data
+            [ ] PersistenceUtils
+            [ ] clean up files 1-by-1
+                [ ] anim
+                [ ] debug
+                [ ] nav
+                [ ] notifications
+                [ ] overlay
+                [ ] pages
+                [ ] potato
+                [ ] tasks
+                [ ] widget
+                [ ] main
         [ ] proper test/debug/prod build system
 
 REMINDERS
     v0.1.9
-    overall reminder system
+    [ ] overhaul reminder system
         [ ] nice formatting
-        [ ] single source of truth
-                [ ] fix double reminder bug
         [ ] daily + weekly
-        [ ] settings page
+    [ ] fix widget / badge
+    [ ] basic settings page
+    [ ] basic stats
 
-
-=== ENGINEERING BETA LOCK === [MON 19 MAY]
+=== ENGINEERING BETA LOCK === [MON 16 MAY]
 === START DESIGN WORK ===
 
 v0.2.0 - UI layout
@@ -120,13 +103,13 @@ v0.2.3 - potato speech
     [ ] 3 character variations speech
     [ ] improve notifications speech
 
-v0.2.4 - potato aim
+v0.2.4 - potato anim
     [ ] keep alive / idle
     [ ] speaking
     [ ] potato celebration anim
     [ ] overlay elements / fx
 
-=== DESIGN BETA LOCK === [MON 26 MAY]
+=== DESIGN BETA LOCK === [MON 02 JUNE]
 === START FLOW WORK ===
 
 v0.3.0 - splash screen
@@ -135,12 +118,10 @@ v0.3.1 - day 1 intro
 
 v0.3.2 - basic advertizing
 
-=== FLOW BETA LOCK === [SUN 01 JUN]
+=== FLOW BETA LOCK === [MON 09 JUNE]
 === BETA READY ===
 
 FUTURE:
-    widget
     emails
     weekly recaps
     progress charts
-    medicare,glasses,passport,license

@@ -58,8 +58,19 @@ class UIState: ObservableObject {
     }
 }
 
-class ModelData: ObservableObject {
-    @Published var tasks: [Task] = []
+class TaskData: ObservableObject {
+    @Published fileprivate(set) var tasks: [Task] = []
+    private var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        // Connect all @Published properties to objectWillChange
+        $tasks
+            .sink { [weak self] _ in self?.objectWillChange.send() }
+            .store(in: &cancellables)
+    }
+    //add task
+    //edit task
+    //delete task
     
     // init()
     // load()
@@ -69,7 +80,7 @@ class ModelData: ObservableObject {
 class AppDataStore: ObservableObject {
     @Published var userSettings = UserSettings()
     @Published var uiState = UIState()
-    @Published var modelData = ModelData()
+    @Published var taskData = TaskData()
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -83,7 +94,7 @@ class AppDataStore: ObservableObject {
             .sink { [weak self] _ in self?.objectWillChange.send() }
             .store(in: &cancellables)
             
-        modelData.objectWillChange
+        taskData.objectWillChange
             .sink { [weak self] _ in self?.objectWillChange.send() }
             .store(in: &cancellables)
     }
@@ -130,6 +141,8 @@ class AppManager: ObservableObject {
         
         // Observe all manager changes
         observeManagerChanges()
+        
+        self.loadTasks()
     }
     
     private func observeManagerChanges() {
@@ -181,17 +194,22 @@ class AppManager: ObservableObject {
     func getOverlayManagerForOverlayView() -> OverlayManager { return overlayManager }
     func getMessageManagerForMessageView() -> MessageManager { return messageManager }
     
-    func getTasks() -> [Task] {
-        return taskManager.tasks
-    }
     
-    func getUnscheduledTasks() -> [Task] {
-        return taskManager.tasks
-    }
+    // BASIC TASK MANAGEMENT
+    private func setTasks(_ tasks: [Task]) { self.appDataStore.taskData.tasks = tasks }
+    private func loadTasks(){ self.setTasks(taskManager.getTasksForProfile())}
+    func addTask(_ task: Task) { self.appDataStore.taskData.tasks.append(task) }
+    func deleteTaskByID(_ id: UUID) { self.appDataStore.taskData.tasks.removeAll { $0.id == id } }
 
+    func getTasks() -> [Task] { return self.appDataStore.taskData.tasks }
+    func getTaskByID(_ id: UUID) -> Task? { return self.appDataStore.taskData.tasks.first(where: { $0.id == id }) }
+    func getTaskForDate(date: Date) -> [Task] { return self.appDataStore.taskData.tasks.filter {$0.date == date } }
+    func getTasksForToday() -> [Task] { return self.appDataStore.taskData.tasks.filter {$0.date == Date()} }
+    func getUnscheduledTasks() -> [Task] { return self.appDataStore.taskData.tasks.filter { $0.date == nil } }
+    
     func setProfile(_ profile: Profile) {
         self.appDataStore.userSettings.profile = profile
-        taskManager.loadTasks()
+        self.loadTasks()
     }
     
     func setNotificationsEnabled(_ enabled: Bool) {
@@ -204,20 +222,20 @@ class AppManager: ObservableObject {
     
     func saveTaskEditOverlay(){
         guard let taskId = overlayManager.taskEditOverlay.taskId,
-              let task = taskManager.tasks.first(where: { $0.id == taskId }) else {
+              let task = self.getTaskByID(taskId) else {
             return
         }
   
         var updatedTask = task
-        updatedTask.title = overlayManager.taskEditOverlay.editedTitle
-        updatedTask.color = overlayManager.taskEditOverlay.selectedColor
-        taskManager.updateTask(updatedTask)
+        updatedTask.setTitle(overlayManager.taskEditOverlay.editedTitle)
+        updatedTask.setColor(overlayManager.taskEditOverlay.selectedColor)
+//        taskManager.updateTask(updatedTask)
         hideTaskEditOverlay()
     }
     
     func deleteTaskEditOverlay(){
         guard let taskId = overlayManager.taskEditOverlay.taskId,
-              let task = taskManager.tasks.first(where: { $0.id == taskId }) else {
+              let task = self.getTaskByID(taskId) else {
             return
         }
         

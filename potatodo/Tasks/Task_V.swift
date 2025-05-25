@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 // MARK: - Task Row Style Protocol
 protocol BaseTaskRowStyle {
@@ -116,7 +117,8 @@ struct Task_V: View {
     }
     
     private var task: Task {
-        taskManager.tasks.first(where: { $0.id == taskId }) ?? Task(title: "ERROR", color: .red)
+//        taskManager.tasks.first(where: { $0.id == taskId }) ?? Task(title: "ERROR", color: .red)
+        appManager.getTaskByID(taskId) ?? Task(title: "ERROR", color: .red)
     }
     
     private var style: BaseTaskRowStyle {
@@ -124,7 +126,7 @@ struct Task_V: View {
     }
     
     var body: some View {
-        guard let _ = taskManager.tasks.first(where: { $0.id == taskId }) else {
+        guard let _ = appManager.getTaskByID(taskId) else {
             return AnyView(EmptyView())
         }
         
@@ -133,7 +135,9 @@ struct Task_V: View {
                 HStack {
                     // Color cycle button
                     Button {
-                        taskManager.cycleTaskColorFromID(taskId)
+                        task.cycleColor()
+                        
+//                        objectWillChange.send()
                     } label: {
                         Image(systemName: "star.fill")
                             .foregroundColor(TaskStyle.fullColor(for: task))
@@ -159,7 +163,8 @@ struct Task_V: View {
                     
                     // Completion circle
                     Button {
-                        taskManager.toggleTaskCompletion(task)
+//                        taskMatasnager.toggleTaskCompletion(task)
+                        task.toggleCompletion()
                         if task.isCompleted {
                             appManager.celebrateTaskComplete()
                         }
@@ -314,7 +319,7 @@ struct AddTaskDropDelegate: DropDelegate {
 //    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
      ZStack {
         VStack() {
-            ForEach(appManager.getTasks()) { task in
+            ForEach(appManager.getTasks().prefix(3)) { task in
                 Task_V(appManager: appManager, taskId: task.id, isCompact: false)
             }
             
@@ -322,7 +327,7 @@ struct AddTaskDropDelegate: DropDelegate {
             
             HStack {
                 VStack() {
-                    ForEach(appManager.getTasks()) { task in
+                    ForEach(appManager.getTasks().prefix(3)) { task in
                         Task_V(appManager: appManager, taskId: task.id, isCompact: true)
                     }
                     

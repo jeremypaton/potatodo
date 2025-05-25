@@ -12,14 +12,14 @@ import Combine
 @MainActor
 class TaskManager: ObservableObject {
     @ObservedObject var appManager: AppManager
-//    let notificationsManager = NotificationsManager()
-
-    @Published private(set) var tasks: [Task] = []
-    @Published var errorMessage: String?
+    //    let notificationsManager = NotificationsManager()
     
-    var unscheduledTasks: [Task] {
-        tasks.filter { $0.date == nil }
-    }
+    //    @Published private(set) var tasks: [Task] = []
+//    @Published var errorMessage: String?
+    
+    //    var unscheduledTasks: [Task] {
+    //        tasks.filter { $0.date == nil }
+    //    }
     
     private var tasksDirectory: URL {
         let fileManager = FileManager.default
@@ -27,7 +27,7 @@ class TaskManager: ObservableObject {
         let profileDirectory = documentsDirectory.appendingPathComponent("tasks_\(appManager.appDataStore.userSettings.profile.rawValue)")
         
         print("Documents Directory: \(documentsDirectory.path)")
-
+        
         // Create directory if it doesn't exist
         if !fileManager.fileExists(atPath: profileDirectory.path) {
             try? fileManager.createDirectory(at: profileDirectory, withIntermediateDirectories: true)
@@ -44,181 +44,159 @@ class TaskManager: ObservableObject {
     
     init(appManager: AppManager) {
         self.appManager = appManager
-        loadTasks()
-        if appManager.appDataStore.userSettings.profile == .prod {
-            setupAutoSave()
-        }
+//        loadTasks()
+//        if appManager.appDataStore.userSettings.profile == .prod {
+//            setupAutoSave()
+//        }
     }
     
     // MARK: - Task Management
     
     func addNewTask(title: String, color: TaskColor = .green, date: Date? = Date()) -> Task {
         var task = Task(title: title, color: color, date: date)
-        if task.isValid == false {
-            task.title = "?"
-        }
-        tasks.append(task)
-        saveTasks()  // Explicitly save after adding
+        appManager.addTask(task)
         return task
+        //        if task.isValid == false {
+        //            task.title = "?"
+        //        }
+        //        tasks.append(task)
+        //        saveTasks()  // Explicitly save after adding
+        //        return task
     }
     
-    func updateTask(_ task: Task) {
-        guard task.isValid else {
-            errorMessage = "Task text cannot be empty"
-            return
-        }
-        
-        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
-            tasks[index] = task
-            errorMessage = nil
-            saveTasks()  // Explicitly save after updating
-        }
-    }
+    //    func updateTask(_ task: Task) {
+    //        appManager.updateTask(task)
+    ////        guard task.isValid else {
+    ////            errorMessage = "Task text cannot be empty"
+    ////            return
+    ////        }
+    ////
+    ////        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+    ////            tasks[index] = task
+    ////            errorMessage = nil
+    ////            saveTasks()  // Explicitly save after updating
+    ////        }
+    //    }
     
     func deleteTask(_ task: Task) {
-        tasks.removeAll { $0.id == task.id }
-        saveTasks()  // Explicitly save after deleting
+        appManager.deleteTaskByID(task.id)
+        //        tasks.removeAll { $0.id == task.id }
+        //        saveTasks()  // Explicitly save after deleting
     }
     
     func toggleTaskCompletion(_ task: Task) {
-        var updatedTask = task
-        updatedTask.isCompleted.toggle()
-        updateTask(updatedTask)  // This will trigger saveTasks
+        task.toggleCompletion()
+        //        updateTask(updatedTask)  // This will trigger saveTasks
     }
     
-    func cycleTaskColorFromID(_ id: UUID) {
-        if let index = tasks.firstIndex(where: { $0.id == id }) {
-            var tc : TaskColor = tasks[index].color
-            
-            switch tc {
-                case .green: tc = .blue
-                case .blue: tc = .yellow
-                case .yellow: tc = .purple
-                case .purple: tc = .red
-                case .red: tc = .gray
-                case .gray: tc = .green
-            }
-            
-            tasks[index].color = tc
-            saveTasks()  // Explicitly save after color change
-        }
-    }
+//    func cycleTaskColorFromID(_ id: UUID) {
+//        if let task = appManager.getTaskByID(id) {
+//            print("Found task: \(task.title), current color: \(task.color)")
+//            switch task.color {
+//            case .green: task.setColor(.blue)
+//            case .blue: task.setColor(.yellow)
+//            case .yellow: task.setColor(.purple)
+//            case .purple: task.setColor(.red)
+//            case .red: task.setColor(.gray)
+//            case .gray: task.setColor(.green)
+//            }
+//            print("New color: \(task.color)")
+//        } else {
+//            print("Task not found for id: \(id)")
+//        }
+//    }
     
     func swapTaskIDs(_ id1: UUID, _ id2: UUID) {
-        guard let index1 = tasks.firstIndex(where: { $0.id == id1 }),
-              let index2 = tasks.firstIndex(where: { $0.id == id2 }) else {
-            return
-        }
+        return
         
-        // Swap the tasks
-        let temp = tasks[index1]
-        tasks[index1] = tasks[index2]
-        tasks[index2] = temp
-        saveTasks()  // Explicitly save after swapping
+        
+//        guard let index1 = tasks.firstIndex(where: { $0.id == id1 }),
+//              let index2 = tasks.firstIndex(where: { $0.id == id2 }) else {
+//            return
+//        }
+//        
+//        // Swap the tasks
+//        let temp = tasks[index1]
+//        tasks[index1] = tasks[index2]
+//        tasks[index2] = temp
+//        saveTasks()  // Explicitly save after swapping
     }
     
     func updateTaskDate(_ taskId: UUID, newDate: Date) {
-        guard let index = tasks.firstIndex(where: { $0.id == taskId }) else { return }
-        tasks[index].date = newDate
-        saveTasks()  // Explicitly save after date change
+        guard var task = appManager.getTaskByID(taskId) else { return }
+        task.setDate(newDate)
     }
     
     // MARK: - Persistence
     
-    private func setupAutoSave() {
-        $tasks
-            .debounce(for: .seconds(1), scheduler: RunLoop.main)
-            .sink { [weak self] _ in
-                self?.saveTasks()
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func saveTasks() {
-        // Only save if we're in production mode
-        guard appManager.appDataStore.userSettings.profile == .prod else { return }
-        
-        let encoder = JSONEncoder()
-        do {
-            let data = try encoder.encode(tasks)
-            try data.write(to: tasksFile)
-        } catch {
-            errorMessage = "Failed to save tasks: \(error.localizedDescription)"
-        }
-    }
-    
-//    private func updateDailyReminders() {
-//        // First, remove all existing reminders to ensure clean state
-//        notificationsManager.removeAllReminders()
-//        
-//        // Get today and next 7 days
-//        let calendar = Calendar.current
-//        let today = calendar.startOfDay(for: Date())
-//        let nextWeek = (0...7).compactMap { day in
-//            calendar.date(byAdding: .day, value: day, to: today)
-//        }
-//        
-//        // For each date in the next week
-//        for date in nextWeek {
-//            let tasksForDate = tasks.filter { task in
-//                if let taskDate = task.date {
-//                    return calendar.isDate(taskDate, inSameDayAs: date)
-//                }
-//                return false
+//    private func setupAutoSave() {
+//        $tasks
+//            .debounce(for: .seconds(1), scheduler: RunLoop.main)
+//            .sink { [weak self] _ in
+//                self?.saveTasks()
 //            }
-//            if !tasksForDate.isEmpty {
-//                // If there are tasks for this date, create task-specific reminder
-//                notificationsManager.updateRemindersForDay(date, tasks: tasksForDate)
-//            } else {
-//                // If no tasks, create default reminder
-//                notificationsManager.setReminderText(for: date, text: notificationsManager.defaultReminderText)
-//            }
+//            .store(in: &cancellables)
+//    }
+//    
+//    private func saveTasks() {
+//        // Only save if we're in production mode
+//        guard appManager.appDataStore.userSettings.profile == .prod else { return }
+//        
+//        let encoder = JSONEncoder()
+//        do {
+//            let data = try encoder.encode(tasks)
+//            try data.write(to: tasksFile)
+//        } catch {
 //        }
 //    }
     
-    func loadTasks() {
+    func getTasksForProfile() -> [Task] {
         // Clear current tasks before loading new ones
-        tasks = []
+//        var tasks : [Task] = []
         
         switch appManager.appDataStore.userSettings.profile {
         case .debug:
-            loadDebugTasks()
+            return loadDebugTasks()
         case .test:
-            loadCSVTestTasks()
+            return loadCSVTestTasks()
         case .prod:
-            loadRealTasks()
+            return loadRealTasks()
         }
 //        updateDailyReminders()
     }
     
-    private func loadRealTasks() {
+    private func loadRealTasks() -> [Task] {
+        var tasks : [Task] = []
         guard let data = try? Data(contentsOf: tasksFile) else {
-            return
+            return []
         }
         
         do {
             tasks = try JSONDecoder().decode([Task].self, from: data)
         } catch {
-            errorMessage = "Failed to load tasks: \(error.localizedDescription)"
+//            errorMessage = "Failed to load tasks: \(error.localizedDescription)"
         }
+        return tasks
     }
     
     // MARK: - Test Data
     
-    private func loadDebugTasks() {
+    private func loadDebugTasks() -> [Task]  {
         let testTasks = [
             Task(title: "Buy groceries", isCompleted: true, color: .green, date: Date()),
             Task(title: "Call mom", isCompleted: true, color: .blue, date: Date()),
             Task(title: "Finish project", isCompleted: false, color: .red, date: Date()),
         ]
         
-        tasks = testTasks
+        return testTasks
     }
     
-    private func loadCSVTestTasks() {
+    private func loadCSVTestTasks() -> [Task]  {
+        var tasks : [Task] = []
+
         guard let csvURL = Bundle.main.url(forResource: "test_tasks", withExtension: "csv") else {
-            errorMessage = "Could not find test_tasks.csv"
-            return
+//            errorMessage = "Could not find test_tasks.csv"
+            return tasks
         }
         
         do {
@@ -257,10 +235,11 @@ class TaskManager: ObservableObject {
             }
             
             tasks = loadedTasks
-            errorMessage = nil
+//            errorMessage = nil
         } catch {
-            errorMessage = "Failed to load CSV tasks: \(error.localizedDescription)"
+//            errorMessage = "Failed to load CSV tasks: \(error.localizedDescription)"
         }
+        return tasks
     }
 }
 
