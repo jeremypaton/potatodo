@@ -10,8 +10,10 @@ struct Splash: View {
     @State private var timer: Timer?
     @State private var spawnTimer: Timer?
     @State private var isSpawning = true
-    @Binding var showingSplash: Bool
+//    @Binding var showingSplash: Bool
     
+    @ObservedObject var appManager: AppManager
+
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -49,7 +51,7 @@ struct Splash: View {
             }
             .onTapGesture {
                 withAnimation {
-                    showingSplash = false
+                    appManager.endSplash()
                 }
             }
             .onAppear {
@@ -142,6 +144,7 @@ struct Splash: View {
 }
 
 #Preview {
-    Splash(showingSplash: .constant(true))
+    let appManager = AppManager()
+    Splash(appManager: appManager)
 }
 

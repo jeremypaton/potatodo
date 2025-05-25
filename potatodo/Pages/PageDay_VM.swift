@@ -1,15 +1,14 @@
 import SwiftUI
 
 struct PageDay_VM: View {
-    @ObservedObject var taskManager: TaskManager
-    @ObservedObject var navManager: NavManager
-    @ObservedObject var potatoManager: PotatoManager
+    @ObservedObject var appManager: AppManager
+
     @State private var previousCompletedCount = 0
     
     private var tasksForCurrentDay: [Task] {
-        taskManager.tasks.filter { task in
+        appManager.getTasks().filter { task in
             if let date = task.date {
-                return Calendar.current.isDate(date, inSameDayAs: navManager.currentDate)
+                return Calendar.current.isDate(date, inSameDayAs: appManager.getCurrentDate())
             }
             return false
         }
@@ -20,29 +19,29 @@ struct PageDay_VM: View {
     }
     
     var body: some View {
-        TopNav_V(navManager: navManager)
+        TopNav_V(appManager: appManager)
         
-        if navManager.isToday {
-            Potato_V(potatoManager: potatoManager)
+        if appManager.isToday() {
+            Potato_V(appManager: appManager)
         }
 
         VStack(spacing: 12) {
             ForEach(0..<3, id: \.self) { index in
                 if index < tasksForCurrentDay.count {
-                    Task_V(taskManager: taskManager, taskId: tasksForCurrentDay[index].id, isCompact: false)
+                    Task_V(appManager: appManager, taskId: tasksForCurrentDay[index].id, isCompact: false)
                 } else if index == 2 {
-                    AddTaskButton_V(taskManager: taskManager, isCompact: false, date: navManager.currentDate)
+                    AddTaskButton_V(appManager: appManager, isCompact: false, date: appManager.getCurrentDate())
                 }
             }
         }
         .padding(.horizontal)
         .onChange(of: completedTasksCount) { oldCount, newCount in
             // Update potato level based on completed tasks
-            potatoManager.setLevel(newCount)
+            appManager.setLevel(newCount)
             
             // Celebrate if we've completed more tasks than before
             if newCount > oldCount {
-                potatoManager.celebrateLevel(newCount)
+                appManager.celebrateLevel(newCount)
             }
             
             // Update previous count
@@ -51,29 +50,21 @@ struct PageDay_VM: View {
         .onAppear {
             // Initialize previous count and set initial level
             previousCompletedCount = completedTasksCount
-            potatoManager.setLevel(completedTasksCount)
+            appManager.setLevel(completedTasksCount)
         }
     }
 }
 
 #Preview {
-    let taskManager = TaskManager()
-    let navManager = NavManager()
-    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
-    let potatoManager = PotatoManager(overlayManager: overlayManager)
-    
-    return ZStack {
+    let appManager = AppManager()
+    ZStack {
         VStack {
-            PageDay_VM(taskManager: taskManager,
-                       navManager: navManager,
-                       potatoManager: potatoManager)
+            PageDay_VM(appManager: appManager)
             Spacer()
         }
         .background(Color(.systemGroupedBackground))
         
-        Overlay_V()
+        Overlay_V(appManager: appManager)
     }
-    .environmentObject(overlayManager)
-    .environmentObject(Settings())
 }
 

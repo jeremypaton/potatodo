@@ -1,40 +1,36 @@
 import SwiftUI
 
 struct PageSettings_VM: View {
-    @EnvironmentObject var settings: Settings
-    @EnvironmentObject var notificationsManager: NotificationsManager
+    @ObservedObject var appManager: AppManager
     @State private var notificationTime = Date()
     
     var body: some View {
         Form {
-                Text("TODO")
-//            Toggle("Enable Notifications", isOn: $settings.notificationsEnabled)
-//                .onChange(of: settings.notificationsEnabled) { oldValue, newValue in
+            Text("TODO")
+//            Toggle("Enable Notifications", isOn: $appManager.settings.notificationsEnabled)
+//                .onChange(of: appManager.settings.notificationsEnabled) { oldValue, newValue in
 //                    if newValue {
-//                        notificationsManager.requestPermissions()
+//                        appManager.notificationsManager.requestPermissions()
 //                    }
 //                }
 //            
-//            if settings.notificationsEnabled {
+//            if appManager.settings.notificationsEnabled {
 //                DatePicker("Daily Reminder Time",
 //                         selection: $notificationTime,
 //                         displayedComponents: .hourAndMinute)
 //                    .onChange(of: notificationTime) { oldValue, newValue in
-//                        settings.notificationTime = newValue
-//                        notificationsManager.setDailyTime(newValue)
+//                        appManager.settings.notificationTime = newValue
+//                        appManager.notificationsManager.setDailyTime(newValue)
 //                    }
 //            }
         }
         .onAppear {
-            notificationTime = settings.notificationTime
+            notificationTime = appManager.appDataStore.userSettings.notificationTime
         }
     }
 }
 
 #Preview {
-    let settings = Settings()
-    let notificationsManager = NotificationsManager()
-    return PageSettings_VM()
-        .environmentObject(settings)
-        .environmentObject(notificationsManager)
+    let appManager = AppManager()
+    return PageSettings_VM(appManager: appManager)
 } 

@@ -99,11 +99,21 @@ struct TaskStyle {
 
 
 struct Task_V: View {
+    @ObservedObject var appManager: AppManager
+
     @ObservedObject var taskManager: TaskManager
-    @EnvironmentObject var overlayManager: OverlayManager
+//    @EnvironmentObject var overlayManager: OverlayManager
     let taskId: UUID
     let isCompact: Bool
     @State private var isTargeted = false
+    
+    init(appManager: AppManager, taskId: UUID, isCompact: Bool, isTargeted: Bool = false) {
+        self.appManager = appManager
+        self.taskManager = appManager.getTaskManagerForTaskView()
+        self.taskId = taskId
+        self.isCompact = isCompact
+        self.isTargeted = isTargeted
+    }
     
     private var task: Task {
         taskManager.tasks.first(where: { $0.id == taskId }) ?? Task(title: "ERROR", color: .red)
@@ -135,7 +145,7 @@ struct Task_V: View {
                     
                     // Task text
                     Button {
-                        overlayManager.showTaskEdit(for: taskId, title: task.title)
+                        appManager.showTaskEdit(taskID: taskId, title: task.title)
                     } label: {
                         Text(task.title.uppercased())
                             .font(.system(size: style.fontSize, weight: .medium))
@@ -151,7 +161,7 @@ struct Task_V: View {
                     Button {
                         taskManager.toggleTaskCompletion(task)
                         if task.isCompleted {
-                            overlayManager.showPotatoRain(isSinglePotato: true)
+                            appManager.celebrateTaskComplete()
                         }
                     } label: {
                         ZStack {
@@ -226,16 +236,25 @@ struct TaskDropDelegate: DropDelegate {
 
 // MARK: - Add Task Button View
 struct AddTaskButton_V: View {
+    @ObservedObject var appManager: AppManager
     @ObservedObject var taskManager: TaskManager
-    @EnvironmentObject var overlayManager: OverlayManager
+//    @EnvironmentObject var overlayManager: OverlayManager
     let isCompact: Bool
     let date: Date?
     @State private var isTargeted = false
     
+    init(appManager: AppManager, isCompact: Bool, date: Date? = nil) {
+        self.appManager = appManager
+        self.taskManager = appManager.getTaskManagerForTaskView()
+//        self.taskId = taskId
+        self.isCompact = isCompact
+        self.date = date
+    }
+    
     var body: some View {
         Button {
             let newTask = taskManager.addNewTask(title: "", date: date)
-            overlayManager.showTaskEdit(for: newTask.id, title: newTask.title)
+            appManager.showTaskEdit(taskID: newTask.id, title: newTask.title)
         } label: {
             Text("➕")
                 .font(.system(size: isCompact ? 20 : 24, weight: .semibold))
@@ -289,24 +308,25 @@ struct AddTaskDropDelegate: DropDelegate {
 }
 
 #Preview {
-    let taskManager = TaskManager()
-    let navManager = NavManager()
-    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
-    return ZStack {
+    let appManager = AppManager()
+//    let taskManager = TaskManager()
+//    let navManager = NavManager()
+//    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
+     ZStack {
         VStack() {
-            ForEach(taskManager.tasks) { task in
-                Task_V(taskManager: taskManager, taskId: task.id, isCompact: false)
+            ForEach(appManager.getTasks()) { task in
+                Task_V(appManager: appManager, taskId: task.id, isCompact: false)
             }
             
-            AddTaskButton_V(taskManager: taskManager, isCompact: false, date: Date())
+            AddTaskButton_V(appManager: appManager, isCompact: false, date: Date())
             
             HStack {
                 VStack() {
-                    ForEach(taskManager.tasks) { task in
-                        Task_V(taskManager: taskManager, taskId: task.id, isCompact: true)
+                    ForEach(appManager.getTasks()) { task in
+                        Task_V(appManager: appManager, taskId: task.id, isCompact: true)
                     }
                     
-                    AddTaskButton_V(taskManager: taskManager, isCompact: true, date: Date())
+                    AddTaskButton_V(appManager: appManager, isCompact: true, date: Date())
                 }
                 .frame(width: UIScreen.main.bounds.width / 2)
                 
@@ -314,7 +334,7 @@ struct AddTaskDropDelegate: DropDelegate {
             }
         }
         
-        Overlay_V()
+        Overlay_V(appManager: appManager)
     }
-    .environmentObject(overlayManager)
+//    .environmentObject(overlayManager)
 }

@@ -40,128 +40,117 @@ struct PotatoCounterWeek_V: View {
 }
 
 struct PageWeek_VM: View {
-    @ObservedObject var taskManager: TaskManager
-    @ObservedObject var navManager: NavManager
+    @ObservedObject var appManager: AppManager
     
-    private var weekDays: [Date] {
+    private var currentWeek: [Date] {
         let calendar = Calendar.current
-        let weekday = calendar.component(.weekday, from: navManager.weekStart)
-        let daysToSubtract = (weekday + 5) % 7
+        let today = appManager.getCurrentDate()
+        let weekday = calendar.component(.weekday, from: today)
+        let daysToSubtract = weekday - calendar.firstWeekday
+        
+        let startOfWeek = calendar.date(byAdding: .day, value: -daysToSubtract, to: today)!
         
         return (0..<7).map { day in
-            calendar.date(byAdding: .day, value: day - daysToSubtract, to: navManager.weekStart) ?? Date()
+            calendar.date(byAdding: .day, value: day, to: startOfWeek)!
         }
     }
     
-    private var completedTasksThisWeek: Int {
-        taskManager.tasks.filter { task in
-            if let taskDate = task.date {
-                return task.isCompleted && weekDays.contains { day in
-                    Calendar.current.isDate(taskDate, inSameDayAs: day)
-                }
-            }
-            return false
-        }.count
-    }
-    
-    private func formatDayHeader(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE"
-        return formatter.string(from: date).uppercased()
-    }
-    
-    private func formatDateHeader(_ date: Date) -> String {
+    private var weekYearString: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM d"
-        return formatter.string(from: date).uppercased()
+        let start = formatter.string(from: currentWeek[0])
+        let end = formatter.string(from: currentWeek[6])
+        return "\(start) - \(end)".uppercased()
     }
     
-    private func tasksForDay(_ date: Date) -> [Task] {
-        taskManager.tasks.filter { task in
+    private func completionPercentage(for date: Date) -> Double {
+        let dayTasks = appManager.getTasks().filter { task in
             if let taskDate = task.date {
                 return Calendar.current.isDate(taskDate, inSameDayAs: date)
             }
             return false
         }
+        guard !dayTasks.isEmpty else { return 0 }
+        let completedCount = dayTasks.filter { $0.isCompleted }.count
+        return Double(completedCount) / Double(dayTasks.count)
     }
     
-    private func dayView(for date: Date) -> some View {
-        VStack(alignment: .center, spacing: 0) {
-            // Header
-            HStack {
-                Text(formatDayHeader(date))
-                    .font(.headline)
-                Text(formatDateHeader(date))
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
+    private var completedTasksThisWeek: Int {
+        let weekTasks = appManager.getTasks().filter { task in
+            if let taskDate = task.date {
+                return currentWeek.contains { Calendar.current.isDate($0, inSameDayAs: taskDate) }
             }
-            .padding(.bottom, 2)
-            
-            // Task List of day in compact mode
-            VStack(spacing: 4) {
-                ForEach(tasksForDay(date)) { task in
-                    Task_V(taskManager: taskManager, taskId: task.id, isCompact: true)
-                }
-                
-                if tasksForDay(date).count < 3 {
-                    AddTaskButton_V(taskManager: taskManager, isCompact: true, date: date)
-                }
-                
-                Spacer(minLength: 0)
-            }
+            return false
         }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 4)
-        .background(Color.white)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-        )
+        return weekTasks.filter { $0.isCompleted }.count
     }
     
     var body: some View {
-        TopNav_V(navManager: navManager)
-
-        GeometryReader { geometry in
-            ZStack {
-                Color(.systemGray6)
-                    .edgesIgnoringSafeArea(.all)
-                
-                VStack(spacing: 0) {
-                    LazyVGrid(columns: [
-                        GridItem(.flexible(), spacing: 8),
-                        GridItem(.flexible(), spacing: 8)
-                    ], spacing: 8) {
-                        ForEach(0..<7) { index in
-                            dayView(for: weekDays[index])
-                                .frame(height: (geometry.size.height - 32) / 4) // 32 for padding, 4 rows
-                        }
-                        
-                        // Potato Counter as 8th box
-                        PotatoCounterWeek_V(completedTasks: completedTasksThisWeek)
-                            .frame(height: (geometry.size.height - 32) / 4)
-                    }
+        VStack(spacing: 20) {
+            // Week header
+            Text(weekYearString)
+                .font(.title)
+                .bold()
+            
+            // Week grid
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 8) {
+                // Day headers
+                ForEach(["S", "M", "T", "W", "T", "F", "S"], id: \.self) { day in
+                    Text(day)
+                        .font(.caption)
+                        .foregroundColor(.gray)
                 }
-                .padding(8)
+                
+                // Calendar days
+                ForEach(currentWeek, id: \.self) { date in
+                    DayCell(date: date,
+                           isCompleted: appManager.getTasks().filter { $0.isCompleted && Calendar.current.isDate($0.date ?? Date(), inSameDayAs: date) }.count > 0,
+                           completionPercentage: completionPercentage(for: date))
+                        .onTapGesture {
+                            appManager.setDate(date)
+                            appManager.setInterval(.day)
+                        }
+                }
             }
+            .padding()
+            
+            // Week summary
+            Text("Completed: \(completedTasksThisWeek)")
+                .font(.headline)
         }
     }
 }
 
-#Preview {
-    let taskManager = TaskManager()
-    let navManager = NavManager()
-    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
-    navManager.setInterval(.week)
+struct DayCell: View {
+    let date: Date
+    let isCompleted: Bool
+    let completionPercentage: Double
     
-    return ZStack {
-        VStack {
-            PageWeek_VM(taskManager: taskManager, navManager: navManager)
-        }
-        .background(Color(.systemGroupedBackground))
-        
-        Overlay_V()
+    private var dayNumber: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d"
+        return formatter.string(from: date)
     }
-    .environmentObject(overlayManager)
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(isCompleted ? Color.green : Color.clear)
+                .opacity(completionPercentage)
+            
+            Text(dayNumber)
+                .font(.system(size: 14))
+        }
+        .frame(height: 40)
+        .overlay(
+            Circle()
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+        )
+    }
+}
+
+#Preview {
+    let appManager = AppManager()
+    return PageWeek_VM(appManager: appManager)
 }
 

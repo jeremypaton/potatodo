@@ -4,6 +4,11 @@ struct BottomNav_V: View {
     @ObservedObject var navManager: NavManager
     var onPotatoClick: () -> Void = {}
     
+    init(appManager: AppManager){
+        self.navManager = appManager.getNavManagerForNavView()
+    }
+    
+    
     var body: some View {
         ZStack {
             HStack {
@@ -81,7 +86,7 @@ struct BottomNav_V: View {
         Spacer()
         
         BottomNav_V(
-            navManager: NavManager()
+            appManager: AppManager()
         )
     }
     .background(Color(.green))

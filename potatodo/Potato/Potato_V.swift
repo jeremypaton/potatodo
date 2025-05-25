@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct Potato_V: View {
-    @ObservedObject var potatoManager: PotatoManager
+//    @ObservedObject var potatoManager: PotatoManager
+    @ObservedObject var appManager: AppManager
+
     
     var body: some View {
         GeometryReader { geometry in
@@ -12,7 +14,7 @@ struct Potato_V: View {
                     .cornerRadius(12)
                     .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
                 
-                Image(potatoManager.isCelebrating ? "potato_celebrate" : "potato_\(potatoManager.level)")
+                Image(appManager.appDataStore.uiState.isCelebrating ? "potato_celebrate" : "potato_\(appManager.appDataStore.uiState.level)")
                     .resizable()
                     .scaledToFit()
                     .frame(width: geometry.size.width - 24, height: geometry.size.width - 24)
@@ -22,7 +24,7 @@ struct Potato_V: View {
                     )
                 
                 VStack {
-                    Message_V(messageManager: potatoManager.messageManager)
+                    Message_V(messageManager: appManager.getMessageManagerForMessageView())
                         .padding(.top, geometry.size.width * 0.1)
                     Spacer()
                 }
@@ -33,26 +35,25 @@ struct Potato_V: View {
 }
 
 #Preview {
-    let taskManager = TaskManager()
-    let navManager = NavManager()
-    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
-    let potatoManager = PotatoManager(overlayManager: overlayManager)
+    let appManager = AppManager()
+//    let navManager = NavManager()
+//    let overlayManager = OverlayManager(taskManager: taskManager, navManager: navManager)
+//    let potatoManager = PotatoManager(overlayManager: overlayManager)
 
     VStack(spacing: 20) {
-        Potato_V(potatoManager: potatoManager)
+        Potato_V(appManager: appManager)
         
         HStack{
             ForEach(0..<4) { level in
                 Button(action: {
-                    potatoManager.celebrateLevel(level)
+                    appManager.celebrateLevel(level)
                 }) {
                     Text("Level \(level)")
                 }
             }
         }
-        Overlay_V()
+        Overlay_V(appManager: appManager)
     }
     .padding()
     .background(Color(.green))
-    .environmentObject(overlayManager)
 }

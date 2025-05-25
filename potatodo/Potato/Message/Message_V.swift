@@ -3,6 +3,7 @@ import SwiftUI
 struct Message_V: View {
     @ObservedObject var messageManager: MessageManager
     
+    
     var body: some View {
         if messageManager.isShowingMessage {
             VStack {

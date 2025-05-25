@@ -3,6 +3,10 @@ import SwiftUI
 struct TopNav_V: View {
     @ObservedObject var navManager: NavManager
     
+    init(appManager: AppManager){
+        self.navManager = appManager.getNavManagerForNavView()
+    }
+    
     var body: some View {
         HStack {
             Button(action: { navManager.movePrev() }) {
@@ -36,7 +40,7 @@ struct TopNav_V: View {
 
 #Preview {
     VStack {
-        TopNav_V(navManager: NavManager())
+        TopNav_V(appManager: AppManager())
         Spacer()
     }.background(Color(.green))
 }

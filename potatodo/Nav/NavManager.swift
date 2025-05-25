@@ -32,7 +32,10 @@ class NavManager: ObservableObject {
     }
     
     func setPage(_ page: PageType) {
+        print("🎯 NavManager: Setting page to \(page)")
+        print("🎯 NavManager: Current page before change: \(currentPage)")
         currentPage = page
+        print("🎯 NavManager: Current page after change: \(currentPage)")
         if page != .backlog && page != .settings {
             switch page {
             case .day:
@@ -167,18 +170,20 @@ class NavManager: ObservableObject {
 }
 
 #Preview {
-    let navManager: NavManager = NavManager()
+//    let navManager: NavManager = NavManager()
+    let appManager = AppManager()
+    
     VStack {
         TopNav_V(
-            navManager: navManager
+            appManager: appManager
         )
         
         Spacer()
-        Text("time: \(navManager.currentDate.formatted())")
+        Text("time: \(appManager.getCurrentDate().formatted())")
         Spacer()
         
         BottomNav_V(
-            navManager: navManager,
+            appManager: appManager,
         )
     }
     .background(Color(.green))

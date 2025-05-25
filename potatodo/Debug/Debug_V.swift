@@ -7,25 +7,199 @@
 
 import SwiftUI
 
-struct Debug_V: View {
-    @ObservedObject var taskManager: TaskManager
+// MARK: - Task Debug View
+struct TaskDebugView: View {
+    let tasks: [Task]
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+                ForEach(tasks) { task in
+                    TaskDebugItemView(task: task)
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+struct TaskDebugItemView: View {
+    let task: Task
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("ID: \(task.id)")
+            Text("Title: \(task.title)")
+            Text("Completed: \(task.isCompleted ? "Yes" : "No")")
+            Text("Color: \(task.color.rawValue)")
+            if let date = task.date {
+                Text("Date: \(date.formatted())")
+            } else {
+                Text("Date: Unscheduled")
+            }
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(8)
+    }
+}
+
+// MARK: - Message Debug View
+struct MessageDebugView: View {
     @ObservedObject var messageManager: MessageManager
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("All Messages")
+                    .font(.headline)
+                ForEach(messageManager.messages.indices, id: \.self) { index in
+                    MessageDebugItemView(message: messageManager.messages[index])
+                }
+                
+                Text("Recent Messages")
+                    .font(.headline)
+                    .padding(.top)
+                ForEach(messageManager.recentMessages, id: \.self) { message in
+                    Text(message)
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+struct MessageDebugItemView: View {
+    let message: Message
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Level: \(message.level)")
+            Text("Text: \(message.text)")
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(8)
+    }
+}
+
+// MARK: - Notifications Debug View
+struct NotificationsDebugView: View {
     @ObservedObject var notificationsManager: NotificationsManager
-    @EnvironmentObject var settings: Settings
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+                NotificationsSettingsView(notificationsManager: notificationsManager)
+                PendingNotificationsView(notifications: notificationsManager.pendingNotifications)
+            }
+            .padding()
+        }
+    }
+}
+
+struct NotificationsSettingsView: View {
+    @ObservedObject var notificationsManager: NotificationsManager
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Settings")
+                .font(.headline)
+            Text("Notifications Enabled: \(notificationsManager.isEnabled ? "Yes" : "No")")
+            Text("Daily Time: \(notificationsManager.dailyTime.formatted(date: .omitted, time: .shortened))")
+            Text("Default Reminder Text: \(notificationsManager.defaultReminderText)")
+        }
+    }
+}
+
+struct PendingNotificationsView: View {
+    let notifications: [UNNotificationRequest]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Pending Notifications")
+                .font(.headline)
+                .padding(.top)
+            ForEach(notifications, id: \.identifier) { notification in
+                NotificationDebugItemView(notification: notification)
+            }
+        }
+    }
+}
+
+struct NotificationDebugItemView: View {
+    let notification: UNNotificationRequest
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("ID: \(notification.identifier)")
+            Text("Title: \(notification.content.title)")
+            Text("Body: \(notification.content.body)")
+            if let trigger = notification.trigger as? UNCalendarNotificationTrigger {
+                Text("Next Trigger: \(trigger.nextTriggerDate()?.formatted() ?? "Unknown")")
+            }
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(8)
+    }
+}
+
+// MARK: - Settings Debug View
+struct SettingsDebugView: View {
+    let appManager: AppManager
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("App Settings")
+                    .font(.headline)
+                
+                VStack(alignment: .leading) {
+                    Text("Profile")
+                        .font(.subheadline)
+                    Picker("Profile", selection: Binding(
+                        get: { appManager.appDataStore.userSettings.profile },
+                        set: { newValue in
+                            appManager.setProfile(newValue)
+                        }
+                    )) {
+                        Text("Debug").tag(Profile.debug)
+                        Text("Test").tag(Profile.test)
+                        Text("Production").tag(Profile.prod)
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                }
+                .padding()
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(8)
+            }
+            .padding()
+        }
+    }
+}
+
+// MARK: - Main Debug View
+struct Debug_V: View {
     @State private var selectedTab = 0
-    @Binding var isPresented: Bool
+    @ObservedObject var appManager: AppManager
+//    @ObservedObject var messageManager: MessageManager
+//    @ObservedObject var notificationsManager: NotificationsManager
+//    @ObservedObject var taskManager: TaskManager
+    
+    init(appManager: AppManager) {
+        self.appManager = appManager
+//        self._messageManager = ObservedObject(wrappedValue: appManager.getMessageManagerForMessageView())
+//        self._notificationsManager = ObservedObject(wrappedValue: appManager.getNotificationsManagerForNotificationsView())
+//        self._taskManager = ObservedObject(wrappedValue: appManager.getTaskManagerForTaskView())
+    }
     
     var body: some View {
         VStack {
-            HStack {
-                Spacer()
-                Button(action: { isPresented = false }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.title2)
-                        .foregroundColor(.gray)
-                }
-                .padding(.trailing)
-            }
+            CloseButton(appManager: appManager)
             
             Picker("View", selection: $selectedTab) {
                 Text("Tasks").tag(0)
@@ -37,139 +211,45 @@ struct Debug_V: View {
             .padding()
             
             TabView(selection: $selectedTab) {
-                // Tasks Tab
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 10) {
-                        ForEach(taskManager.tasks) { task in
-                            VStack(alignment: .leading) {
-                                Text("ID: \(task.id)")
-                                Text("Title: \(task.title)")
-                                Text("Completed: \(task.isCompleted ? "Yes" : "No")")
-                                Text("Color: \(task.color.rawValue)")
-                                if let date = task.date {
-                                    Text("Date: \(date.formatted())")
-                                } else {
-                                    Text("Date: Unscheduled")
-                                }
-                            }
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(8)
-                        }
-                    }
-                    .padding()
-                }
-                .tag(0)
+                TaskDebugView(tasks: appManager.getTasks())
+                    .tag(0)
                 
-                // Messages Tab
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("All Messages")
-                            .font(.headline)
-                        ForEach(messageManager.messages.indices, id: \.self) { index in
-                            let message = messageManager.messages[index]
-                            VStack(alignment: .leading) {
-                                Text("Level: \(message.level)")
-                                Text("Text: \(message.text)")
-                            }
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(8)
-                        }
-                        
-                        Text("Recent Messages")
-                            .font(.headline)
-                            .padding(.top)
-                        ForEach(messageManager.recentMessages, id: \.self) { message in
-                            Text(message)
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(8)
-                        }
-                    }
-                    .padding()
-                }
-                .tag(1)
+                MessageDebugView(messageManager: appManager.getMessageManagerForMessageView())
+                    .tag(1)
                 
-                // Notifications Tab
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Settings")
-                            .font(.headline)
-                        Text("Notifications Enabled: \(notificationsManager.isEnabled ? "Yes" : "No")")
-                        Text("Daily Time: \(notificationsManager.dailyTime.formatted(date: .omitted, time: .shortened))")
-                        Text("Default Reminder Text: \(notificationsManager.defaultReminderText)")
-                        
-                        Text("Pending Notifications")
-                            .font(.headline)
-                            .padding(.top)
-                        ForEach(notificationsManager.pendingNotifications, id: \.identifier) { notification in
-                            VStack(alignment: .leading) {
-                                Text("ID: \(notification.identifier)")
-                                Text("Title: \(notification.content.title)")
-                                Text("Body: \(notification.content.body)")
-                                if let trigger = notification.trigger as? UNCalendarNotificationTrigger {
-                                    Text("Next Trigger: \(trigger.nextTriggerDate()?.formatted() ?? "Unknown")")
-                                }
-                            }
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(8)
-                        }
-                    }
-                    .padding()
-                }
-                .tag(2)
+                NotificationsDebugView(notificationsManager: appManager.getNotificationsManagerForNotificationsView())
+                    .tag(2)
                 
-                // Settings Tab
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("App Settings")
-                            .font(.headline)
-                        
-                        VStack(alignment: .leading) {
-                            Text("Profile")
-                                .font(.subheadline)
-                            Picker("Profile", selection: $settings.profile) {
-                                Text("Debug").tag(Profile.debug)
-                                Text("Test").tag(Profile.test)
-                                Text("Production").tag(Profile.prod)
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                            .onChange(of: settings.profile) { oldValue, newValue in
-                                taskManager.loadTasks()
-                            }
-                        }
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(8)
-                    }
-                    .padding()
-                }
-                .tag(3)
+                SettingsDebugView(appManager: appManager)
+                    .tag(3)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
         .background(Color(.systemBackground))
-        .onAppear {
-            notificationsManager.updatePendingNotifications()
+//        .onAppear {
+//            notificationsManager.updatePendingNotifications()
+//        }
+    }
+}
+
+struct CloseButton: View {
+    let appManager: AppManager
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            Button(action: { appManager.hideDebugView() }) {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.title2)
+                    .foregroundColor(.gray)
+            }
+            .padding(.trailing)
         }
     }
 }
 
 #Preview {
-    let settings = Settings()
-    
-    let taskManager = TaskManager()
-    let messageManager = MessageManager()
-    let notificationsManager = NotificationsManager()
-    
-    return Debug_V(
-        taskManager: taskManager,
-        messageManager: messageManager,
-        notificationsManager: notificationsManager,
-        isPresented: .constant(true)
-    )
-    .environmentObject(settings)
+    let appManager = AppManager()
+    return Debug_V(appManager: appManager)
 }
 
