@@ -28,7 +28,7 @@ struct PageDay_VM: View {
         VStack(spacing: 12) {
             ForEach(0..<3, id: \.self) { index in
                 if index < tasksForCurrentDay.count {
-                    Task_V(appManager: appManager, taskId: tasksForCurrentDay[index].id, isCompact: false)
+                    Task_V(appManager: appManager, task: tasksForCurrentDay[index], isCompact: false)
                 } else if index == 2 {
                     AddTaskButton_V(appManager: appManager, isCompact: false, date: appManager.getCurrentDate())
                 }

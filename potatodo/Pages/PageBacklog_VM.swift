@@ -18,7 +18,7 @@ struct PageBacklog_VM: View {
             ScrollView {
                 LazyVStack(spacing: 8) {
                     ForEach(unscheduledTasks) { task in
-                        Task_V(appManager: appManager, taskId: task.id,isCompact: false)
+                        Task_V(appManager: appManager, task: task, isCompact: false)
                     }
                     
                     // Add task button

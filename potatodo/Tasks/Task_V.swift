@@ -101,24 +101,17 @@ struct TaskStyle {
 
 struct Task_V: View {
     @ObservedObject var appManager: AppManager
-
     @ObservedObject var taskManager: TaskManager
-//    @EnvironmentObject var overlayManager: OverlayManager
-    let taskId: UUID
+    @ObservedObject var task: Task
     let isCompact: Bool
     @State private var isTargeted = false
     
-    init(appManager: AppManager, taskId: UUID, isCompact: Bool, isTargeted: Bool = false) {
+    init(appManager: AppManager, task: Task, isCompact: Bool, isTargeted: Bool = false) {
         self.appManager = appManager
         self.taskManager = appManager.getTaskManagerForTaskView()
-        self.taskId = taskId
+        self.task = task
         self.isCompact = isCompact
         self.isTargeted = isTargeted
-    }
-    
-    private var task: Task {
-//        taskManager.tasks.first(where: { $0.id == taskId }) ?? Task(title: "ERROR", color: .red)
-        appManager.getTaskByID(taskId) ?? Task(title: "ERROR", color: .red)
     }
     
     private var style: BaseTaskRowStyle {
@@ -126,82 +119,73 @@ struct Task_V: View {
     }
     
     var body: some View {
-        guard let _ = appManager.getTaskByID(taskId) else {
-            return AnyView(EmptyView())
-        }
-        
-        return AnyView(
-            GeometryReader { geometry in
-                HStack {
-                    // Color cycle button
-                    Button {
-                        task.cycleColor()
-                        
-//                        objectWillChange.send()
-                    } label: {
-                        Image(systemName: "star.fill")
-                            .foregroundColor(TaskStyle.fullColor(for: task))
-                            .font(.system(size: style.fontSize * 1.2))
+        GeometryReader { geometry in
+            HStack {
+                // Color cycle button
+                Button {
+                    task.cycleColor()
+                } label: {
+                    Image(systemName: "star.fill")
+                        .foregroundColor(TaskStyle.fullColor(for: task))
+                        .font(.system(size: style.fontSize * 1.2))
+                }
+                .buttonStyle(PlainButtonStyle())
+                .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
+                .frame(width: style.circleSize)
+                
+                // Task text
+                Button {
+                    appManager.showTaskEdit(taskID: task.id, title: task.title)
+                } label: {
+                    Text(task.title.uppercased())
+                        .font(.system(size: style.fontSize, weight: .medium))
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: .infinity)
+                        .foregroundColor(.black)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
+                
+                // Completion circle
+                Button {
+                    task.toggleCompletion()
+                    if task.isCompleted {
+                        appManager.celebrateTaskComplete()
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
-                    .frame(width: style.circleSize)
-                    
-                    // Task text
-                    Button {
-                        appManager.showTaskEdit(taskID: taskId, title: task.title)
-                    } label: {
-                        Text(task.title.uppercased())
-                            .font(.system(size: style.fontSize, weight: .medium))
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-                            .frame(maxWidth: .infinity)
-                            .foregroundColor(.black)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
-                    
-                    // Completion circle
-                    Button {
-//                        taskMatasnager.toggleTaskCompletion(task)
-                        task.toggleCompletion()
+                } label: {
+                    ZStack {
+                        Circle()
+                            .fill(TaskStyle.toggleColor(for: task))
+                            .frame(width: style.circleSize, height: style.circleSize)
+                            .shadow(color: Color.black.opacity(0.2), radius: style.shadowRadius, x: 0, y: 1)
                         if task.isCompleted {
-                            appManager.celebrateTaskComplete()
-                        }
-                    } label: {
-                        ZStack {
-                            Circle()
-                                .fill(TaskStyle.toggleColor(for: task))
-                                .frame(width: style.circleSize, height: style.circleSize)
-                                .shadow(color: Color.black.opacity(0.2), radius: style.shadowRadius, x: 0, y: 1)
-                            if task.isCompleted {
-                                Text("🥔")
-                                    .font(.system(size: style.fontSize*1.1, weight: .medium))
-                                    .shadow(color: Color.black.opacity(0.3), radius: style.shadowRadius*2, x: 0, y: 1)
-                            }
+                            Text("🥔")
+                                .font(.system(size: style.fontSize*1.1, weight: .medium))
+                                .shadow(color: Color.black.opacity(0.3), radius: style.shadowRadius*2, x: 0, y: 1)
                         }
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
-                    .frame(width: style.circleSize)
                 }
-                .padding(style.padding)
-                .frame(height: style.height)
-                .background(TaskStyle.bgColor(for: task))
-                .cornerRadius(style.cornerRadius)
-                .overlay(
-                    RoundedRectangle(cornerRadius: style.cornerRadius)
-                        .stroke(TaskStyle.fullColor(for: task), lineWidth: style.strokeWidth)
-                )
-                .shadow(color: Color.black.opacity(0.1), radius: style.shadowRadius, x: 0, y: 2)
-                .scaleEffect(isTargeted ? 1.05 : 1.0)
-                .animation(.easeInOut(duration: 0.2), value: isTargeted)
-                .onDrag {
-                    NSItemProvider(object: taskId.uuidString as NSString)
-                }
-                .onDrop(of: [.text], delegate: TaskDropDelegate(taskId: taskId, taskManager: taskManager, isTargeted: $isTargeted))
+                .buttonStyle(PlainButtonStyle())
+                .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
+                .frame(width: style.circleSize)
             }
-        )
+            .padding(style.padding)
+            .frame(height: style.height)
+            .background(TaskStyle.bgColor(for: task))
+            .cornerRadius(style.cornerRadius)
+            .overlay(
+                RoundedRectangle(cornerRadius: style.cornerRadius)
+                    .stroke(TaskStyle.fullColor(for: task), lineWidth: style.strokeWidth)
+            )
+            .shadow(color: Color.black.opacity(0.1), radius: style.shadowRadius, x: 0, y: 2)
+            .scaleEffect(isTargeted ? 1.05 : 1.0)
+            .animation(.easeInOut(duration: 0.2), value: isTargeted)
+            .onDrag {
+                NSItemProvider(object: task.id.uuidString as NSString)
+            }
+            .onDrop(of: [.text], delegate: TaskDropDelegate(taskId: task.id, taskManager: taskManager, isTargeted: $isTargeted))
+        }
     }
 }
 
@@ -320,7 +304,7 @@ struct AddTaskDropDelegate: DropDelegate {
      ZStack {
         VStack() {
             ForEach(appManager.getTasks().prefix(3)) { task in
-                Task_V(appManager: appManager, taskId: task.id, isCompact: false)
+                Task_V(appManager: appManager, task: task, isCompact: false)
             }
             
             AddTaskButton_V(appManager: appManager, isCompact: false, date: Date())
@@ -328,7 +312,7 @@ struct AddTaskDropDelegate: DropDelegate {
             HStack {
                 VStack() {
                     ForEach(appManager.getTasks().prefix(3)) { task in
-                        Task_V(appManager: appManager, taskId: task.id, isCompact: true)
+                        Task_V(appManager: appManager, task: task, isCompact: true)
                     }
                     
                     AddTaskButton_V(appManager: appManager, isCompact: true, date: Date())

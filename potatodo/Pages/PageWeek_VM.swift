@@ -95,7 +95,7 @@ struct PageWeek_VM: View {
             // Task List of day in compact mode
             VStack(spacing: 4) {
                 ForEach(tasksForDay(date)) { task in
-                    Task_V(appManager: appManager, taskId: task.id, isCompact: true)
+                    Task_V(appManager: appManager, task: task, isCompact: true)
                 }
                 
                 if tasksForDay(date).count < 3 {

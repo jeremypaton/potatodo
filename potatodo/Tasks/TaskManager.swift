@@ -255,7 +255,7 @@ class TaskManager: ObservableObject {
      ZStack {
         VStack {
             ForEach(appManager.getTasks()) { task in
-                Task_V(appManager: appManager, taskId: task.id, isCompact: false)
+                Task_V(appManager: appManager, task: task, isCompact: false)
             }
             
             AddTaskButton_V(appManager: appManager, isCompact: false, date: Date())
@@ -263,7 +263,7 @@ class TaskManager: ObservableObject {
             HStack {
                 VStack {
                     ForEach(appManager.getTasks()) { task in
-                        Task_V(appManager: appManager, taskId: task.id, isCompact: true)
+                        Task_V(appManager: appManager, task: task, isCompact: true)
                     }
                 }
                 .frame(width: UIScreen.main.bounds.width / 2)
