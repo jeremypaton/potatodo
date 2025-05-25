@@ -9,11 +9,36 @@ import SwiftUI
 import UserNotifications
 import Combine
 
-enum Profile: String, Codable {
-    case debug
-    case test
-    case prod
+class Profile : Hashable, ObservableObject {
+    var name: String
+    
+    #if DEBUG
+    init(name: String = "DEBUG") {
+        self.name = name
+    }
+    #elseif TEST
+    init(name: String = "TEST") {
+        self.name = name
+    }
+    #else
+    init(name: String = "defaultUser") {
+        self.name = name
+    }
+    #endif
+    
+    static func == (lhs: Profile, rhs: Profile) -> Bool {
+        return lhs.name == rhs.name
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+    }
 }
+//enum Profile: String, Codable {
+//    case debug
+//    case test
+//    case prod
+//}
 
 //enum PageType: String, Codable {
 //    case backlog
@@ -24,7 +49,7 @@ enum Profile: String, Codable {
 //}
 
 class UserSettings: ObservableObject {
-    @Published fileprivate(set) var profile: Profile = .test
+    @Published fileprivate(set) var profile: Profile = Profile()
     @Published fileprivate(set) var notificationsEnabled: Bool = false
     @Published fileprivate(set) var notificationTime: Date = Calendar.current.date(from: DateComponents(hour: 9, minute: 0)) ?? Date()
     
@@ -197,7 +222,7 @@ class AppManager: ObservableObject {
     
     // BASIC TASK MANAGEMENT
     private func setTasks(_ tasks: [Task]) { self.appDataStore.taskData.tasks = tasks }
-    private func loadTasks(){ self.setTasks(taskManager.getTasksForProfile())}
+    private func loadTasks(){ self.setTasks(PersistinceUtils.getTaskArrayForProfile(self.appDataStore.userSettings.profile))}
     func addTask(_ task: Task) { self.appDataStore.taskData.tasks.append(task) }
     func deleteTaskByID(_ id: UUID) { self.appDataStore.taskData.tasks.removeAll { $0.id == id } }
 
@@ -210,8 +235,8 @@ class AppManager: ObservableObject {
     func createDefaultTask(_ task: Task) { self.appDataStore.taskData.tasks.append(task) }
 
     
-    func setProfile(_ profile: Profile) {
-        self.appDataStore.userSettings.profile = profile
+    func setProfileByName(_ name: String) {
+        self.appDataStore.userSettings.profile = Profile(name: name)
         self.loadTasks()
     }
     

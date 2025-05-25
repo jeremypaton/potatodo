@@ -57,29 +57,33 @@ REFACTOR
     v0.1.8
         [ ] BIG REFACTOR
             [X] centralize AppManager
-            [ ] centralize task data
-            [ ] PersistenceUtils
-            [ ] clean up files 1-by-1
-                [ ] anim
-                [ ] debug
-                [ ] nav
-                [ ] notifications
-                [ ] overlay
-                [ ] pages
-                [ ] potato
-                [ ] tasks
-                [ ] widget
-                [ ] main
+            [X] centralize task data
+            [X] PersistenceUtils
         [ ] proper test/debug/prod build system
 
 REMINDERS
     v0.1.9
-    [ ] overhaul reminder system
-        [ ] nice formatting
-        [ ] daily + weekly
-    [ ] fix widget / badge
-    [ ] basic settings page
-    [ ] basic stats
+        [ ] overhaul reminder system
+            [ ] nice formatting
+            [ ] daily + weekly
+            [ ] reminder persistenceutils
+        [ ] fix widget / badge
+        [ ] make drag and drop more robust
+        [ ] basic settings page
+        [ ] basic stats
+    
+CLEANUP
+    [ ] clean up files 1-by-1
+        [ ] anim
+        [ ] debug
+        [ ] nav
+        [ ] notifications
+        [ ] overlay
+        [ ] pages
+        [ ] potato
+        [ ] tasks
+        [ ] widget
+        [ ] main
 
 === ENGINEERING BETA LOCK === [MON 16 MAY]
 === START DESIGN WORK ===

@@ -46,7 +46,38 @@ struct Main: View {
                 .transition(.move(edge: .bottom))
                 .zIndex(2)
             }
+            
+            NameIndicator(appManager: appManager)
+                .zIndex(3)
         }
+    }
+}
+
+struct NameIndicator: View {
+    @ObservedObject var appManager: AppManager
+    
+    var backgroundColor: Color {
+        let name = appManager.appDataStore.userSettings.profile.name
+        switch name {
+        case "DEBUG":
+            return .red
+        case "TEST":
+            return .yellow
+        case "defaultUser":
+            return .green
+        default:
+            return .clear
+        }
+    }
+    
+    var body: some View {
+        VStack {
+            Text(appManager.appDataStore.userSettings.profile.name)
+                .font(.system(size: 12))
+                .background(backgroundColor)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 

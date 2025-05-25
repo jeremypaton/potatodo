@@ -150,7 +150,7 @@ struct NotificationDebugItemView: View {
 
 // MARK: - Settings Debug View
 struct SettingsDebugView: View {
-    let appManager: AppManager
+    @ObservedObject var appManager: AppManager
     
     var body: some View {
         ScrollView {
@@ -162,14 +162,14 @@ struct SettingsDebugView: View {
                     Text("Profile")
                         .font(.subheadline)
                     Picker("Profile", selection: Binding(
-                        get: { appManager.appDataStore.userSettings.profile },
+                        get: { appManager.appDataStore.userSettings.profile.name },
                         set: { newValue in
-                            appManager.setProfile(newValue)
+                            appManager.setProfileByName(newValue)
                         }
                     )) {
-                        Text("Debug").tag(Profile.debug)
-                        Text("Test").tag(Profile.test)
-                        Text("Production").tag(Profile.prod)
+                        Text("DEBUG").tag("DEBUG")
+                        Text("TEST").tag("TEST")
+                        Text("defaultUser").tag("defaultUser")
                     }
                     .pickerStyle(MenuPickerStyle())
                 }
