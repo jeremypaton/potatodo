@@ -67,7 +67,9 @@ REFACTOR
 REMINDERS
     v0.1.9
         [ ] fix badge
-        
+            [ ] set up good debug statements
+            [ ] really understand publish / cancellables / will sends / observable etc etc.
+            
         [ ] basic user settings page
             [X] move profile dropdown to settings
             [X] reminder settings

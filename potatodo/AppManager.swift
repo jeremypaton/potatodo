@@ -90,10 +90,19 @@ class TaskData: ObservableObject {
     
     init() {
         // Observe the tasks array itself
+        updateArrayObservations()
+        updateTaskObservations()
+    }
+    
+    private func updateArrayObservations() {
+        print("[TaskData] updateArrayObservations called") // Debug print
+        arrayCancellables.removeAll()
         $tasks
             .sink { [weak self] _ in
                 self?.objectWillChange.send()
                 self?.updateTaskObservations()
+                print("[TaskData] something changed in the task array") // Debug print
+
             }
             .store(in: &arrayCancellables)
     }
@@ -113,6 +122,12 @@ class TaskData: ObservableObject {
                 }
                 .store(in: &taskCancellables)
         }
+    }
+    
+    fileprivate func setTasks(_ tasks: [Task]) {
+        self.tasks = tasks
+        updateArrayObservations()
+        updateTaskObservations()
     }
     //add task
     //edit task
@@ -268,7 +283,7 @@ class AppManager: ObservableObject {
     
     
     // BASIC TASK MANAGEMENT
-    private func setTasks(_ tasks: [Task]) { self.appDataStore.taskData.tasks = tasks }
+    private func setTasks(_ tasks: [Task]) { self.appDataStore.taskData.setTasks(tasks) }
     private func loadTasks(){ self.setTasks(PersistenceUtils.getTaskArrayForProfile(self.appDataStore.userSettings.profile))}
     func addTask(_ task: Task) {
         self.appDataStore.taskData.tasks.append(task)
