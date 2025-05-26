@@ -101,15 +101,19 @@ REMINDERS
         [X] open in finder while iphone plugin
             [X] make an archive
             
-        [ ] transfer data functionality
+        [X] transfer data functionality
+        
+        [ ] calendar click date
+        [ ] highlight current date in week / month
 
 === FEATURES BETA LOCK === [MON 26 MAY]
 === START DESIGN WORK ===
 
 v0.2.0 - UI layout
+    [ ] learn best practices for designing layouts for different screen sizes
+    [ ] setup testing pipeline for auto-screenshot different devices, pages etc.
     [ ] fix layouts + dynamic scaling
     [ ] fix previews
-    [ ] setup testing pipeline for auto-screenshot different devices, pages etc.
     
 v0.2.1 - UI styles
     [ ] UI design pass / alts

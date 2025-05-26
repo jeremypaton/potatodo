@@ -81,7 +81,9 @@ struct PageWeek_VM: View {
     }
     
     private func dayView(for date: Date) -> some View {
-        VStack(alignment: .center, spacing: 0) {
+        let isToday = Calendar.current.isDateInToday(date)
+        
+        return VStack(alignment: .center, spacing: 0) {
             // Header
             HStack {
                 Text(formatDayHeader(date))
@@ -91,6 +93,10 @@ struct PageWeek_VM: View {
                     .foregroundColor(.gray)
             }
             .padding(.bottom, 2)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(isToday ? Color.yellow.opacity(0.8) : Color.clear)
+            .cornerRadius(4)
             
             // Task List of day in compact mode
             VStack(spacing: 4) {

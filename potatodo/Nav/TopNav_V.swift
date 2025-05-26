@@ -21,6 +21,7 @@ struct TopNav_V: View {
             VStack(spacing: 4) {
                 Text(navManager.title)
                     .font(.largeTitle)
+                    .background(navManager.title == "TODAY" ? Color.yellow.opacity(0.8) : Color.clear)
                 Text(navManager.subtitle)
                     .font(.headline)
             }.padding(10)

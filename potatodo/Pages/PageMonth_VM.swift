@@ -136,9 +136,12 @@ struct PageMonth_VM: View {
     private let weekDays = ["Su", "M", "Tu", "W", "Th", "F", "Sa"]
     
     private func dayView(for date: Date) -> some View {
-        Button(action: {
+        let isToday = Calendar.current.isDateInToday(date)
+        
+        return Button(action: {
             appManager.setDate(date)
             appManager.setInterval(.day)
+            appManager.getNavManagerForNavView().setPage(.day)
         }) {
             ZStack {
                 // Task bars
@@ -170,6 +173,9 @@ struct PageMonth_VM: View {
                 Text("\(Calendar.current.component(.day, from: date))")
                     .font(.system(size: 14))
                     .foregroundColor(.black)
+                    .padding(4)
+                    .background(isToday ? Color.yellow.opacity(0.8) : Color.clear)
+                    .cornerRadius(4)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
