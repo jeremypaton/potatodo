@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import WidgetKit
 
 struct PersistenceUtils {
     
@@ -127,6 +128,9 @@ struct PersistenceUtils {
             let data = try encoder.encode(tasks)
             let url = tasksFileForProfile(profile)
             try data.write(to: url)
+            
+            // Reload widget to show updated tasks
+            WidgetCenter.shared.reloadAllTimelines()
         } catch {
             print("Error saving tasks: \(error)")
         }

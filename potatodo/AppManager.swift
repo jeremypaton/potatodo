@@ -8,6 +8,7 @@
 import SwiftUI
 import UserNotifications
 import Combine
+import WidgetKit
 
 class Profile : Hashable, ObservableObject, Codable {
     var name: String
@@ -130,7 +131,6 @@ class TaskData: ObservableObject {
                 self?.objectWillChange.send()
                 self?.updateTaskObservations()
                 print("[TaskData] something changed in the task array") // Debug print
-
             }
             .store(in: &arrayCancellables)
     }
