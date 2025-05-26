@@ -109,11 +109,6 @@
 			path = potatodoUITests;
 			sourceTree = "<group>";
 		};
-		D1C504052DDB1C350022FC52 /* phonedata_archive */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = phonedata_archive;
-			sourceTree = "<group>";
-		};
 		D1DCDB642DE3E48E00B4C48E /* PotatodoWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -162,7 +157,6 @@
 			isa = PBXGroup;
 			children = (
 				D1DCDB952DE3F1BD00B4C48E /* PotatodoWidgetExtension.entitlements */,
-				D1C504052DDB1C350022FC52 /* phonedata_archive */,
 				D1C503132DD48A960022FC52 /* MILESTONES.txt */,
 				D1C503152DD490E40022FC52 /* TODO.txt */,
 				D1900CC22DD1A82200C53EEF /* potatodo */,
@@ -213,7 +207,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				D1900CC22DD1A82200C53EEF /* potatodo */,
-				D1C504052DDB1C350022FC52 /* phonedata_archive */,
 			);
 			name = potatodo;
 			packageProductDependencies = (
@@ -563,7 +556,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.7;
+				MARKETING_VERSION = 0.1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -596,7 +589,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.7;
+				MARKETING_VERSION = 0.1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -760,7 +753,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.7;
+				MARKETING_VERSION = 0.1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -824,7 +817,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo.PotatodoWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -855,7 +848,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo.PotatodoWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -886,7 +879,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo.PotatodoWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

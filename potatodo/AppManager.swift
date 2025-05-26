@@ -326,7 +326,7 @@ class AppManager: ObservableObject {
     
     
     // BASIC TASK MANAGEMENT
-    private func setTasks(_ tasks: [Task]) { self.appDataStore.taskData.setTasks(tasks) }
+    func setTasks(_ tasks: [Task]) { self.appDataStore.taskData.setTasks(tasks) }
     private func loadTasks(){ self.setTasks(PersistenceUtils.getTaskArrayForProfile(self.appDataStore.userSettings.profile))}
     func addTask(_ task: Task) {
         self.appDataStore.taskData.tasks.append(task)

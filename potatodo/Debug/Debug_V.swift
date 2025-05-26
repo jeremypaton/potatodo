@@ -10,10 +10,32 @@ import SwiftUI
 // MARK: - Task Debug View
 struct TaskDebugView: View {
     let tasks: [Task]
+    @ObservedObject var appManager: AppManager
+    @State private var showingTransferAlert = false
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
+                Button(action: {
+                    showingTransferAlert = true
+                }) {
+                    Text("TRANSFER MAY26 DATA")
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.red)
+                        .cornerRadius(8)
+                }
+                .alert("Confirm Data Transfer", isPresented: $showingTransferAlert) {
+                    Button("Cancel", role: .cancel) { }
+                    Button("Transfer", role: .destructive) {
+                        let tasks = PersistenceUtils.getMAY26TaskArray()
+                        appManager.setTasks(tasks)
+                    }
+                } message: {
+                    Text("This will overwrite your current task data. This action cannot be undone.")
+                }
+                
                 ForEach(tasks) { task in
                     TaskDebugItemView(task: task)
                 }
@@ -240,7 +262,7 @@ struct Debug_V: View {
             .padding()
             
             TabView(selection: $selectedTab) {
-                TaskDebugView(tasks: appManager.getTasks())
+                TaskDebugView(tasks: appManager.getTasks(), appManager: appManager)
                     .tag(0)
                 
                 MessageDebugView(messageManager: appManager.getMessageManagerForMessageView())

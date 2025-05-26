@@ -154,4 +154,24 @@ struct PersistenceUtils {
         return documentsDirectory.appendingPathComponent("\(profile.name)_settings.json")
     }
     
+    static func getMAY26TaskArray() -> [Task] {
+        let fileManager = FileManager.default
+        let currentDirectory = fileManager.currentDirectoryPath
+        guard let jsonURL = Bundle.main.url(forResource: "MAY26tasks", withExtension: "json") else {
+            return []
+            
+        }
+        print("Attempting to read file at: \(jsonURL)")
+        
+        do {
+            let data = try Data(contentsOf: jsonURL)
+//            let data = try Data(contentsOf: URL(fileURLWithPath: csvURL))
+            let tasks = try JSONDecoder().decode([Task].self, from: data)
+            return tasks
+        } catch {
+            print("Error loading MAY26 tasks: \(error)")
+            return []
+        }
+    }
+    
 }
