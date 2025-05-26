@@ -111,35 +111,78 @@ REMINDERS
 
 v0.2.0 - UI layout
     [ ] learn best practices for designing layouts for different screen sizes
+
+    [ ] fix basic previews
+
     [ ] setup testing pipeline for auto-screenshot different devices, pages etc.
-    [ ] fix layouts + dynamic scaling
-    [ ] fix previews
+    
+    [ ] RESPONSIVE REFACTOR
+        
+        Layout
+        - [ ] Remove fixed width/height unless absolutely necessary
+        - [ ] Use Spacer() and .frame(maxWidth: .infinity) for flexible spacing
+        - [ ] Replace HStack/VStack with GeometryReader if layout should change on wide screens
+        - [ ] Use ScrollView if content may overflow on small screens
+
+        Text
+        - [ ] Replace hardcoded font sizes with .font(.title), .body, etc.
+        - [ ] Ensure Text views use .lineLimit(nil) or appropriate wrapping
+        - [ ] Test with Dynamic Type enabled (larger accessibility fonts)
+
+        Device Support
+        - [ ] Preview on small (SE), medium (iPhone 16), and large (16 Pro Max) devices
+        - [ ] Check layout in both portrait and landscape orientations
+        - [ ] Test in Light Mode and Dark Mode
+
+        Safe Areas
+        - [ ] Ensure views respect safe areas (notches, home indicator)
+        - [ ] Avoid .ignoresSafeArea() unless it's for a background
+
+        Logic & Adaptation
+        - [ ] Use @Environment(\.horizontalSizeClass) for iPad/landscape support if needed
+        - [ ] Use .layoutPriority() to avoid unwanted text/view compression
+        - [ ] Use .adaptive grid layout if displaying a collection of items
+        
+        [ ] disable landscape
     
 v0.2.1 - UI styles
     [ ] UI design pass / alts
-        [ ] try dark mode
-        [ ] mock up built in elements vs hand drawn etc.
+        [ ] mock up basic design
+        [ ] implement basic design
         
 v0.2.2 - potato character lookdev
+    [ ] make smol
     [ ] still frames for each level
-    [ ] 3 character variations
+        [ ] EMPTY
+        [ ] 0
+        [ ] 1
+        [ ] 2
+        [ ] CELEBRATE
+        [ ] POST-CELEBRATE
 
 v0.2.3 - potato speech
-    [ ] generate good speech for each level
+    [ ] generate good speech for each level (quality over quantity)
+        [ ] guarantee first 10 are best (use a seed / iterator with saved position?)
     [ ] figure out timing / triggers
-    [ ] 3 character variations speech
+    [ ] bring back potato button
     [ ] improve notifications speech
 
 v0.2.4 - potato anim
-    [ ] keep alive / idle
-    [ ] speaking
-    [ ] potato celebration anim
-    [ ] overlay elements / fx
+    [ ] 0/EMPTY: keep alive / idle
+    [ ] BUTTON/COMPLETE: speaking
+    [ ] COMPLETE: 3 potato dances
+    [ ] CELEBRATE - make epic
+        [ ] potato celebration animation
+        [ ] overlay elements / fx
+    [ ] POST-CELEBRATE
 
 v0.2.5 - splash screen
     [ ] don't toggle from widget
+    [ ] make sweeeet
 
 v0.2.6 - day 1 intro
+    [ ] make onboarding flow super clear / motivating
+    [ ] add FRESH_LAUNCH config
 
 === DESIGN BETA LOCK === [MON 02 JUNE]
 === START ROBUSTNESS/TESTING ===
@@ -180,3 +223,4 @@ FUTURE:
     emails
     weekly recaps
     progress charts
+    3+ characters (sweet, seargant, sleepy?)
