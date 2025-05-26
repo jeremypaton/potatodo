@@ -95,7 +95,7 @@ REMINDERS
                 [X] refresh every task save
             [ ] split out taskmodel / taskstyle / taskview from app so then can be used in widget
 
-        [ ] drag and drop
+        [X] drag and drop
         
         [X] fix task edit color bug
             
