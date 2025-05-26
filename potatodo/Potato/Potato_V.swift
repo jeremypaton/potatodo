@@ -14,14 +14,22 @@ struct Potato_V: View {
                     .cornerRadius(12)
                     .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
                 
-                Image(appManager.appDataStore.uiState.isCelebrating ? "potato_celebrate" : "potato_\(appManager.appDataStore.uiState.level)")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: geometry.size.width - 24, height: geometry.size.width - 24)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.gray.opacity(0.3), lineWidth: 3)
-                    )
+                let imageName = appManager.appDataStore.uiState.isCelebrating ? "potato_celebrate" : "potato_\(appManager.appDataStore.uiState.level)"
+//                print("Attempting to load image: \(imageName)")
+                
+                if let _ = UIImage(named: imageName) {
+                    Image(imageName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: geometry.size.width - 24, height: geometry.size.width - 24)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 3)
+                        )
+                } else {
+                    Text("Image not found: \(imageName)")
+                        .foregroundColor(.red)
+                }
                 
                 VStack {
                     Message_V(messageManager: appManager.getMessageManagerForMessageView())

@@ -44,7 +44,7 @@ class Task: Identifiable, Equatable, Codable, ObservableObject {
         try container.encode(position, forKey: .position)
     }
     
-    init(id: UUID = UUID(), title: String, isCompleted: Bool = false, color: TaskColor = .green, date: Date? = Date(), position: Int = 0) {
+    init(id: UUID = UUID(), title: String, isCompleted: Bool = false, color: TaskColor = .green, date: Date? = nil, position: Int = 0) {
         self.id = id
         self.title = title
         self.isCompleted = isCompleted
