@@ -149,7 +149,7 @@ struct PageMonth_VM: View {
                                 return Calendar.current.isDate(taskDate, inSameDayAs: date)
                             }
                             return false
-                        }
+                        }.sorted { $0.position < $1.position }
                         if index < tasksForDate.count {
                             let task = tasksForDate[index]
                             Rectangle()

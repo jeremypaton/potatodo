@@ -77,7 +77,7 @@ struct PageWeek_VM: View {
                 return Calendar.current.isDate(taskDate, inSameDayAs: date)
             }
             return false
-        }
+        }.sorted { $0.position < $1.position }
     }
     
     private func dayView(for date: Date) -> some View {

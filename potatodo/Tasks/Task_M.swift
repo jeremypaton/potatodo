@@ -111,4 +111,20 @@ class Task: Identifiable, Equatable, Codable, ObservableObject {
             case .gray: self.setColor(.green)
         }
     }
+    
+    static func swapTasks(_ task1: Task, _ task2: Task) {
+        // Swap positions
+        let tempPosition = task1.position
+        task1.setPosition(task2.position)
+        task2.setPosition(tempPosition)
+        
+        // Swap dates
+        let tempDate = task1.date
+        task1.setDate(task2.date)
+        task2.setDate(tempDate)
+        
+        // Notify observers for both tasks
+        task1.objectWillChange.send()
+        task2.objectWillChange.send()
+    }
 }

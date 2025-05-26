@@ -339,9 +339,32 @@ class AppManager: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    func deleteTaskByID(_ id: UUID) { self.appDataStore.taskData.tasks.removeAll { $0.id == id } }
+    func deleteTaskByID(_ id: UUID) {
+        // Get the task being deleted to know its date
+        guard let deletedTask = getTaskByID(id) else { return }
+        let deletedDate = deletedTask.date
+        
+        // Remove the task
+        self.appDataStore.taskData.tasks.removeAll { $0.id == id }
+        
+        // If the task had a date, reorder remaining tasks for that day
+        if let date = deletedDate {
+            // Get all tasks for the same day
+            let sameDayTasks = self.appDataStore.taskData.tasks.filter { task in
+                if let taskDate = task.date {
+                    return Calendar.current.isDate(taskDate, inSameDayAs: date)
+                }
+                return false
+            }
+            
+            // Update positions to be sequential
+            for (index, task) in sameDayTasks.enumerated() {
+                task.setPosition(index)
+            }
+        }
+    }
 
-    func getTasks() -> [Task] { return self.appDataStore.taskData.tasks }
+    func getTasks() -> [Task] { return self.appDataStore.taskData.tasks}
     func getTaskByID(_ id: UUID) -> Task? { return self.appDataStore.taskData.tasks.first(where: { $0.id == id }) }
     func getTaskForDate(date: Date) -> [Task] { return self.appDataStore.taskData.tasks.filter {$0.date == date } }
     func getTasksForToday() -> [Task] { return self.appDataStore.taskData.tasks.filter {$0.date == Date()} }

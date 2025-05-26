@@ -42,6 +42,8 @@ struct TaskDebugItemView: View {
                 Text("Date: Unscheduled")
                     .font(.system(size: 14))
             }
+            Text("Position: \(task.position)")
+                .font(.system(size: 14))
             Text("ID: \(task.id)")                .font(.system(size: 10))
         }
         .padding()

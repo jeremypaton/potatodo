@@ -89,10 +89,10 @@ REMINDERS
         [X] basic backlog page
             [X] add backlog tasks to test data
                 
-        [ ] basic widget
+        [X] basic widget
             [X] compile structure
-            [ ] fix so uses actual data correctly
-                [ ] refresh every task save
+            [X] fix so uses actual data correctly
+                [X] refresh every task save
             [ ] split out taskmodel / taskstyle / taskview from app so then can be used in widget
 
         [ ] drag and drop

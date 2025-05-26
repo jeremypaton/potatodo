@@ -11,7 +11,7 @@ struct PageDay_VM: View {
                 return Calendar.current.isDate(date, inSameDayAs: appManager.getCurrentDate())
             }
             return false
-        }
+        }.sorted { $0.position < $1.position }
     }
     
     private var completedTasksCount: Int {
