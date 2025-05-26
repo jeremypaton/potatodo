@@ -52,28 +52,7 @@ struct PersistenceUtils {
         
         do {
             tasks = try JSONDecoder().decode([Task].self, from: data)
-            
-            // Group tasks by date and fix positions
-            let calendar = Calendar.current
-            
-            // First handle tasks with dates
-            let datedTasks = tasks.filter { $0.date != nil }
-            let tasksByDate = Dictionary(grouping: datedTasks) { task in
-                calendar.startOfDay(for: task.date!)
-            }
-            
-            // Fix positions for each date group
-            for (_, dateTasks) in tasksByDate {
-                for (index, task) in dateTasks.enumerated() {
-                    task.setPosition(index)
-                }
-            }
-            
-            // Then handle tasks without dates
-            let undatedTasks = tasks.filter { $0.date == nil }
-            for (index, task) in undatedTasks.enumerated() {
-                task.setPosition(index)
-            }
+            fixTaskPositions(tasks)
         } catch {
             // errorMessage = "Failed to load tasks: \(error.localizedDescription)"
         }
@@ -91,7 +70,7 @@ struct PersistenceUtils {
             Task(title: "Boring stuff", isCompleted: true, color: .blue),
             Task(title: "Eat broccoli", isCompleted: false, color: .red),
         ]
-        
+        fixTaskPositions(testTasks)
         return testTasks
     }
     
@@ -141,6 +120,7 @@ struct PersistenceUtils {
             }
             
             tasks = loadedTasks
+            fixTaskPositions(tasks)
         } catch {
             // errorMessage = "Failed to load CSV tasks: \(error.localizedDescription)"
         }
@@ -177,22 +157,40 @@ struct PersistenceUtils {
     }
     
     static func getMAY26TaskArray() -> [Task] {
-        let fileManager = FileManager.default
-        let currentDirectory = fileManager.currentDirectoryPath
         guard let jsonURL = Bundle.main.url(forResource: "MAY26tasks", withExtension: "json") else {
             return []
-            
         }
         print("Attempting to read file at: \(jsonURL)")
         
         do {
             let data = try Data(contentsOf: jsonURL)
-//            let data = try Data(contentsOf: URL(fileURLWithPath: csvURL))
             let tasks = try JSONDecoder().decode([Task].self, from: data)
+            fixTaskPositions(tasks)
             return tasks
         } catch {
             print("Error loading MAY26 tasks: \(error)")
             return []
+        }
+    }
+    
+    /// Ensures all tasks have correct positions grouped by date, then undated
+    static func fixTaskPositions(_ tasks: [Task]) {
+        let calendar = Calendar.current
+        // First handle tasks with dates
+        let datedTasks = tasks.filter { $0.date != nil }
+        let tasksByDate = Dictionary(grouping: datedTasks) { task in
+            calendar.startOfDay(for: task.date!)
+        }
+        // Fix positions for each date group
+        for (_, dateTasks) in tasksByDate {
+            for (index, task) in dateTasks.enumerated() {
+                task.setPosition(index)
+            }
+        }
+        // Then handle tasks without dates
+        let undatedTasks = tasks.filter { $0.date == nil }
+        for (index, task) in undatedTasks.enumerated() {
+            task.setPosition(index)
         }
     }
     
