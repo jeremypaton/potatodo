@@ -206,7 +206,11 @@ struct TaskDropDelegate: DropDelegate {
                 guard let draggedTask = tasks.first(where: { $0.id == draggedId }),
                       let targetTask = tasks.first(where: { $0.id == self.taskId }) else { return }
                 
+                // Swap the tasks
                 Task.swapTasks(draggedTask, targetTask)
+                
+                // Force an update of the task list to trigger UI refresh
+                self.appManager.objectWillChange.send()
             }
         }
         

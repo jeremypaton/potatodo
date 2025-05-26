@@ -52,6 +52,28 @@ struct PersistenceUtils {
         
         do {
             tasks = try JSONDecoder().decode([Task].self, from: data)
+            
+            // Group tasks by date and fix positions
+            let calendar = Calendar.current
+            
+            // First handle tasks with dates
+            let datedTasks = tasks.filter { $0.date != nil }
+            let tasksByDate = Dictionary(grouping: datedTasks) { task in
+                calendar.startOfDay(for: task.date!)
+            }
+            
+            // Fix positions for each date group
+            for (_, dateTasks) in tasksByDate {
+                for (index, task) in dateTasks.enumerated() {
+                    task.setPosition(index)
+                }
+            }
+            
+            // Then handle tasks without dates
+            let undatedTasks = tasks.filter { $0.date == nil }
+            for (index, task) in undatedTasks.enumerated() {
+                task.setPosition(index)
+            }
         } catch {
             // errorMessage = "Failed to load tasks: \(error.localizedDescription)"
         }

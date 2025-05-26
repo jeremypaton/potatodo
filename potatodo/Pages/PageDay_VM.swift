@@ -6,12 +6,14 @@ struct PageDay_VM: View {
     @State private var previousCompletedCount = 0
     
     private var tasksForCurrentDay: [Task] {
-        appManager.getTasks().filter { task in
-            if let date = task.date {
-                return Calendar.current.isDate(date, inSameDayAs: appManager.getCurrentDate())
+        appManager.getTasks()
+            .filter { task in
+                if let taskDate = task.date {
+                    return Calendar.current.isDate(taskDate, inSameDayAs: appManager.getCurrentDate())
+                }
+                return false
             }
-            return false
-        }.sorted { $0.position < $1.position }
+            .sorted { $0.position < $1.position }
     }
     
     private var completedTasksCount: Int {
