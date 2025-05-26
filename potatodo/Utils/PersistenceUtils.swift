@@ -14,10 +14,13 @@ struct PersistenceUtils {
     
     static private func tasksDirectoryForProfile(_ profile: Profile) -> URL {
         let fileManager = FileManager.default
-        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let profileDirectory = documentsDirectory.appendingPathComponent("tasks_\(profile.name)")
-        
-        print("Documents Directory: \(documentsDirectory.path)")
+        guard let containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: "group.com.wombleman.potatodo") else {
+            print("Error: Could not access shared container")
+            // Fallback to Documents directory if shared container is not available
+            let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            return documentsDirectory.appendingPathComponent("tasks_\(profile.name)")
+        }
+        let profileDirectory = containerURL.appendingPathComponent("tasks_\(profile.name)")
         
         // Create directory if it doesn't exist
         if !fileManager.fileExists(atPath: profileDirectory.path) {

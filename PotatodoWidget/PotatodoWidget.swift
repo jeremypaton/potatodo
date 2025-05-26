@@ -2,8 +2,11 @@ import WidgetKit
 import SwiftUI
 
 struct Provider: TimelineProvider {
+    init() {
+    }
+    
     func placeholder(in context: Context) -> TaskEntry {
-        TaskEntry(date: Date(), tasks: [])
+        return TaskEntry(date: Date(), tasks: [])
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TaskEntry) -> ()) {
@@ -19,10 +22,12 @@ struct Provider: TimelineProvider {
     }
     
     private func loadTodayTasks() -> [WidgetTask] {
-        // Load tasks from the same file as the main app
+        // Load tasks from the shared App Group container
         let fileManager = FileManager.default
-        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let profileDirectory = documentsDirectory.appendingPathComponent("tasks_defaultUser")
+        guard let containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: "group.com.wombleman.potatodo") else {
+            return []
+        }
+        let profileDirectory = containerURL.appendingPathComponent("tasks_defaultUser")
         let tasksFile = profileDirectory.appendingPathComponent("tasks.json")
         
         guard let data = try? Data(contentsOf: tasksFile) else {
@@ -30,13 +35,35 @@ struct Provider: TimelineProvider {
         }
         
         do {
+            // First try to decode as Task (main app type)
+            if let tasks = try? JSONDecoder().decode([Task].self, from: data) {
+                let todayTasks = tasks.filter { task in
+                    guard let taskDate = task.date else {
+                        return false
+                    }
+                    return Calendar.current.isDateInToday(taskDate)
+                }.map { task in
+                    // Convert Task to WidgetTask
+                    WidgetTask(
+                        id: task.id,
+                        title: task.title,
+                        isCompleted: task.isCompleted,
+                        color: WidgetTaskColor(rawValue: task.color.rawValue) ?? .green,
+                        date: task.date
+                    )
+                }
+                return todayTasks
+            }
+            
+            // If that fails, try to decode as WidgetTask
             let tasks = try JSONDecoder().decode([WidgetTask].self, from: data)
             return tasks.filter { task in
-                guard let taskDate = task.date else { return false }
+                guard let taskDate = task.date else {
+                    return false
+                }
                 return Calendar.current.isDateInToday(taskDate)
             }
         } catch {
-            print("Error loading tasks for widget: \(error)")
             return []
         }
     }
@@ -52,18 +79,19 @@ struct WidgetTaskView: View {
     
     var body: some View {
         HStack {
+            Text(task.title.uppercased())
+                .font(.headline)
+                .foregroundColor(.primary)
+                .lineLimit(1)
+            Spacer()
             Circle()
                 .fill(task.isCompleted ? WidgetTaskStyle.fullColor(for: task) : Color.clear)
-                .frame(width: 12, height: 12)
+                .frame(width: 18, height: 18)
                 .overlay(
                     Circle()
                         .stroke(WidgetTaskStyle.fullColor(for: task), lineWidth: 2)
                 )
             
-            Text(task.title)
-                .font(.subheadline)
-                .foregroundColor(.primary)
-                .lineLimit(1)
         }
     }
 }
@@ -73,9 +101,9 @@ struct PotatodoWidgetEntryView : View {
     @Environment(\.widgetFamily) var family
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Today's Tasks")
-                .font(.headline)
+        VStack(alignment: .center, spacing: 8) {
+            Text("pota.TODO")
+                .font(.subheadline)
                 .foregroundColor(.primary)
             
             if entry.tasks.isEmpty {
@@ -100,6 +128,9 @@ struct PotatodoWidgetEntryView : View {
 
 struct PotatodoWidget: Widget {
     let kind: String = "PotatodoWidget"
+    
+    init() {
+    }
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in

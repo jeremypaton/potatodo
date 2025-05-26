@@ -109,10 +109,10 @@ class MessageManager: ObservableObject {
 //                    print("⚠️ Invalid row format: \(row)")
                 }
             }
-            print("✅ Finished loading \(messages.count) messages")
+//            print("✅ Finished loading \(messages.count) messages")
             
         } catch {
-            print("❌ Error loading CSV: \(error)")
+//            print("❌ Error loading CSV: \(error)")
         }
     }
     

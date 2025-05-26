@@ -124,26 +124,26 @@ class TaskData: ObservableObject {
     }
     
     private func updateArrayObservations() {
-        print("[TaskData] updateArrayObservations called") // Debug print
+//        print("[TaskData] updateArrayObservations called") // Debug print
         arrayCancellables.removeAll()
         $tasks
             .sink { [weak self] _ in
                 self?.objectWillChange.send()
                 self?.updateTaskObservations()
-                print("[TaskData] something changed in the task array") // Debug print
+//                print("[TaskData] something changed in the task array") // Debug print
             }
             .store(in: &arrayCancellables)
     }
     
     private func updateTaskObservations() {
-        print("[TaskData] updateTaskObservations called") // Debug print
+//        print("[TaskData] updateTaskObservations called") // Debug print
         // Only clear taskCancellables, not arrayCancellables!
         taskCancellables.removeAll()
         // Observe each task
         for task in tasks {
             task.objectWillChange
                 .sink { [weak self] _ in
-                    print("[TaskData] Task \(task.id) changed") // Debug print
+//                    print("[TaskData] Task \(task.id) changed") // Debug print
                     guard let self = self else { return }
                     // Force a task array update to trigger auto-save
                     self.tasks = self.tasks
@@ -194,7 +194,7 @@ class AppDataStore: ObservableObject {
         taskData.$tasks
             .dropFirst() // Ignore initial value
             .sink { [weak self] tasks in
-                print("[AppDataStore] taskData.$tasks sink called, tasks count: \(tasks.count)") // Debug print
+//                print("[AppDataStore] taskData.$tasks sink called, tasks count: \(tasks.count)") // Debug print
                 guard let self = self else { return }
                 PersistenceUtils.saveTasksForProfile(tasks, profile: self.userSettings.profile)
                 

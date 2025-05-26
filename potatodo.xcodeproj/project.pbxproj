@@ -61,6 +61,7 @@
 		D1DCDB5E2DE3E48E00B4C48E /* PotatodoWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PotatodoWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1DCDB602DE3E48E00B4C48E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		D1DCDB622DE3E48E00B4C48E /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		D1DCDB952DE3F1BD00B4C48E /* PotatodoWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PotatodoWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -78,6 +79,14 @@
 			);
 			target = D1DCDB5D2DE3E48E00B4C48E /* PotatodoWidgetExtension */;
 		};
+		D1DCDB942DE3F00C00B4C48E /* Exceptions for "potatodo" folder in "PotatodoWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Tasks/Task_M.swift,
+				Utils/DebugUtils.swift,
+			);
+			target = D1DCDB5D2DE3E48E00B4C48E /* PotatodoWidgetExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -85,6 +94,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				D1C503922DD586120022FC52 /* Exceptions for "potatodo" folder in "potatodo" target */,
+				D1DCDB942DE3F00C00B4C48E /* Exceptions for "potatodo" folder in "PotatodoWidgetExtension" target */,
 			);
 			path = potatodo;
 			sourceTree = "<group>";
@@ -151,6 +161,7 @@
 		D1900CB72DD1A82200C53EEF = {
 			isa = PBXGroup;
 			children = (
+				D1DCDB952DE3F1BD00B4C48E /* PotatodoWidgetExtension.entitlements */,
 				D1C504052DDB1C350022FC52 /* phonedata_archive */,
 				D1C503132DD48A960022FC52 /* MILESTONES.txt */,
 				D1C503152DD490E40022FC52 /* TODO.txt */,
@@ -534,6 +545,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = potatodo/potatodo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -566,6 +578,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = potatodo/potatodo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -729,6 +742,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = potatodo/potatodo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -795,10 +809,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = PotatodoWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = JS3JFCX9RV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PotatodoWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PotatodoWidget;
@@ -825,10 +840,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = PotatodoWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = JS3JFCX9RV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PotatodoWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PotatodoWidget;
@@ -855,10 +871,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = PotatodoWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = JS3JFCX9RV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PotatodoWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PotatodoWidget;

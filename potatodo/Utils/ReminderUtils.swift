@@ -106,7 +106,7 @@ struct ReminderUtils {
                 print("Error scheduling reminder for \(weekdayName): \(error)")
             }
         }
-        print(reminderSummary)
+//        print(reminderSummary)
     }
     
     static func setBadgeCount(_ count: Int) {
