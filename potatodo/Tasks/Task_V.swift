@@ -134,18 +134,16 @@ struct Task_V: View {
                 .frame(width: style.circleSize)
                 
                 // Task text
-                Button {
-                    appManager.showTaskEdit(task: task)
-                } label: {
-                    Text(task.title.uppercased())
-                        .font(.system(size: style.fontSize, weight: .medium))
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                        .frame(maxWidth: .infinity)
-                        .foregroundColor(.black)
-                }
-                .buttonStyle(PlainButtonStyle())
-                .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
+                Text(task.title.uppercased())
+                    .font(.system(size: style.fontSize, weight: .medium))
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .frame(maxWidth: .infinity)
+                    .foregroundColor(.black)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        appManager.showTaskEdit(task: task)
+                    }
                 
                 // Completion circle
                 Button {

@@ -103,8 +103,8 @@ REMINDERS
             
         [X] transfer data functionality
         
-        [ ] calendar click date
-        [ ] highlight current date in week / month
+        [X] calendar click date
+        [X] highlight current date in week / month
 
 === FEATURES BETA LOCK === [MON 26 MAY]
 === START DESIGN WORK ===
