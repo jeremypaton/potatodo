@@ -72,7 +72,7 @@ struct ReminderUtils {
                     if(index != 1) {
                         reminderText += "\n"
                     }
-                        reminderText += "🥔[\(index + 1)] \(task.title)"
+                        reminderText += "🥔[\(index + 1)] \(task.title)\n"
                 }
             } else {
                 reminderTitle = "time to plan your day!"

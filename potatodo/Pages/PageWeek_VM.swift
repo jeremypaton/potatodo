@@ -2,25 +2,72 @@ import SwiftUI
 
 struct PotatoCounterWeek_V: View {
     let completedTasks: Int
+    let appManager: AppManager
+    @State private var sortedTasks: [Task] = []
+    
+    private func loadTasks() async {
+        let weekDays = await CounterUtils.getWeekDays(appManager: appManager)
+        sortedTasks = await CounterUtils.getSortedCompletedTasks(appManager: appManager, dateRange: weekDays)
+    }
+    
+    private var colorGroups: [(TaskColor, [Task])] {
+        CounterUtils.getColorGroups(tasks: sortedTasks)
+    }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            LazyVGrid(columns: [
-                GridItem(.flexible(), spacing: 1),
-                GridItem(.flexible(), spacing: 1),
-                GridItem(.flexible(), spacing: 1),
-                GridItem(.flexible(), spacing: 1),
-                GridItem(.flexible(), spacing: 1),
-                GridItem(.flexible(), spacing: 1),
-                GridItem(.flexible(), spacing: 1)
-            ], spacing: 1) {
-                ForEach(0..<completedTasks, id: \.self) { _ in
-                    Text("🥔")
-                        .font(.system(size: 24))
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Spacer()
+                Text("TASKS COMPLETED: \(completedTasks)")
+                    .font(.subheadline)
+                Spacer()
+            }
+//             Color count circles row
+            // Color count circles row
+            HStack(spacing: 8) {
+                Spacer()
+                ForEach(colorGroups, id: \.0) { color, tasks in
+                    ZStack {
+                        Circle()
+                            .fill(Color.white)
+                            .overlay(
+                                Circle()
+                                    .stroke(TaskStyle.fullColor(for: tasks[0]), lineWidth: 2)
+                            )
+                            .frame(width: 24, height: 24)
+                        Text("\(tasks.count)")
+                            .font(.system(size: 24, weight: .heavy))
+                            .foregroundColor(TaskStyle.fullColor(for: tasks[0]))
+                    }
+                }
+                Spacer()
+            }
+            .padding(.horizontal, 4)
+//            .padding(.bottom, 8)
+            
+            
+            // Potato grids
+            ForEach(colorGroups, id: \.0) { color, tasks in
+                LazyVGrid(columns: [
+                    GridItem(.flexible(), spacing: 1),
+                    GridItem(.flexible(), spacing: 1),
+                    GridItem(.flexible(), spacing: 1),
+                    GridItem(.flexible(), spacing: 1),
+                    GridItem(.flexible(), spacing: 1),
+                    GridItem(.flexible(), spacing: 1),
+                    GridItem(.flexible(), spacing: 1)
+                ], spacing: 0) {
+                    ForEach(tasks) { task in
+                        ZStack {
+                            Circle()
+                                .fill(TaskStyle.partialColor(for: task))
+                            Text("🥔")
+                                .font(.system(size: 20))
+                        }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
                 }
             }
-            .padding(2)
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -29,6 +76,14 @@ struct PotatoCounterWeek_V: View {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(Color.gray.opacity(0.3), lineWidth: 1)
         )
+        .task {
+            await loadTasks()
+        }
+        .onChange(of: completedTasks) { _, _ in
+            _Concurrency.Task {
+                await loadTasks()
+            }
+        }
     }
 }
 
@@ -139,7 +194,7 @@ struct PageWeek_VM: View {
                         }
                         
                         // Potato Counter as 8th box
-                        PotatoCounterWeek_V(completedTasks: completedTasksThisWeek)
+                        PotatoCounterWeek_V(completedTasks: completedTasksThisWeek, appManager: appManager)
                             .frame(height: (geometry.size.height - 32) / 4)
                     }
                 }

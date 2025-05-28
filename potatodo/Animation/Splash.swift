@@ -4,6 +4,7 @@ struct Splash: View {
     @State private var opacity1 = 0.0
     @State private var opacity2 = 0.0
     @State private var opacity3 = 0.0
+    @State private var opacity4 = 0.0
     @State private var backgroundOpacity = 1.0
     @State private var textBackgroundOpacity = 0.0
     @State private var potatoes: [(id: UUID, x: CGFloat, y: CGFloat, rotation: Double, creationTime: Date)] = []
@@ -48,6 +49,16 @@ struct Splash: View {
                         .opacity(opacity3)
                 }
                 .foregroundColor(.white)
+                
+//                VStack(spacing: 20) {
+//                    Spacer()
+//                    Text("[EARLY ACCESS]")
+//                        .font(.system(size: 20, weight: .bold))
+////                        .opacity(opacity4)
+//                        .foregroundColor(.red)
+////                        .fontWeight(.thin)
+//                }
+//                .foregroundColor(.white)
             }
             .onTapGesture {
                 withAnimation {
@@ -73,6 +84,13 @@ struct Splash: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 4.5) {
                     withAnimation(.easeIn(duration: 0.5)) {
                         opacity3 = 1.0
+                        textBackgroundOpacity = 1.0
+                    }
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.5) {
+                    withAnimation(.easeIn(duration: 0.5)) {
+                        opacity4 = 1.0
                         textBackgroundOpacity = 1.0
                     }
                 }

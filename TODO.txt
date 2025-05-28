@@ -109,7 +109,6 @@ REMINDERS
 === FEATURES ALPHA LOCK === [MON 26 MAY]
 === START DESIGN WORK ===
 
-TUESDAY
 v0.2.0 - UI layout
     [ ] learn best practices for designing layouts for different screen sizes
 
@@ -131,13 +130,11 @@ v0.2.0 - UI layout
 
     [ ] disable landscape
 
-WEDNESDAY
 v0.2.1 - UI styles
     [ ] UI design pass / alts
         [ ] mock up basic design
         [ ] implement basic design
      
-THURSDAY
 v0.2.2 - potato character lookdev
     [ ] make smol
     [ ] still frames for each level?
@@ -148,7 +145,6 @@ v0.2.2 - potato character lookdev
         [ ] CELEBRATE
         [ ] POST-CELEBRATE
 
-FRIDAY
 v0.2.3 - potato speech
     [ ] generate good speech for each level (quality over quantity)
         [ ] guarantee first 10 are best (use a seed / iterator with saved position?)
