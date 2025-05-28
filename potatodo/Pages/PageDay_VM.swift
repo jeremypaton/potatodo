@@ -33,6 +33,7 @@ struct PageDay_VM: View {
                     if index < tasksForCurrentDay.count {
                         Task_V(appManager: appManager, task: tasksForCurrentDay[index], isCompact: false)
                     } else if index == 2 {
+                        Spacer()
                         AddTaskButton_V(appManager: appManager, isCompact: false, date: appManager.getCurrentDate())
                     }
                 }
