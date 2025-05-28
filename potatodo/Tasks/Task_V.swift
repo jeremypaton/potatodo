@@ -21,7 +21,7 @@ struct DefaultTaskRowStyle: BaseTaskRowStyle {
     var backgroundColor: Color = .white
     var cornerRadius: CGFloat = 12
     var circleSize: CGFloat = 40
-    var strokeWidth: CGFloat = 3
+    var strokeWidth: CGFloat = 5
     var shadowRadius: CGFloat = 4
 }
 
@@ -32,7 +32,7 @@ struct CompactTaskRowStyle: BaseTaskRowStyle {
     var backgroundColor: Color = .white
     var cornerRadius: CGFloat = 8
     var circleSize: CGFloat = 24
-    var strokeWidth: CGFloat = 2.25
+    var strokeWidth: CGFloat = 4
     var shadowRadius: CGFloat = 2
 }
 
@@ -169,7 +169,7 @@ struct Task_V: View {
                 .frame(width: style.circleSize)
             }
             .padding(style.padding)
-            .frame(height: style.height)
+//            .frame(height: style.height)
             .background(TaskStyle.bgColor(for: task))
             .cornerRadius(style.cornerRadius)
             .overlay(
@@ -328,6 +328,7 @@ struct AddTaskDropDelegate: DropDelegate {
                     ForEach(appManager.getTasks().prefix(3)) { task in
                         Task_V(appManager: appManager, task: task, isCompact: true)
                     }
+                    
                     
                     AddTaskButton_V(appManager: appManager, isCompact: true, date: Date())
                 }

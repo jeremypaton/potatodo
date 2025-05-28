@@ -23,30 +23,23 @@ struct PageDay_VM: View {
     var body: some View {
         TopNav_V(appManager: appManager)
         
-        if appManager.isToday() {
+//        if appManager.isToday() {
             Potato_V(appManager: appManager).padding(.bottom,10)
-            
-        }
-//        
-//        HStack {
-//            Spacer()
-//            Text("TASKS COMPLETED: \(completedTasks)")
-//                .font(.subheadline)
-//            Spacer()
 //        }
-//        .padding(.bottom, 4)
-//        Spacer()
 
-        VStack(spacing: 15) {
-            ForEach(0..<3, id: \.self) { index in
-                if index < tasksForCurrentDay.count {
-                    Task_V(appManager: appManager, task: tasksForCurrentDay[index], isCompact: false)
-                } else if index == 2 {
-                    AddTaskButton_V(appManager: appManager, isCompact: false, date: appManager.getCurrentDate())
+        VStack {
+            VStack(spacing: 10) {
+                ForEach(0..<3, id: \.self) { index in
+                    if index < tasksForCurrentDay.count {
+                        Task_V(appManager: appManager, task: tasksForCurrentDay[index], isCompact: false)
+                    } else if index == 2 {
+                        AddTaskButton_V(appManager: appManager, isCompact: false, date: appManager.getCurrentDate())
+                    }
                 }
             }
+            .padding(.horizontal,10)
+            Spacer()
         }
-        .padding(.horizontal)
         .onChange(of: completedTasksCount) { oldCount, newCount in
             // Update potato level based on completed tasks
             appManager.setLevel(newCount)
@@ -64,7 +57,6 @@ struct PageDay_VM: View {
             previousCompletedCount = completedTasksCount
             appManager.setLevel(completedTasksCount)
         }
-//        Spacer()
     }
 }
 
@@ -73,9 +65,7 @@ struct PageDay_VM: View {
     ZStack {
         VStack {
             PageDay_VM(appManager: appManager)
-//            Spacer()
             BottomNav_V(appManager: appManager)
-
         }
         .background(Color(.systemGroupedBackground))
         
