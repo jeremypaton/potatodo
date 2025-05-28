@@ -18,7 +18,7 @@ struct BottomNav_V: View {
                     navManager.setPage(.backlog)
                 }) {
                     Image(systemName: "list.bullet")
-                        .font(.system(size: 24))
+                        .font(.system(size: 30))
                         .foregroundColor(navManager.currentPage == .backlog ? .blue : .gray)
                 }
                 Spacer()
@@ -28,7 +28,7 @@ struct BottomNav_V: View {
                     navManager.setPage(.week)
                 }) {
                     Text("W")
-                        .font(.system(size: 24, weight: .bold))
+                        .font(.system(size: 30, weight: .bold))
                         .foregroundColor(navManager.currentPage == .week ? .blue : .gray)
                 }
                 Spacer()
@@ -37,13 +37,14 @@ struct BottomNav_V: View {
                 Spacer()
                 Spacer()
                 Spacer()
-                
+                Spacer()
+
                 // Month button
                 Button(action: {
                     navManager.setPage(.month)
                 }) {
                     Text("M")
-                        .font(.system(size: 24, weight: .bold))
+                        .font(.system(size: 30, weight: .bold))
                         .foregroundColor(navManager.currentPage == .month ? .blue : .gray)
                 }
                 Spacer()
@@ -53,7 +54,7 @@ struct BottomNav_V: View {
                     navManager.setPage(.settings)
                 }) {
                     Image(systemName: "gear")
-                        .font(.system(size: 24))
+                        .font(.system(size: 30))
                         .foregroundColor(navManager.currentPage == .settings ? .blue : .gray)
                 }
                 Spacer()
@@ -67,27 +68,49 @@ struct BottomNav_V: View {
                 onPotatoClick()
             }) {
                 Text("🥔")
-                    .font(.system(size: 45))
+                    .font(.system(size: 55))
                     .frame(width: 80, height: 80)
                     .background(Color.white)
                     .clipShape(Circle())
-                    .shadow(color: navManager.currentPage == .day ? Color.blue.opacity(0.6) : Color.black.opacity(0.3), radius: 6, x: 0, y: 2)
+//                    .overlay(
+//                        Circle()
+//                            .stroke(Color.blue.opacity(0.3), lineWidth:
+//                                         navManager.currentPage == .day ? 6 : 0)
+//                    )
+                    .shadow(color: navManager.currentPage == .day ? Color.blue.opacity(0.6) :  Color.black.opacity(0.3), radius: 6, x: 0, y: 2)
             }
             .offset(y: -10)
         }
         .background(Color.white)
-        .edgesIgnoringSafeArea(.bottom)
-        .offset(y: 30)
+//        .edgesIgnoringSafeArea(.bottom)
+//        .offset(y: 30)
     }
 }
+
+//#Preview {
+//    VStack {
+////        Spacer()
+//        
+//        .safeAreaInset(edge: .bottom) {
+//            BottomNav_V(appManager: appManager)
+//        }
+//    }
+//    .background(Color(.green))
+//}
 
 #Preview {
     VStack {
         Spacer()
+        Text("Content above")
+            .frame(maxWidth: .infinity)
+            .frame(height: 300)
+            .background(Color.blue.opacity(0.2))
         
+    }
+    .safeAreaInset(edge: .bottom) {
         BottomNav_V(
             appManager: AppManager()
         )
     }
-    .background(Color(.green))
+    .background(Color(.systemGroupedBackground))
 }

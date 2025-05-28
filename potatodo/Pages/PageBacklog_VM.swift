@@ -2,7 +2,7 @@ import SwiftUI
 
 struct PageBacklog_VM: View {
     @ObservedObject var appManager: AppManager
-    @State private var filterOption: FilterOption = .all
+    @State private var filterOption: FilterOption = .incomplete
     
     enum FilterOption: String, CaseIterable {
         case all = "All"
@@ -25,15 +25,25 @@ struct PageBacklog_VM: View {
     var body: some View {
         VStack(spacing: 0) {
             // Title and Subtitle
+//            VStack(spacing: 4) {
+//                Text("BACKLOG")
+//                    .font(.largeTitle)
+//                    .fontWeight(.bold)
+//                Text("unscheduled tasks")
+//                    .font(.headline)
+//                    .foregroundColor(.gray)
+//            }
+//            .padding(.vertical)
+//            
             VStack(spacing: 4) {
                 Text("BACKLOG")
                     .font(.largeTitle)
                     .fontWeight(.bold)
+                    .background(Color.clear)
                 Text("unscheduled tasks")
                     .font(.headline)
                     .foregroundColor(.gray)
-            }
-            .padding(.vertical)
+            }.padding(10)
             
             // Filter Picker
             Picker("Filter", selection: $filterOption) {

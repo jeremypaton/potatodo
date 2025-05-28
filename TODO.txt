@@ -108,6 +108,7 @@ REMINDERS
 
 === FEATURES ALPHA LOCK === [MON 26 MAY]
 === START DESIGN WORK ===
+    [X] intiial potato counter colors
 
 v0.2.0 - UI layout
     [ ] learn best practices for designing layouts for different screen sizes

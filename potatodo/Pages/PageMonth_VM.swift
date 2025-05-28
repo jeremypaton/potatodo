@@ -12,6 +12,8 @@ struct PotatoCounterMonth_V: View {
     
     private var colorGroups: [(TaskColor, [Task])] {
         CounterUtils.getColorGroups(tasks: sortedTasks)
+            .sorted { $0.1.count > $1.1.count }
+
     }
     
     var body: some View {
@@ -223,12 +225,28 @@ struct PageMonth_VM: View {
                 .frame(maxHeight: .infinity)
                 
                 // Day number
-                Text("\(Calendar.current.component(.day, from: date))")
-                    .font(.system(size: 14))
-                    .foregroundColor(.black)
-                    .padding(4)
-                    .background(isToday ? Color.yellow.opacity(0.8) : Color.clear)
-                    .cornerRadius(4)
+                if isToday {
+                    Text("★")
+                        .font(.system(size: 25))
+                        .foregroundColor(.black)
+                        .padding(4)
+                        .background(Color.clear)
+                        .cornerRadius(4)
+                        .fontWeight(.bold)
+                } else {
+                    Text("\(Calendar.current.component(.day, from: date))")
+                        .font(.system(size: 14))
+                        .foregroundColor(.black)
+                        .padding(4)
+                        .background(Color.clear)
+                        .cornerRadius(4)
+                }
+//                Text("\(Calendar.current.component(.day, from: date))")
+//                    .font(.system(size: 14))
+//                    .foregroundColor(.black)
+//                    .padding(4)
+//                    .background(isToday ? Color.yellow.opacity(0.8) : Color.clear)
+//                    .cornerRadius(4)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -331,7 +349,7 @@ struct PageMonth_VM: View {
     return ZStack {
         VStack {
             PageMonth_VM(appManager: appManager)
-            Spacer()
+            BottomNav_V(appManager: appManager)
         }
         .background(Color(.systemGroupedBackground))
         

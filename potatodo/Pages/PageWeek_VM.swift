@@ -12,6 +12,7 @@ struct PotatoCounterWeek_V: View {
     
     private var colorGroups: [(TaskColor, [Task])] {
         CounterUtils.getColorGroups(tasks: sortedTasks)
+            .sorted { $0.1.count > $1.1.count }
     }
     
     var body: some View {
@@ -47,25 +48,23 @@ struct PotatoCounterWeek_V: View {
             
             
             // Potato grids
-            ForEach(colorGroups, id: \.0) { color, tasks in
-                LazyVGrid(columns: [
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1)
-                ], spacing: 0) {
-                    ForEach(tasks) { task in
-                        ZStack {
-                            Circle()
-                                .fill(TaskStyle.partialColor(for: task))
-                            Text("🥔")
-                                .font(.system(size: 20))
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1),
+                GridItem(.flexible(), spacing: 1)
+            ], spacing: 0) {
+                ForEach(sortedTasks) { task in
+                    ZStack {
+                        Circle()
+                            .fill(TaskStyle.partialColor(for: task))
+                        Text("🥔")
+                            .font(.system(size: 20))
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
             Spacer()
@@ -73,8 +72,8 @@ struct PotatoCounterWeek_V: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.white)
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 0)
+                .stroke(Color.gray, lineWidth: 1)
         )
         .task {
             await loadTasks()
@@ -141,17 +140,27 @@ struct PageWeek_VM: View {
         return VStack(alignment: .center, spacing: 0) {
             // Header
             HStack {
-                Text(formatDayHeader(date))
-                    .font(.headline)
-                Text(formatDateHeader(date))
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
+                if isToday {
+//                    Text("★")
+//                        .font(.headline)
+                    Text("TODAY")
+                        .font(.headline)
+//                    Text(formatDateHeader(date))
+//                        .font(.subheadline)
+//                        .foregroundColor(.gray)
+//                    Text("★")
+//                        .font(.headline)
+                } else {
+                    Text(formatDayHeader(date))
+                        .font(.headline)
+                    Text(formatDateHeader(date))
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
             }
-            .padding(.bottom, 2)
-            .padding(.horizontal, 8)
             .padding(.vertical, 4)
-            .background(isToday ? Color.yellow.opacity(0.8) : Color.clear)
-            .cornerRadius(4)
+//            .padding(.bottom, 2)
+//            .size(.horizontal, .infinity)
             
             // Task List of day in compact mode
             VStack(spacing: 4) {
@@ -166,12 +175,13 @@ struct PageWeek_VM: View {
                 Spacer(minLength: 0)
             }
         }
-        .padding(.vertical, 8)
+//        .frame(maxWidth: .infinity)
+//        .padding(.vertical, 8)
         .padding(.horizontal, 4)
         .background(Color.white)
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 0)
+                .stroke(Color.gray, lineWidth: 1)
         )
     }
     
@@ -185,20 +195,22 @@ struct PageWeek_VM: View {
                 
                 VStack(spacing: 0) {
                     LazyVGrid(columns: [
-                        GridItem(.flexible(), spacing: 8),
-                        GridItem(.flexible(), spacing: 8)
-                    ], spacing: 8) {
+                        GridItem(.flexible(), spacing: 0),
+                        GridItem(.flexible(), spacing: 0)
+                    ], spacing: 0) {
                         ForEach(0..<7) { index in
                             dayView(for: weekDays[index])
-                                .frame(height: (geometry.size.height - 32) / 4) // 32 for padding, 4 rows
+//                                .frame(height: .infinity) // 32 for padding, 4 rows
+
+                                .frame(height: (geometry.size.height - 0) / 4) // 32 for padding, 4 rows
                         }
                         
                         // Potato Counter as 8th box
                         PotatoCounterWeek_V(completedTasks: completedTasksThisWeek, appManager: appManager)
-                            .frame(height: (geometry.size.height - 32) / 4)
+                            .frame(height: (geometry.size.height) / 4)
                     }
                 }
-                .padding(8)
+//                .padding(8)
             }
         }
     }
@@ -214,6 +226,10 @@ struct PageWeek_VM: View {
     return ZStack {
         VStack {
             PageWeek_VM(appManager: appManager)
+//                .background(.red)
+
+            BottomNav_V(appManager: appManager)
+
         }
         .background(Color(.systemGroupedBackground))
         

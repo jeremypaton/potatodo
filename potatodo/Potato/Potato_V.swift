@@ -38,7 +38,7 @@ struct Potato_V: View {
                 }
             }
         }
-        .frame(height: UIScreen.main.bounds.width - 12)
+        .frame(height: UIScreen.main.bounds.width - 24)
     }
 }
 

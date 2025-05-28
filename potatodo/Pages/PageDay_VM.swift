@@ -24,10 +24,20 @@ struct PageDay_VM: View {
         TopNav_V(appManager: appManager)
         
         if appManager.isToday() {
-            Potato_V(appManager: appManager)
+            Potato_V(appManager: appManager).padding(.bottom,10)
+            
         }
+//        
+//        HStack {
+//            Spacer()
+//            Text("TASKS COMPLETED: \(completedTasks)")
+//                .font(.subheadline)
+//            Spacer()
+//        }
+//        .padding(.bottom, 4)
+//        Spacer()
 
-        VStack(spacing: 12) {
+        VStack(spacing: 15) {
             ForEach(0..<3, id: \.self) { index in
                 if index < tasksForCurrentDay.count {
                     Task_V(appManager: appManager, task: tasksForCurrentDay[index], isCompact: false)
@@ -54,6 +64,7 @@ struct PageDay_VM: View {
             previousCompletedCount = completedTasksCount
             appManager.setLevel(completedTasksCount)
         }
+//        Spacer()
     }
 }
 
@@ -62,7 +73,9 @@ struct PageDay_VM: View {
     ZStack {
         VStack {
             PageDay_VM(appManager: appManager)
-            Spacer()
+//            Spacer()
+            BottomNav_V(appManager: appManager)
+
         }
         .background(Color(.systemGroupedBackground))
         

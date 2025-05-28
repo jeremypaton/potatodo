@@ -12,18 +12,28 @@ struct TopNav_V: View {
             Button(action: { navManager.movePrev() }) {
                 Image(systemName: "chevron.left")
                     .foregroundColor(.blue)
-                    .font(.system(size: 24))
+                    .font(.system(size: 34))
+                    .fontWeight(.bold)
                     .frame(width: 60)
             }
             
             Spacer()
             
             VStack(spacing: 4) {
-                Text(navManager.title)
-                    .font(.largeTitle)
-                    .background(navManager.title == "TODAY" ? Color.yellow.opacity(0.8) : Color.clear)
-                Text(navManager.subtitle)
-                    .font(.headline)
+//                if(navManager.title == "TODAY") {
+//                    Text("★ " + navManager.title + " ★")
+//                        .font(.largeTitle)
+//                        .background(Color.clear)
+//                    Text(navManager.subtitle)
+//                        .font(.headline)
+//                } else {
+                    Text(navManager.title)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                    Text(navManager.subtitle)
+                        .font(.headline)
+                        .foregroundColor(.gray)
+//                }
             }.padding(10)
             
             Spacer()
@@ -31,7 +41,8 @@ struct TopNav_V: View {
             Button(action: { navManager.moveNext() }) {
                 Image(systemName: "chevron.right")
                     .foregroundColor(.blue)
-                    .font(.system(size: 24))
+                    .font(.system(size: 34))
+                    .fontWeight(.bold)
                     .frame(width: 60)
             }
         }.background(Color(.white))
