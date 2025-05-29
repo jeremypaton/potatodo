@@ -1,5 +1,49 @@
 import SwiftUI
 
+struct ScrollingBanner: View {
+    let direction: Bool // true for left, false for right
+    let speed: Double
+    
+    @State private var offset: CGFloat = 0
+    
+    var body: some View {
+        GeometryReader { geometry in
+            let baseText = "POTATODO - PRIVATE ALPHA - "
+            let repeatedText = String(repeating: baseText, count: 100)
+            let textWidth = geometry.size.width * 3
+            
+            HStack(spacing: 0) {
+                Text(repeatedText)
+                    .foregroundColor(.white)
+                    .font(.system(size: 16, weight: .bold))
+            }
+            .frame(width: textWidth)
+            .offset(x: offset)
+            .onAppear {
+                offset = direction ? 0 : -textWidth + geometry.size.width
+                withAnimation(Animation.linear(duration: speed).repeatForever(autoreverses: false)) {
+                    offset = direction ? -textWidth + geometry.size.width : 0
+                }
+            }
+        }
+        .frame(height: 30)
+        .background(Color.black)
+    }
+}
+
+struct RedTextModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(.white)
+            .overlay(
+                Text("PRIVATE ALPHA")
+                    .foregroundColor(.red)
+                    .font(.system(size: 16, weight: .bold))
+                    .offset(x: 0)
+            )
+    }
+}
+
 enum IntroImageMode {
     case autoplay
     case button
@@ -32,9 +76,6 @@ class IntroViewModel: ObservableObject {
         IntroImageConfig(imageName: "intro_11", duration: 2.0, mode: .button),
         IntroImageConfig(imageName: "intro_12", duration: 2.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_13", duration: 2.0, mode: .launch)
-
-        
-
     ]
     
     init() {
@@ -84,6 +125,8 @@ struct PageIntro: View {
     @State private var imageOpacity: Double = 0
     @State private var previousImageIndex: Int = 0
     @State private var glowOpacity: Double = 0.5
+    private let bannerSpeed: Double = 20.0
+    @ObservedObject var appManager: AppManager
     
     var body: some View {
         ZStack {
@@ -120,30 +163,23 @@ struct PageIntro: View {
                     }
                 }
                 
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            viewModel.reset()
-                        }) {
-                            Text("RESET")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 10)
-                                .background(Color.blue)
-                                .cornerRadius(5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 5.0)
-                                        .stroke(Color.black, lineWidth: 2)
-                                )
-                        }
-                        .padding()
+                VStack(spacing: 0) {
+                    // Top banner - only show if not on launch page
+                    if viewModel.currentConfig.mode != .launch {
+                        ScrollingBanner(direction: true, speed: bannerSpeed)
+                            .zIndex(1)
                     }
+                    
                     Spacer()
                     
                     if viewModel.showNextButton {
                         Button(action: {
+                            // Trigger potato rain based on button type
+                            if viewModel.currentConfig.mode == .launch {
+                                appManager.getOverlayManagerForOverlayView().showPotatoRain(isSinglePotato: false)
+                            } else {
+                                appManager.getOverlayManagerForOverlayView().showPotatoRain(isSinglePotato: true)
+                            }
                             viewModel.nextImage()
                         }) {
                             Text(viewModel.currentConfig.mode == .launch ? "LET'S DO THIS!" : "NEXT")
@@ -174,12 +210,74 @@ struct PageIntro: View {
                         }
                         .padding(.bottom, 50)
                     }
+                    
+                    // Bottom banner - only show if not on launch page
+                    if viewModel.currentConfig.mode != .launch {
+                        ScrollingBanner(direction: false, speed: bannerSpeed)
+                            .zIndex(1)
+                    }
                 }
+                
+                // Top right reset button
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            viewModel.reset()
+                        }) {
+                            Text("RESET")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 10)
+                                .background(Color.blue)
+                                .cornerRadius(5)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 5.0)
+                                        .stroke(Color.black, lineWidth: 2)
+                                )
+                        }
+                        .padding()
+                    }
+                    Spacer()
+                }
+                .zIndex(2)
+                
+                // Top left skip button
+                VStack {
+                    HStack {
+                        Button(action: {
+                            // Trigger multi potato rain for skip
+                            appManager.getOverlayManagerForOverlayView().showPotatoRain(isSinglePotato: false)
+                            viewModel.isLastImage = true
+                        }) {
+                            Text("SKIP")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 10)
+                                .background(Color.blue)
+                                .cornerRadius(5)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 5.0)
+                                        .stroke(Color.black, lineWidth: 2)
+                                )
+                        }
+                        .padding()
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                .zIndex(2)
             }
+            
+            // Add overlay for potato rain effects
+            Overlay_V(appManager: appManager)
+                .zIndex(3)
         }
     }
 }
 
 #Preview {
-    PageIntro()
+    PageIntro(appManager: AppManager())
 } 
