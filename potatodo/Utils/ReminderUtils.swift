@@ -67,12 +67,12 @@ struct ReminderUtils {
             var reminderText = ""
             
             if !tasksForDate.isEmpty {
-                reminderTitle = "today's todos:"
+                reminderTitle = "today's priorities:"
                 for (index, task) in tasksForDate.enumerated() {
                     if(index != 1) {
                         reminderText += "\n"
                     }
-                        reminderText += "🥔[\(index + 1)] \(task.title)\n"
+                        reminderText += "🥔[\(index + 1)] \(task.title)"
                 }
             } else {
                 reminderTitle = "time to plan your day!"

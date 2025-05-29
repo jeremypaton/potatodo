@@ -111,32 +111,32 @@ REMINDERS
     [X] intiial potato counter colors
 
 PRE-ALPHA TODOs
-    [ ] INTRO
+    [X] INTRO
         [X] writing
         [X] UX / app integration
             [X] only first launch
                 [X] for now add skip and reset buttons
             [X] potato falls with each button click
         [X cool 'private alpha' stamp / banner
-            [ ] make cooler?
+            make cooler?
         [X] potato drawings
             [X] cute / well timed intro
         [X] app screenshots
-            [ ] make nicer?
+            make nicer?
             
     [X] backlog color filters
     
-    [ ] edit task
-        [ ] clarify color select
-        [ ] text all caps
-        [ ] fix keyboard squishing
+    [X] edit task
+        clarify color select?
+        [X] text all caps
             
     BUGS
+        [ ] fix keyboard squishing
         [ ] make sure position is saved ?
         [X] position for backlog
         [ ] message shouldn't display when switching page away from today
         [ ] notification whitespaace
-            [ ] change text "today's priorities"
+        [X] change text "today's priorities"
             
     --- PANCAKE BREAK ---
     
@@ -157,6 +157,11 @@ PRE-ALPHA TODOs
             [ ] cuter text bubble / font?
             [ ] decide when to trigger / maybe potato button is just a wave? etc.
         [ ] fix potato button
+        
+    BUGS
+        [ ] make sure position is saved ?
+        [ ] message shouldn't display when switching page away from today
+        [ ] check notification whitespaace
     
     --- FRIDAY ---
     
