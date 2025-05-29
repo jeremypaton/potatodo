@@ -3,6 +3,7 @@ import SwiftUI
 struct PageBacklog_VM: View {
     @ObservedObject var appManager: AppManager
     @State private var filterOption: FilterOption = .incomplete
+    @State private var selectedColors: Set<TaskColor> = []
     
     enum FilterOption: String, CaseIterable {
         case all = "All"
@@ -12,14 +13,22 @@ struct PageBacklog_VM: View {
     
     private var filteredTasks: [Task] {
         let unscheduled = appManager.getUnscheduledTasks()
-        switch filterOption {
+        let statusFiltered = switch filterOption {
         case .all:
-            return unscheduled
+            unscheduled
         case .incomplete:
-            return unscheduled.filter { !$0.isCompleted }
+            unscheduled.filter { !$0.isCompleted }
         case .complete:
-            return unscheduled.filter { $0.isCompleted }
+            unscheduled.filter { $0.isCompleted }
         }
+        
+        // If no colors are selected, show all colors
+        if selectedColors.isEmpty {
+            return statusFiltered
+        }
+        
+        // Otherwise filter by selected colors
+        return statusFiltered.filter { selectedColors.contains($0.color) }
     }
     
     var body: some View {
@@ -45,6 +54,27 @@ struct PageBacklog_VM: View {
                     .foregroundColor(.gray)
             }.padding(10)
             
+            // Color Filter
+            HStack(spacing: 0) {
+                ForEach([TaskColor.green, .blue, .yellow, .purple, .red, .gray], id: \.self) { color in
+                    Button {
+                        if selectedColors.contains(color) {
+                            selectedColors.remove(color)
+                        } else {
+                            selectedColors.insert(color)
+                        }
+                    } label: {
+                        Image(systemName: "star.fill")
+                            .foregroundColor(TaskStyle.fullColor(for: Task(title: "", color: color)))
+                            .font(.system(size: 32))
+                            .opacity(selectedColors.contains(color) ? 1.0 : 0.3)
+                            .frame(maxWidth: .infinity)
+                    }
+                }
+            }
+            .padding(.horizontal, 4)
+            .padding(.bottom, 8)
+            
             // Filter Picker
             Picker("Filter", selection: $filterOption) {
                 ForEach(FilterOption.allCases, id: \.self) { option in
@@ -59,7 +89,6 @@ struct PageBacklog_VM: View {
                 VStack(spacing: 55) {
                     ForEach(filteredTasks) { task in
                         Task_V(appManager: appManager, task: task, isCompact: false)
-
                     }
                 }
                 .padding()

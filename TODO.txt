@@ -113,10 +113,10 @@ REMINDERS
 PRE-ALPHA TODOs
     [ ] INTRO
         [X] writing
-        [ ] UX / app integration
-            [ ] only first launch
-                [ ] for now add skip and reset buttons
-            [ ] potato falls with each button click
+        [X] UX / app integration
+            [X] only first launch
+                [X] for now add skip and reset buttons
+            [X] potato falls with each button click
         [X cool 'private alpha' stamp / banner
             [ ] make cooler?
         [X] potato drawings
