@@ -65,15 +65,21 @@ class IntroViewModel: ObservableObject {
     let introConfigs: [IntroImageConfig] = [
         IntroImageConfig(imageName: "intro_1", duration: 1.5, mode: .autoplay),
         IntroImageConfig(imageName: "intro_2", duration: 1.5, mode: .button),
+        IntroImageConfig(imageName: "black", duration: 1.5, mode: .autoplay),
+
         IntroImageConfig(imageName: "intro_3", duration: 2.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_4", duration: 3.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_5", duration: 3.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_6", duration: 1.0, mode: .button),
+        IntroImageConfig(imageName: "black", duration: 1.5, mode: .autoplay),
+
         IntroImageConfig(imageName: "intro_7", duration: 2.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_8", duration: 2.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_9", duration: 2.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_10", duration: 2.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_11", duration: 2.0, mode: .button),
+        IntroImageConfig(imageName: "black", duration: 1.5, mode: .autoplay),
+
         IntroImageConfig(imageName: "intro_12", duration: 2.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_13", duration: 2.0, mode: .launch)
     ]
@@ -177,6 +183,7 @@ struct PageIntro: View {
                             // Trigger potato rain based on button type
                             if viewModel.currentConfig.mode == .launch {
                                 appManager.getOverlayManagerForOverlayView().showPotatoRain(isSinglePotato: false)
+                                appManager.endIntro()
                             } else {
                                 appManager.getOverlayManagerForOverlayView().showPotatoRain(isSinglePotato: true)
                             }
@@ -222,6 +229,7 @@ struct PageIntro: View {
                 VStack {
                     HStack {
                         Spacer()
+                        #if DEBUG
                         Button(action: {
                             viewModel.reset()
                         }) {
@@ -238,6 +246,7 @@ struct PageIntro: View {
                                 )
                         }
                         .padding()
+                        #endif
                     }
                     Spacer()
                 }
@@ -246,6 +255,7 @@ struct PageIntro: View {
                 // Top left skip button
                 VStack {
                     HStack {
+                        #if DEBUG
                         Button(action: {
                             // Trigger multi potato rain for skip
                             appManager.getOverlayManagerForOverlayView().showPotatoRain(isSinglePotato: false)
@@ -264,6 +274,7 @@ struct PageIntro: View {
                                 )
                         }
                         .padding()
+                        #endif
                         Spacer()
                     }
                     Spacer()

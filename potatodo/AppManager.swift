@@ -61,9 +61,19 @@ class UserSettings: ObservableObject, Codable {
             UserDefaults.standard.set(notificationTime, forKey: "notificationTime")
         }
     }
+    @Published fileprivate(set) var newUser: Bool {
+        didSet {
+            UserDefaults.standard.set(newUser, forKey: "newUser")
+        }
+    }
+    @Published fileprivate(set) var showIntro: Bool {
+        didSet {
+            UserDefaults.standard.set(showIntro, forKey: "showIntro")
+        }
+    }
     
     enum CodingKeys: String, CodingKey {
-        case profile, notificationsEnabled, notificationTime
+        case profile, notificationsEnabled, notificationTime, newUser, showIntro
     }
     
     required init(from decoder: Decoder) throws {
@@ -71,6 +81,8 @@ class UserSettings: ObservableObject, Codable {
         profile = try container.decode(Profile.self, forKey: .profile)
         notificationsEnabled = try container.decode(Bool.self, forKey: .notificationsEnabled)
         notificationTime = try container.decode(Date.self, forKey: .notificationTime)
+        newUser = try container.decode(Bool.self, forKey: .newUser)
+        showIntro = try container.decode(Bool.self, forKey: .showIntro)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -78,12 +90,26 @@ class UserSettings: ObservableObject, Codable {
         try container.encode(profile, forKey: .profile)
         try container.encode(notificationsEnabled, forKey: .notificationsEnabled)
         try container.encode(notificationTime, forKey: .notificationTime)
+        try container.encode(newUser, forKey: .newUser)
+        try container.encode(showIntro, forKey: .showIntro)
     }
     
     init() {
         // Load saved settings from UserDefaults
         self.notificationsEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
         self.notificationTime = UserDefaults.standard.object(forKey: "notificationTime") as? Date ?? Calendar.current.date(from: DateComponents(hour: 9, minute: 0)) ?? Date()
+        self.newUser = UserDefaults.standard.bool(forKey: "newUser", defaultValue: true)
+        self.showIntro = UserDefaults.standard.bool(forKey: "showIntro", defaultValue: false)
+    }
+}
+
+extension UserDefaults {
+    func bool(forKey key: String, defaultValue: Bool) -> Bool {
+        if object(forKey: key) == nil {
+            set(defaultValue, forKey: key)
+            return defaultValue
+        }
+        return bool(forKey: key)
     }
 }
 
@@ -468,5 +494,23 @@ class AppManager: ObservableObject {
     private func loadUserSettings() {
         // No longer needed as we're using UserDefaults
         // The settings are loaded in the UserSettings init()
+    }
+    
+    func setShowIntro(_ show: Bool) {
+        self.appDataStore.userSettings.showIntro = show
+    }
+    
+    func setNewUser(_ isNew: Bool) {
+        self.appDataStore.userSettings.newUser = isNew
+    }
+    
+    func shouldShowIntro() -> Bool {
+        return appDataStore.userSettings.newUser || appDataStore.userSettings.showIntro
+    }
+    
+    func endIntro() {
+        setNewUser(false)
+        setShowIntro(false)
+        endSplash()
     }
 } 

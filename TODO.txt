@@ -117,10 +117,12 @@ PRE-ALPHA TODOs
             [ ] only first launch
                 [ ] for now add skip and reset buttons
             [ ] potato falls with each button click
-        [ ] cool 'private alpha' stamp / banner
+        [X cool 'private alpha' stamp / banner
+            [ ] make cooler?
         [X] potato drawings
             [X] cute / well timed intro
-        [ ] better app screenshots
+        [X] app screenshots
+            [ ] make nicer?
             
     [ ] backlog color filters
     

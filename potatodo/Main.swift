@@ -16,7 +16,12 @@ struct Main: View {
     
     var body: some View {
         ZStack {
-            if appManager.appDataStore.uiState.showSplash {
+            if appManager.shouldShowIntro() {
+                PageIntro(appManager: appManager)
+                    .onAppear {
+                        appManager.requestPermissions()
+                    }
+            } else if appManager.appDataStore.uiState.showSplash {
                 Splash(appManager: appManager)
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 6) {

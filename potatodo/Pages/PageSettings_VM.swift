@@ -99,6 +99,20 @@ struct PageSettings_VM: View {
                 }
                 .pickerStyle(MenuPickerStyle())
             }
+            
+            Section(header: Text("Intro")) {
+                Toggle("Show Intro", isOn: Binding(
+                    get: { appManager.appDataStore.userSettings.showIntro },
+                    set: { newValue in
+                        appManager.setShowIntro(newValue)
+                    }
+                ))
+                
+                if appManager.appDataStore.userSettings.newUser {
+                    Text("New User: Yes")
+                        .foregroundColor(.gray)
+                }
+            }
         }
         .onAppear {
             notificationTime = appManager.appDataStore.userSettings.notificationTime
