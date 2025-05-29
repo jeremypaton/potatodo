@@ -219,13 +219,14 @@ struct TaskEditOverlay_V: View {
                     TextField("Task description", text: Binding(
                         get: { overlayManager.taskEditOverlay.editedTitle },
                         set: { newValue in
-//                            Task { @MainActor in
-                                overlayManager.taskEditOverlay.editedTitle = newValue
-                                overlayManager.objectWillChange.send()
-//                            }
+                            overlayManager.taskEditOverlay.editedTitle = newValue.uppercased()
+                            overlayManager.objectWillChange.send()
                         }
                     ))
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .textCase(.uppercase)
+                    .autocapitalization(.allCharacters)
+                    .textInputAutocapitalization(.characters)
                     .padding(.horizontal)
                     
                     // Action buttons

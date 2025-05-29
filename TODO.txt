@@ -124,7 +124,7 @@ PRE-ALPHA TODOs
         [X] app screenshots
             [ ] make nicer?
             
-    [ ] backlog color filters
+    [X] backlog color filters
     
     [ ] edit task
         [ ] clarify color select
@@ -132,8 +132,8 @@ PRE-ALPHA TODOs
         [ ] fix keyboard squishing
             
     BUGS
-        [ ] make sure position is saved
-        [ ] position for backlog
+        [ ] make sure position is saved ?
+        [X] position for backlog
         [ ] message shouldn't display when switching page away from today
         [ ] notification whitespaace
             [ ] change text "today's priorities"

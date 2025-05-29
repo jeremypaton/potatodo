@@ -23,12 +23,15 @@ struct PageBacklog_VM: View {
         }
         
         // If no colors are selected, show all colors
-        if selectedColors.isEmpty {
-            return statusFiltered
+        let colorFiltered = if selectedColors.isEmpty {
+            statusFiltered
+        } else {
+            // Otherwise filter by selected colors
+            statusFiltered.filter { selectedColors.contains($0.color) }
         }
         
-        // Otherwise filter by selected colors
-        return statusFiltered.filter { selectedColors.contains($0.color) }
+        // Sort by position without modifying the tasks
+        return colorFiltered.sorted { $0.position < $1.position }
     }
     
     var body: some View {
