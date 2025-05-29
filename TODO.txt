@@ -110,6 +110,92 @@ REMINDERS
 === START DESIGN WORK ===
     [X] intiial potato counter colors
 
+PRE-ALPHA TODOs
+    [ ] INTRO
+        [ ] writing
+        [ ] UX / app integration
+            [ ] only first launch
+                [ ] for now add skip and reset buttons
+            [ ] potato falls with each button click
+        [ ] cool 'private alpha' stamp / banner
+        [ ] potato drawings
+            [ ] cute / well timed intro
+        [ ] better app screenshots
+            
+    [ ] backlog color filters
+    
+    [ ] edit task
+        [ ] clarify color select
+        [ ] text all caps
+        [ ] fix keyboard squishing
+            
+    BUGS
+        [ ] make sure position is saved
+        [ ] position for backlog
+        [ ] message shouldn't display when switching page away from today
+        [ ] notification whitespaace
+            [ ] change text "today's priorities"
+            
+    --- PANCAKE BREAK ---
+    
+    [ ] UI
+        [ ] quick drawover / refinement
+            ok to be a bit janky
+        
+    [ ] POTATO
+        [ ] resize potato canvas
+        [ ] make cute
+        [ ] animations
+            [ ] talking
+            [ ] waving
+            [ ] dance
+            [ ] one nice celebration with fx
+        [ ] speech
+            [ ] better text
+            [ ] cuter text bubble / font?
+            [ ] decide when to trigger / maybe potato button is just a wave? etc.
+        [ ] fix potato button
+    
+    --- FRIDAY ---
+    
+    [ ] NEW USER
+        [ ] FRESH_LAUNCH flag
+            how to do without data loss?
+                could be a profile which pops up a confirm dialog before wiping data and notifications preferences for freshLaunchUser
+        [ ] test notifications etc.
+        [ ] FORK flag
+            [ ] forks tasks from default user
+                [ ] confirm dialog for intial fork, then load/save from forkUser
+            
+    [ ] DATA safety
+        [ ] good long-term plan for versioning / data recovery
+
+    [ ] super basic analytics / crash reporting
+
+BETA TODOs
+    REDESIGN - FIGMA
+    ANIMATE - SVGs
+    ENGINEER - FLUTTER (or reactnative?)
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 v0.2.0 - UI layout
     [ ] learn best practices for designing layouts for different screen sizes
 

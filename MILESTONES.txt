@@ -15,20 +15,34 @@ v0.2 - UI/animation update
 v0.3 - splash/onboard update
     v03.x - iterate animation
 
-=== BETA === [JUNE 1]
+=== CLOSED ALPHA RELEASE (FEEDBACK) === [JUNE 1]
 
 ... start socials
 
-v0.4 - closed beta
+2 weeks
+v0.4 - closed alpha
     v0.4.x - iterate
     
-v0.5 - open beta
+2 weeks
+v0.5 - open alpha
     v0.5.x - iterate
-    
-v0.6 - feature lock
-    v0.6.x - test / fix bugs
         
-=== EARLY ACCESS === [JULY 1]
+=== START BETA DEV === [JULY 1]
+
+2 weeks
+v0.6 - incorporate alpha feedback
+    v0.6.x
+    
+*** feature lock ***
+
+2 weeks
+v0.7 - make robust / test
+    v0.7.x
+
+=== OPEN BETA RELEASE (EARLY ACCESS) === [AUGUST 1]
+
+1 week
+v0.9 - soft launch
 
 v0.9 - free early access
     - product hunt launch etc.
@@ -36,7 +50,7 @@ v0.9 - free early access
 GOAL: 1000 Daily Active Users
     -> then monetize
     
-=== FULL LAUNCH ===
+=== FULL LAUNCH === [o]
 
 v1.0 - full launch w/ monetization
 
