@@ -65,21 +65,21 @@ class IntroViewModel: ObservableObject {
     let introConfigs: [IntroImageConfig] = [
         IntroImageConfig(imageName: "intro_1", duration: 1.5, mode: .autoplay),
         IntroImageConfig(imageName: "intro_2", duration: 1.5, mode: .button),
+        
         IntroImageConfig(imageName: "black", duration: 1.5, mode: .autoplay),
-
         IntroImageConfig(imageName: "intro_3", duration: 2.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_4", duration: 3.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_5", duration: 3.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_6", duration: 1.0, mode: .button),
+        
         IntroImageConfig(imageName: "black", duration: 1.5, mode: .autoplay),
-
         IntroImageConfig(imageName: "intro_7", duration: 2.0, mode: .autoplay),
-        IntroImageConfig(imageName: "intro_8", duration: 2.0, mode: .autoplay),
-        IntroImageConfig(imageName: "intro_9", duration: 2.0, mode: .autoplay),
-        IntroImageConfig(imageName: "intro_10", duration: 2.0, mode: .autoplay),
+        IntroImageConfig(imageName: "intro_8", duration: 3.0, mode: .autoplay),
+        IntroImageConfig(imageName: "intro_9", duration: 3.0, mode: .autoplay),
+//        IntroImageConfig(imageName: "intro_10", duration: 2.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_11", duration: 2.0, mode: .button),
+        
         IntroImageConfig(imageName: "black", duration: 1.5, mode: .autoplay),
-
         IntroImageConfig(imageName: "intro_12", duration: 2.0, mode: .autoplay),
         IntroImageConfig(imageName: "intro_13", duration: 2.0, mode: .launch)
     ]
@@ -215,7 +215,7 @@ struct PageIntro: View {
                                     }
                                 }
                         }
-                        .padding(.bottom, 50)
+                        .padding(.bottom, 150)
                     }
                     
                     // Bottom banner - only show if not on launch page

@@ -165,6 +165,8 @@ PRE-ALPHA TODOs
             
     [X] fix counter overflow
     
+    [X] fix notification whitespaace
+
     --- run ---
 
     [X] POTATO SPEECH - 15min
@@ -174,30 +176,29 @@ PRE-ALPHA TODOs
         [X] decide when to trigger
             on delay after anim? half of potato button clicks?
         
-    [ ] INTRO - 15min
-        [ ] cleaner images
-        [ ] fix banner safe areas
-        [ ] make launch button cooler and more like add task button
-        [ ] figure something cooler out for year
-            [ ] scrolling potatos?
+    [X] INTRO - 15min
+        [X] cleaner images
+        [PASS] fix banner safe areas
+        [X] make launch button cooler and more like add task button
+        [PASS] figure something cooler out for year
+            [PASS] scrolling potatos?
             
     [X] update icon - 2 min
+            
+    [X] backup my data - 5min
+        [PASS] new backup reload button
+        
+    ----
     
     [ ] BUGS - 10min
-        [ ] dances when navigating back to day page
+        [ ] celebrates when navigating back to day page
         [ ] goes to level 3 celebrate when pressing potato button
         [ ] make sure position is saved / loaded well
-        [X] check notification whitespaace
         [ ] low priority bugs
             [ ] message shouldn't display when switching page away from today?
             [ ] badge doesn't update when day changes and app closed
             [ ] fix keyboard squishing
             [ ] check today notification not wiped
-            
-    [ ] backup my data - 5min
-        [ ] new backup reload button
-        
-    ----
     
     [ ] make the test user data awesome (replace with json?) demoUser?
         
