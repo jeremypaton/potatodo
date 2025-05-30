@@ -69,14 +69,14 @@ struct ReminderUtils {
             if !tasksForDate.isEmpty {
                 reminderTitle = "today's priorities:"
                 for (index, task) in tasksForDate.enumerated() {
-                    if(index != 1) {
+                    if(index != 0) {
                         reminderText += "\n"
                     }
-                        reminderText += "🥔[\(index + 1)] \(task.title)"
+                    reminderText += "🥔\(index + 1). \(task.title.lowercased())"
                 }
             } else {
                 reminderTitle = "time to plan your day!"
-                reminderText = "🥔[1] ?\n🥔[2] ?\n🥔[3] ?"
+                reminderText = "🥔1. ?\n🥔2. ?\n🥔3. ?"
             }
             
             reminderSummary += "Weekday: \(weekdayName)\n"

@@ -129,55 +129,96 @@ PRE-ALPHA TODOs
     [X] edit task
         clarify color select?
         [X] text all caps
-            
-    BUGS
-        [ ] fix keyboard squishing
-        [ ] make sure position is saved ?
-        [X] position for backlog
-        [ ] message shouldn't display when switching page away from today
-        [ ] notification whitespaace
-        [X] change text "today's priorities"
-            
-    --- PANCAKE BREAK ---
-    
-    [ ] UI
-        [ ] quick drawover / refinement
-            ok to be a bit janky
         
-    [ ] POTATO
-        [ ] resize potato canvas
-        [ ] make cute
-        [ ] animations
-            [ ] talking
-            [ ] waving
-            [ ] dance
-            [ ] one nice celebration with fx
-        [ ] speech
-            [ ] better text
-            [ ] cuter text bubble / font?
-            [ ] decide when to trigger / maybe potato button is just a wave? etc.
-        [ ] fix potato button
-        
-    BUGS
-        [ ] make sure position is saved ?
-        [ ] message shouldn't display when switching page away from today
-        [ ] check notification whitespaace
-    
     --- FRIDAY ---
+
+    [X] POTATO ANIM
+        [X] make cute
+            [X] level 0 :
+            [X] level 1 :)
+            [X] level 2 :D
+            [X] level 3 (chill)
+        [X] procreate animations
+            [X] talking
+            [X] waving
+            [X] dance
+            [X] celebration anim
+ 
+    
+    --- glasses ---
+    --- library ---
+    
+    POTATO ANIM ~ 20min
+        [ ] integrate into test preview
+        [ ] integrate animations into full app
+        [ ] fix potato button
+            [ ] half wave / half anim?
+        [ ] first time today loads, wave
+            
+    POTATO LAYOUT ~ 20min
+        [ ] resize potato canvas
+        [ ] make potato smaller
+        [ ] space for "priorities:" text above day tasks
+        
+    [ ] TASKS ~ 20min
+        [ ] show check mark briefly before potato? just first few times?
+        [ ] backlog filter only 1 color at a time
+        [ ] counters stack potatos vertically and overlapping like bar chart
+    
+    --- run ---
+    --- zouk ---
+        
+    [ ] POTATO SPEECH
+        [ ] better text
+            [ ] simplify - 1 level
+            [ ] curate 30 best phrases
+        [ ] cuter text bubble / font?
+        [ ] decide when to trigger
+            on delay after anim? half of potato button clicks?
+        
+    [ ] INTRO
+        [ ] cleaner images
+        [ ] fix banner safe areas
+        [ ] make launch button cooler and more like add task button
+        [ ] figure something cooler out for year
+            [ ] scrolling potatos?
+    
+    --- SATURDAY ---
+    
+    [ ] BUGS
+        [ ] make sure position is saved
+        [ ] message shouldn't display when switching page away from today?
+        [ ] check notification whitespaace
+        [ ] low priority bugs
+            [ ] badge doesn't update when day changes and app closed
+            [ ] fix keyboard squishing
+            [ ] check today notification not wiped
+        
+        
     
     [ ] NEW USER
         [ ] FRESH_LAUNCH flag
             how to do without data loss?
                 could be a profile which pops up a confirm dialog before wiping data and notifications preferences for freshLaunchUser
+        [ ] fix show intro toggle / button
         [ ] test notifications etc.
         [ ] FORK flag
             [ ] forks tasks from default user
                 [ ] confirm dialog for intial fork, then load/save from forkUser
-            
-    [ ] DATA safety
-        [ ] good long-term plan for versioning / data recovery
 
+    --- SUNDAY ---
+            
     [ ] super basic analytics / crash reporting
+    
+    [ ] tester info
+        [ ] about app
+            [ ] basic images w/ tagline like app store
+        [ ] testing info packet
+            [ ] about app
+                [ ] basic images w/ tagline like app store
+            [ ] framing (want to know first impression etc.)
+            [ ] testflight how-to (screenshots etc.)
+            [ ] tester feedback form
 
 BETA TODOs
     REDESIGN - FIGMA
