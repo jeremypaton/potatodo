@@ -18,14 +18,64 @@ struct PotatoCounterMonth_V: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
+            Spacer()
             HStack {
                 Spacer()
                 Text("TASKS COMPLETED: \(completedTasks)")
-                    .font(.subheadline)
+                    .font(.title3)
                 Spacer()
             }
             .padding(.bottom, 4)
 
+//            // Color count circles row
+//            HStack(spacing: 8) {
+//                Spacer()
+//                ForEach(colorGroups, id: \.0) { color, tasks in
+//                    ZStack {
+//                        Circle()
+//                            .fill(Color.white)
+//                            .overlay(
+//                                Circle()
+//                                    .stroke(TaskStyle.fullColor(for: tasks[0]), lineWidth: 2)
+//                            )
+//                            .frame(width: 32, height: 32)
+//                        Text("\(tasks.count)")
+//                            .font(.system(size: 24, weight: .heavy))
+//                            .foregroundColor(TaskStyle.fullColor(for: tasks[0]))
+//                    }
+//                }
+//                Spacer()
+//            }
+//            .padding(.horizontal, 4)
+//            .padding(.bottom, 8)
+            
+            // Potato grids
+            HStack(spacing: 10) {
+                Spacer()
+                ForEach(colorGroups, id: \.0) { color, tasks in
+                    VStack(spacing: -14) { // 35% overlap (40 * 0.35 = 14)
+                        Spacer() // Push content to bottom
+                        ForEach(tasks.reversed()) { task in // Reverse to show newest on top
+                            ZStack {
+                                Circle()
+                                    .fill(TaskStyle.partialColor(for: task))
+                                    .stroke(Color.black, lineWidth: 1)
+//                                    .border(Color.black, lineWidth: 5)
+                                Text("🥔")
+                                    .font(.system(size: 24))
+                            }
+                            .frame(width: 40, height: 40)
+                            .shadow(radius: 4.0)
+                            
+                        }
+                    }
+//                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                }
+                Spacer()
+            }
+            Spacer()
+            
             // Color count circles row
             HStack(spacing: 8) {
                 Spacer()
@@ -47,34 +97,6 @@ struct PotatoCounterMonth_V: View {
             }
             .padding(.horizontal, 4)
             .padding(.bottom, 8)
-            
-            // Potato grids
-            ForEach(colorGroups, id: \.0) { color, tasks in
-                LazyVGrid(columns: [
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1),
-                    GridItem(.flexible(), spacing: 1)
-                ], spacing: 0) {
-                    ForEach(tasks) { task in
-                        ZStack {
-                            Circle()
-                                .fill(TaskStyle.partialColor(for: task))
-                            Text("🥔")
-                                .font(.system(size: 24))
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    }
-                }
-            }
-            Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.white)
@@ -90,6 +112,8 @@ struct PotatoCounterMonth_V: View {
                 await loadTasks()
             }
         }
+        
+        
     }
 }
 

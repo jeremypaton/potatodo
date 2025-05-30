@@ -25,6 +25,53 @@ struct PotatoCounterWeek_V: View {
             }
 //             Color count circles row
             // Color count circles row
+//            HStack(spacing: 8) {
+//                Spacer()
+//                ForEach(colorGroups, id: \.0) { color, tasks in
+//                    ZStack {
+//                        Circle()
+//                            .fill(Color.white)
+//                            .overlay(
+//                                Circle()
+//                                    .stroke(TaskStyle.fullColor(for: tasks[0]), lineWidth: 2)
+//                            )
+//                            .frame(width: 19, height: 19) // 24 * 0.8 = 19.2
+//                        Text("\(tasks.count)")
+//                            .font(.system(size: 19, weight: .heavy)) // 24 * 0.8 = 19.2
+//                            .foregroundColor(TaskStyle.fullColor(for: tasks[0]))
+//                    }
+//                }
+//                Spacer()
+//            }
+//            .padding(.horizontal, 4)
+//            .padding(.bottom, 8)
+            
+            
+            // Potato grids
+            HStack(spacing: 0) {
+                Spacer()
+
+                ForEach(colorGroups, id: \.0) { color, tasks in
+                    VStack(spacing: -24) { // 35% overlap (40 * 0.35 = 14)
+                        Spacer() // Push content to bottom
+                        ForEach(tasks.reversed()) { task in // Reverse to show newest on top
+                            ZStack {
+                                Circle()
+                                    .fill(TaskStyle.partialColor(for: task))
+                                    .stroke(Color.black, lineWidth: 1)
+                                Text("🥔")
+                                    .font(.system(size: 20))
+                            }
+                            .frame(width: 30, height: 40)
+                            .shadow(radius: 2.0)
+                        }
+                    }
+//                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                }
+                Spacer()
+            }
+            
             HStack(spacing: 8) {
                 Spacer()
                 ForEach(colorGroups, id: \.0) { color, tasks in
@@ -35,38 +82,15 @@ struct PotatoCounterWeek_V: View {
                                 Circle()
                                     .stroke(TaskStyle.fullColor(for: tasks[0]), lineWidth: 2)
                             )
-                            .frame(width: 24, height: 24)
+                            .frame(width: 25, height: 25) // 24 * 0.8 = 19.2
                         Text("\(tasks.count)")
-                            .font(.system(size: 24, weight: .heavy))
+                            .font(.system(size: 19, weight: .heavy)) // 24 * 0.8 = 19.2
                             .foregroundColor(TaskStyle.fullColor(for: tasks[0]))
                     }
                 }
                 Spacer()
             }
             .padding(.horizontal, 4)
-//            .padding(.bottom, 8)
-            
-            
-            // Potato grids
-            LazyVGrid(columns: [
-                GridItem(.flexible(), spacing: 1),
-                GridItem(.flexible(), spacing: 1),
-                GridItem(.flexible(), spacing: 1),
-                GridItem(.flexible(), spacing: 1),
-                GridItem(.flexible(), spacing: 1),
-                GridItem(.flexible(), spacing: 1),
-                GridItem(.flexible(), spacing: 1)
-            ], spacing: 0) {
-                ForEach(sortedTasks) { task in
-                    ZStack {
-                        Circle()
-                            .fill(TaskStyle.partialColor(for: task))
-                        Text("🥔")
-                            .font(.system(size: 20))
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-            }
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
