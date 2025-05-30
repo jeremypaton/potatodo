@@ -342,19 +342,18 @@ class AppManager: ObservableObject {
         
         setLevel(newLevel)
 
-//        if newLevel == 3 {
-            appDataStore.uiState.isCelebrating = true
-            
-            if newLevel == 3 {
-                DispatchQueue.main.async {
-                    self.overlayManager.showPotatoRain(isSinglePotato: false)
-                }
+        appDataStore.uiState.isCelebrating = true
+        
+        if newLevel == 3 {
+            DispatchQueue.main.async {
+                self.overlayManager.showPotatoRain(isSinglePotato: false)
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-                self?.appDataStore.uiState.isCelebrating = false
-                self?.setLevel(newLevel)
-            }
-//        }
+        }
+        let duration = newLevel == 3 ? 3.0 : 1.2
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
+            self?.appDataStore.uiState.isCelebrating = false
+            self?.setLevel(newLevel)
+        }
     }
     
     func potatoWave() {
