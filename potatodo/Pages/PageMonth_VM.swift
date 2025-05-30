@@ -18,14 +18,14 @@ struct PotatoCounterMonth_V: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Spacer()
-            HStack {
-                Spacer()
-                Text("TASKS COMPLETED: \(completedTasks)")
-                    .font(.title3)
-                Spacer()
-            }
-            .padding(.bottom, 4)
+//            Spacer()
+//            HStack {
+//                Spacer()
+//                Text("TASKS COMPLETED: \(completedTasks)")
+//                    .font(.title3)
+//                Spacer()
+//            }
+//            .padding(.bottom, 4)
 
 //            // Color count circles row
 //            HStack(spacing: 8) {
@@ -53,29 +53,38 @@ struct PotatoCounterMonth_V: View {
             HStack(spacing: 10) {
                 Spacer()
                 ForEach(colorGroups, id: \.0) { color, tasks in
-                    VStack(spacing: -14) { // 35% overlap (40 * 0.35 = 14)
-                        Spacer() // Push content to bottom
-                        ForEach(tasks.reversed()) { task in // Reverse to show newest on top
-                            ZStack {
-                                Circle()
-                                    .fill(TaskStyle.partialColor(for: task))
-                                    .stroke(Color.black, lineWidth: 1)
-//                                    .border(Color.black, lineWidth: 5)
-                                Text("🥔")
-                                    .font(.system(size: 24))
+                    HStack(spacing: -20) { // Overlap columns of same color
+                        ForEach(0..<(tasks.count + 6) / 7, id: \.self) { columnIndex in
+                            VStack(spacing: -14) { // 35% overlap (40 * 0.35 = 14)
+                                Spacer() // Push content to bottom
+                                ForEach(tasks.reversed().dropFirst(columnIndex * 7).prefix(7)) { task in
+                                    ZStack {
+                                        Circle()
+                                            .fill(TaskStyle.partialColor(for: task))
+                                            .stroke(Color.black, lineWidth: 1)
+                                        Text("🥔")
+                                            .font(.system(size: 24))
+                                    }
+                                    .frame(width: 40, height: 40)
+                                    .shadow(radius: 4.0)
+                                }
                             }
-                            .frame(width: 40, height: 40)
-                            .shadow(radius: 4.0)
-                            
                         }
                     }
-//                    .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
                 }
                 Spacer()
             }
             Spacer()
             
+            HStack {
+                Spacer()
+                Text("TASKS COMPLETED: \(completedTasks)")
+                    .font(.title3)
+                Spacer()
+            }
+            .padding(.bottom, 4)
+
             // Color count circles row
             HStack(spacing: 8) {
                 Spacer()
