@@ -35,11 +35,12 @@ struct Potato_V: View {
                     .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
                 
                 if appManager.isToday() {
+                    let scale = 0.4
                     if let _ = UIImage(named: currentImageName) {
                         Image(currentImageName)
                             .resizable()
                             .scaledToFit()
-                            .frame(width: (geometry.size.width - 24)*0.5, height: (geometry.size.width - 24)*0.5)
+                            .frame(width: (geometry.size.width - 24)*scale, height: (geometry.size.width - 24)*scale)
 //                            .overlay(
 //                                RoundedRectangle(cornerRadius: 12)
 //                                    .stroke(Color.gray.opacity(0.3), lineWidth: 3)

@@ -181,41 +181,35 @@ PRE-ALPHA TODOs
         [ ] make launch button cooler and more like add task button
         [ ] figure something cooler out for year
             [ ] scrolling potatos?
+            
+    [ ] update icon - 2 min
     
-    --- zouk ---
-
-    [ ] BUGS
-        [ ] make sure position is saved
-        [ ] message shouldn't display when switching page away from today?
-        [ ] check notification whitespaace
+    [ ] BUGS - 10min
+        [ ] make sure position is saved / loaded well
+        [X] check notification whitespaace
         [ ] low priority bugs
+            [ ] message shouldn't display when switching page away from today?
             [ ] badge doesn't update when day changes and app closed
             [ ] fix keyboard squishing
             [ ] check today notification not wiped
+            
+    [ ] backup my data - 5min
+        [ ] new backup reload button
         
-    --- SATURDAY ---
-    
-    [ ] backup my data
-        
-    [ ] NEW USER
+    [ ] NEW USER - 30min
         [ ] FRESH_LAUNCH flag
             how to do without data loss?
                 could be a profile which pops up a confirm dialog before wiping data and notifications preferences for freshLaunchUser
         [ ] fix show intro toggle / button
-        [ ] test notifications etc.
-        [ ] FORK flag
-            [ ] forks tasks from default user
-                [ ] confirm dialog for intial fork, then load/save from forkUser
-                
-    [ ] data recovery plan
+        [ ] test notifications, intro etc.
+ 
+    [ ] data recovery plan - 10min
     
-    [ ] super basic analytics / crash reporting
+    [ ] super basic analytics / crash reporting - 2hr
         firebase?
     
-    --- SUNDAY ---
+    --- SATURDAY ---
     
-    
-
     [ ] tester info
         [ ] about app
             [ ] basic images w/ tagline like app store
@@ -225,16 +219,24 @@ PRE-ALPHA TODOs
             [ ] framing (want to know first impression etc.)
             [ ] testflight how-to (screenshots etc.)
             [ ] tester feedback form
+            
+    ---
+    
+    figure out
+        [ ] space on day pages
+                affirmations / potato wisdom etc.?
+        [ ] compact backlog view?
 
 BETA TODOs
     REDESIGN - FIGMA
     ANIMATE - SVGs
     ENGINEER - FLUTTER (or reactnative?)
     
-    
-
-
-
+    [ ] FORK flag
+        [ ] forks tasks from default user
+            [ ] confirm dialog for intial fork, then load/save from forkUser\
+    [ ] profiles with max tasks, max empty tasks etc. for debugging
+    [ ] configs for different profiles eg. defaultUser without -o
 
 
 

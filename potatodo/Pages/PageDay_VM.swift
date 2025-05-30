@@ -28,7 +28,7 @@ struct PageDay_VM: View {
             Potato_V(appManager: appManager).padding(.bottom,10)
             VStack {
                 Spacer()
-                Text("PRIORITIES").font(.title3).underline(true, color: Color.black)
+                Text("DAY PRIORITIES:").font(.title3).underline(false, color: Color.black)
                 }
         }
 //            Potato_V(appManager: appManager).padding(.bottom,10)
