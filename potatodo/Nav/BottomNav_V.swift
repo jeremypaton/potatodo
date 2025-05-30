@@ -17,7 +17,7 @@ struct BottomNav_V: View {
                 Spacer()
                 // Backlog button
                 Button(action: {
-                    navManager.setPage(.backlog)
+                    appManager.setPage(.backlog)
                 }) {
                     Image(systemName: "list.bullet")
                         .font(.system(size: 30))
@@ -27,7 +27,7 @@ struct BottomNav_V: View {
                 
                 // Week button
                 Button(action: {
-                    navManager.setPage(.week)
+                    appManager.setPage(.week)
                 }) {
                     Text("W")
                         .font(.system(size: 30, weight: .bold))
@@ -43,7 +43,7 @@ struct BottomNav_V: View {
 
                 // Month button
                 Button(action: {
-                    navManager.setPage(.month)
+                    appManager.setPage(.month)
                 }) {
                     Text("M")
                         .font(.system(size: 30, weight: .bold))
@@ -53,7 +53,7 @@ struct BottomNav_V: View {
                 
                 // Settings button
                 Button(action: {
-                    navManager.setPage(.settings)
+                    appManager.setPage(.settings)
                 }) {
                     Image(systemName: "gear")
                         .font(.system(size: 30))

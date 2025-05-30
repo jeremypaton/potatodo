@@ -352,8 +352,16 @@ class AppManager: ObservableObject {
         let duration = newLevel == 3 ? 2.5 : 1.2
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
             self?.appDataStore.uiState.isCelebrating = false
-            self?.setLevel(newLevel)
+//            self?.setLevel(newLevel)
+            
+            self?.potatoTalk()
         }
+        
+//        let speakDuration = 2.0
+//        DispatchQueue.main.asyncAfter(deadline: .now() + speakDuration) { [weak self] in
+//            self?.appDataStore.uiState.isTalking = false
+////            self?.setLevel(newLevel)
+//        }
     }
     
     func potatoWave() {
@@ -365,7 +373,7 @@ class AppManager: ObservableObject {
     
     func potatoTalk() {
         appDataStore.uiState.isTalking = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
             self?.appDataStore.uiState.isTalking = false
         }
     }
@@ -473,6 +481,7 @@ class AppManager: ObservableObject {
     
     func setDate(_ date : Date){
         navManager.setDate(date)
+        potatoReset()
     }
     
     func getCurrentDate() -> Date {
@@ -481,6 +490,7 @@ class AppManager: ObservableObject {
     
     func setInterval(_ interval: DateInterval){
         navManager.setInterval(interval)
+        potatoReset()
     }
     
     func getWeekStart() -> Date {
@@ -493,6 +503,18 @@ class AppManager: ObservableObject {
     
     func getCurrentPage() -> PageType {
         return navManager.currentPage
+    }
+    
+    func setPage(_ page: PageType) {
+        navManager.setPage(page)
+        potatoReset()
+    }
+    
+    func potatoReset() {
+        appDataStore.uiState.isCelebrating = false
+        appDataStore.uiState.isWaving = false
+        appDataStore.uiState.isTalking = false
+        messageManager.clear()
     }
     
     func requestPermissions() {

@@ -8,9 +8,9 @@ struct Message_V: View {
         if messageManager.isShowingMessage {
             VStack {
                 Text(messageManager.displayedText)
-                    .font(.system(size: 26, weight: .light))
+                    .font(.system(size: 20, weight: .light))
                     .multilineTextAlignment(.center)
-                    .padding(12)
+                    .padding(6)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
                             .fill(Color(.systemGray6))

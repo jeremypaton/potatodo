@@ -76,7 +76,7 @@ struct PotatoCounterWeek_V: View {
             
             HStack {
                  Spacer()
-                 Text("TASKS COMPLETED: \(completedTasks)")
+                 Text("COMPLETED: \(completedTasks)")
                      .font(.subheadline)
                  Spacer()
              }

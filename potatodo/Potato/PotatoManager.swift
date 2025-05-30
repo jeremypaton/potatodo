@@ -11,7 +11,6 @@ class PotatoManager: ObservableObject {
     
     init() {
         self.messageManager = MessageManager()
-        self.messageManager.loadMessages()
     }
     
     func showRandomMessageForLevel(level: Int) {

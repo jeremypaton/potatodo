@@ -162,17 +162,16 @@ PRE-ALPHA TODOs
         [X] show check mark briefly before potato? just first few times?
         [X] backlog filter only 1 color at a time
         [X] counters stack potatos vertically and overlapping like bar chart
-    
-    --- run ---
-        
+            
     [X] fix counter overflow
     
-    [ ] POTATO SPEECH - 15min
-        [ ] better text
-            [ ] simplify - 1 level
-            [ ] curate 30 best phrases
-        [ ] cuter text bubble / font?
-        [ ] decide when to trigger
+    --- run ---
+
+    [X] POTATO SPEECH - 15min
+        [X] better text
+            [X] curate ~5 best phrases per level
+        [X] cuter text bubble / font?
+        [X] decide when to trigger
             on delay after anim? half of potato button clicks?
         
     [ ] INTRO - 15min
@@ -182,9 +181,11 @@ PRE-ALPHA TODOs
         [ ] figure something cooler out for year
             [ ] scrolling potatos?
             
-    [ ] update icon - 2 min
+    [X] update icon - 2 min
     
     [ ] BUGS - 10min
+        [ ] dances when navigating back to day page
+        [ ] goes to level 3 celebrate when pressing potato button
         [ ] make sure position is saved / loaded well
         [X] check notification whitespaace
         [ ] low priority bugs
@@ -195,6 +196,10 @@ PRE-ALPHA TODOs
             
     [ ] backup my data - 5min
         [ ] new backup reload button
+        
+    ----
+    
+    [ ] make the test user data awesome (replace with json?) demoUser?
         
     [ ] NEW USER - 30min
         [ ] FRESH_LAUNCH flag
@@ -209,6 +214,8 @@ PRE-ALPHA TODOs
         firebase?
     
     --- SATURDAY ---
+    
+    [ ] record demo / progress video
     
     [ ] tester info
         [ ] about app
@@ -236,20 +243,8 @@ BETA TODOs
         [ ] forks tasks from default user
             [ ] confirm dialog for intial fork, then load/save from forkUser\
     [ ] profiles with max tasks, max empty tasks etc. for debugging
+        [ ] an excellent demo profile (well thought out task names etc.)
     [ ] configs for different profiles eg. defaultUser without -o
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 v0.2.0 - UI layout

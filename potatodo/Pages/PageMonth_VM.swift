@@ -79,7 +79,7 @@ struct PotatoCounterMonth_V: View {
             
             HStack {
                 Spacer()
-                Text("TASKS COMPLETED: \(completedTasks)")
+                Text("PRIORITIES COMPLETED: \(completedTasks)")
                     .font(.title3)
                 Spacer()
             }
@@ -229,7 +229,7 @@ struct PageMonth_VM: View {
         return Button(action: {
             appManager.setDate(date)
             appManager.setInterval(.day)
-            appManager.getNavManagerForNavView().setPage(.day)
+            appManager.setPage(.day)
         }) {
             ZStack {
                 // Task bars
