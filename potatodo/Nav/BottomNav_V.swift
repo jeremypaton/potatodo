@@ -2,10 +2,12 @@ import SwiftUI
 
 struct BottomNav_V: View {
     @ObservedObject var navManager: NavManager
+    @ObservedObject var appManager: AppManager
     var onPotatoClick: () -> Void = {}
     
     init(appManager: AppManager){
         self.navManager = appManager.getNavManagerForNavView()
+        self.appManager = appManager
     }
     
     
@@ -65,6 +67,7 @@ struct BottomNav_V: View {
             Button(action: {
                 navManager.setPage(.day)
                 navManager.moveToToday()
+                appManager.potatoWave()
                 onPotatoClick()
             }) {
                 Text("🥔")

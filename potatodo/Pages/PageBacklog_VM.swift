@@ -3,7 +3,7 @@ import SwiftUI
 struct PageBacklog_VM: View {
     @ObservedObject var appManager: AppManager
     @State private var filterOption: FilterOption = .incomplete
-    @State private var selectedColors: Set<TaskColor> = []
+    @State private var selectedColor: TaskColor? = nil
     
     enum FilterOption: String, CaseIterable {
         case all = "All"
@@ -22,12 +22,11 @@ struct PageBacklog_VM: View {
             unscheduled.filter { $0.isCompleted }
         }
         
-        // If no colors are selected, show all colors
-        let colorFiltered = if selectedColors.isEmpty {
-            statusFiltered
+        // If no color is selected, show all colors
+        let colorFiltered = if let color = selectedColor {
+            statusFiltered.filter { $0.color == color }
         } else {
-            // Otherwise filter by selected colors
-            statusFiltered.filter { selectedColors.contains($0.color) }
+            statusFiltered
         }
         
         // Sort by position without modifying the tasks
@@ -61,16 +60,16 @@ struct PageBacklog_VM: View {
             HStack(spacing: 0) {
                 ForEach([TaskColor.green, .blue, .yellow, .purple, .red, .gray], id: \.self) { color in
                     Button {
-                        if selectedColors.contains(color) {
-                            selectedColors.remove(color)
+                        if selectedColor == color {
+                            selectedColor = nil
                         } else {
-                            selectedColors.insert(color)
+                            selectedColor = color
                         }
                     } label: {
                         Image(systemName: "star.fill")
                             .foregroundColor(TaskStyle.fullColor(for: Task(title: "", color: color)))
                             .font(.system(size: 32))
-                            .opacity(selectedColors.contains(color) ? 1.0 : 0.3)
+                            .opacity(selectedColor == color ? 1.0 : 0.3)
                             .frame(maxWidth: .infinity)
                     }
                 }

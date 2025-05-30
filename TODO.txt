@@ -149,20 +149,18 @@ PRE-ALPHA TODOs
     --- library ---
     
     POTATO ANIM ~ 20min
-        [ ] integrate into test preview
-        [ ] integrate animations into full app
-        [ ] fix potato button
-            [ ] half wave / half anim?
-        [ ] first time today loads, wave
+        [X] integrate into test preview
+        [X] integrate animations into full app
+        [X] fix potato button to wave
             
     POTATO LAYOUT ~ 20min
-        [ ] resize potato canvas
-        [ ] make potato smaller
-        [ ] space for "priorities:" text above day tasks
+        [X] resize potato canvas
+        [X] make potato smaller
+        [X] space for "priorities:" text above day tasks
         
     [ ] TASKS ~ 20min
-        [ ] show check mark briefly before potato? just first few times?
-        [ ] backlog filter only 1 color at a time
+        [X] show check mark briefly before potato? just first few times?
+        [X] backlog filter only 1 color at a time
         [ ] counters stack potatos vertically and overlapping like bar chart
     
     --- run ---

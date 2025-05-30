@@ -24,7 +24,14 @@ struct PageDay_VM: View {
         TopNav_V(appManager: appManager)
         
 //        if appManager.isToday() {
+        ZStack {
             Potato_V(appManager: appManager).padding(.bottom,10)
+            VStack {
+                Spacer()
+                Text("PRIORITIES").font(.title3).underline(true, color: Color.black)
+                }
+        }
+//            Potato_V(appManager: appManager).padding(.bottom,10)
 //        }
 
         VStack {

@@ -105,6 +105,7 @@ struct Task_V: View {
     @ObservedObject var task: Task
     let isCompact: Bool
     @State private var isTargeted = false
+    @State private var showCheckmark = false
     
     init(appManager: AppManager, task: Task, isCompact: Bool, isTargeted: Bool = false) {
         self.appManager = appManager
@@ -149,6 +150,10 @@ struct Task_V: View {
                 Button {
                     task.toggleCompletion()
                     if task.isCompleted {
+                        showCheckmark = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            showCheckmark = false
+                        }
                         appManager.celebrateTaskComplete()
                     }
                 } label: {
@@ -158,15 +163,24 @@ struct Task_V: View {
                             .frame(width: style.circleSize, height: style.circleSize)
                             .shadow(color: Color.black.opacity(0.2), radius: style.shadowRadius, x: 0, y: 1)
                         if task.isCompleted {
-                            Text("🥔")
-                                .font(.system(size: style.fontSize*1.1, weight: .medium))
-                                .shadow(color: Color.black.opacity(0.3), radius: style.shadowRadius*2, x: 0, y: 1)
+                            if showCheckmark {
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: style.fontSize, weight: .bold))
+                                    .foregroundColor(TaskStyle.fullColor(for: task))
+                                    .transition(.opacity)
+                            } else {
+                                Text("🥔")
+                                    .font(.system(size: style.fontSize*1.2, weight: .medium))
+                                    .shadow(color: Color.black.opacity(0.3), radius: style.shadowRadius*2, x: 0, y: 1)
+                                    .transition(.opacity)
+                            }
                         }
                     }
                 }
                 .buttonStyle(PlainButtonStyle())
                 .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in })
                 .frame(width: style.circleSize)
+                .animation(.easeInOut(duration: 0.5), value: showCheckmark)
             }
             .padding(style.padding)
 //            .frame(height: style.height)

@@ -349,7 +349,7 @@ class AppManager: ObservableObject {
                 self.overlayManager.showPotatoRain(isSinglePotato: false)
             }
         }
-        let duration = newLevel == 3 ? 3.0 : 1.2
+        let duration = newLevel == 3 ? 2.5 : 1.2
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
             self?.appDataStore.uiState.isCelebrating = false
             self?.setLevel(newLevel)
