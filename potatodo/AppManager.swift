@@ -116,6 +116,8 @@ extension UserDefaults {
 class UIState: ObservableObject {
     @Published fileprivate(set) var level: Int = 0
     @Published fileprivate(set) var isCelebrating: Bool = false
+    @Published fileprivate(set) var isWaving: Bool = false
+    @Published fileprivate(set) var isTalking: Bool = false
     @Published fileprivate(set) var showSplash = true
     @Published fileprivate(set) var showDebugView = false
     
@@ -127,6 +129,12 @@ class UIState: ObservableObject {
             .sink { [weak self] _ in self?.objectWillChange.send() }
             .store(in: &cancellables)
         $isCelebrating
+            .sink { [weak self] _ in self?.objectWillChange.send() }
+            .store(in: &cancellables)
+        $isWaving
+            .sink { [weak self] _ in self?.objectWillChange.send() }
+            .store(in: &cancellables)
+        $isTalking
             .sink { [weak self] _ in self?.objectWillChange.send() }
             .store(in: &cancellables)
         $showSplash
@@ -321,6 +329,10 @@ class AppManager: ObservableObject {
             .store(in: &cancellables)
     }
     
+    
+    func getLevel() -> Int{
+        return appDataStore.uiState.level
+    }
     func setLevel(_ newLevel: Int) {
         appDataStore.uiState.level = newLevel
     }
@@ -328,17 +340,34 @@ class AppManager: ObservableObject {
     func celebrateLevel(_ newLevel: Int) {
         messageManager.showMessageForCompletionLevel(newLevel)
         
-        if newLevel == 3 {
+        setLevel(newLevel)
+
+//        if newLevel == 3 {
             appDataStore.uiState.isCelebrating = true
-            DispatchQueue.main.async {
-                self.overlayManager.showPotatoRain(isSinglePotato: false)
+            
+            if newLevel == 3 {
+                DispatchQueue.main.async {
+                    self.overlayManager.showPotatoRain(isSinglePotato: false)
+                }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
                 self?.appDataStore.uiState.isCelebrating = false
                 self?.setLevel(newLevel)
             }
-        } else {
-            setLevel(newLevel)
+//        }
+    }
+    
+    func potatoWave() {
+        appDataStore.uiState.isWaving = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.appDataStore.uiState.isWaving = false
+        }
+    }
+    
+    func potatoTalk() {
+        appDataStore.uiState.isTalking = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.appDataStore.uiState.isTalking = false
         }
     }
     
