@@ -188,53 +188,127 @@ PRE-ALPHA TODOs
     [X] backup my data - 5min
         [PASS] new backup reload button
         
-    ----
-    
-    [ ] BUGS - 10min
-        [ ] celebrates when navigating back to day page
-        [ ] goes to level 3 celebrate when pressing potato button
-        [ ] make sure position is saved / loaded well
-        [ ] low priority bugs
-            [ ] message shouldn't display when switching page away from today?
-            [ ] badge doesn't update when day changes and app closed
-            [ ] fix keyboard squishing
-            [ ] check today notification not wiped
-    
-    [ ] make the test user data awesome (replace with json?) demoUser?
-        
-    [ ] NEW USER - 30min
-        [ ] FRESH_LAUNCH flag
-            how to do without data loss?
-                could be a profile which pops up a confirm dialog before wiping data and notifications preferences for freshLaunchUser
-        [ ] fix show intro toggle / button
-        [ ] test notifications, intro etc.
- 
-    [ ] data recovery plan - 10min
-    
-    [ ] super basic analytics / crash reporting - 2hr
-        firebase?
-    
     --- SATURDAY ---
+    1hr
+        
+    [X] fix show intro toggle and make it button
+      
+    [X] make debug settings clearly for debugging
+    
+    [X] add notification setting status to settings page
+            UNUserNotificationCenter.current().getNotificationSettings().authorizationStatus
+
+    [X] BUGS - 10min
+        [PASS] celebrates when navigating back to day page
+        [X] goes to level 3 celebrate when pressing potato button
+        [PASS] low priority bugs
+            [PASS] message shouldn't display when switching page away from today?
+            [PASS] badge doesn't update when day changes and app closed
+            [PASS] fix keyboard squishing
+            
+    [ ] make sure position is saved / loaded well
+    [PASS] check today notification not wiped
+
+    ---
+    1hr
+    
+    [PASS] data recovery plan - 10min
+    
+    [PASS] super basic analytics / crash reporting - 45min
+        firebase?
+            
+    [X]] create a full release build without debug features/settings - 15min
+        [X] test notifications + intro
+            use Device → Erase All Content and Settings
+            
+    --- SUNDAY ALPHA DAY! ---
+    
+    20min
+            
+    [X] notification prompt on second load
+    
+    [X] no message on non-today pages
+    
+    [X] single potato on first launch
+    
+    [X] fx behind potato for celebrate
+          
+    [PASS] update intro screenshots with better today data
+    
+    ---
+    go for walk
+    ---
+    
+    30min
+    
+    [ ] basic analytics
+        > page views
+        > task actions
+        > drag n drop
+        > num tasks
+        etc ?
+
+    prep for testers
+    
+    [X] call for help
+    
+    [ ] forms
+        [X] tester sign up form
+        [ ] tester feedback forms
+            [ ] first impression
+            [ ] 1 week follow-up
+        
+    [ ] official ALPHA build
+        [ ] feedback links in settings
+        
+    ---
+    go for run
+    ---
+    
+    30min
     
     [ ] record demo / progress video
     
-    [ ] tester info
+    [ ] tester info packet (1 pager)
         [ ] about app
             [ ] basic images w/ tagline like app store
-        [ ] testing info packet
-            [ ] about app
-                [ ] basic images w/ tagline like app store
-            [ ] framing (want to know first impression etc.)
-            [ ] testflight how-to (screenshots etc.)
-            [ ] tester feedback form
+            [ ] stage of development / timeline
+        [ ] feedback
+            [ ] goals
+            [ ] how-to
+                [ ] testflight screenshots etc.
+                [ ] form
+                [ ] talk to me
             
+    WAVES
+        [ ] mon morning - broski
+        [ ] mon evening - will / weiwei
+        [ ] wed - everyone else
+        
     ---
+    
+    [ ] make the test user data awesome (replace with json?) demoUser? - 20min
+
+    [ ] teasers
+        [ ] web
+            [ ] make super appealing so people want to help / team up
+                [ ] call for help / be vulnerable
+            [ ] progress chart
+                MVP (MAY) -> ALPHA (JUNE) -> BETA (JULY) -> EARLY ACCESS (AUGUST) -> PUBLIC LAUNCH (SEPTEMBER)
+                [ ] motivate signing up with email
+            [ ] fwd to links?
+                [ ] early access
+                [ ] social media
+        [ ] social media
+            [ ] instagram
+            [ ] tiktok
+
     
     figure out
         [ ] space on day pages
                 affirmations / potato wisdom etc.?
         [ ] compact backlog view?
-
+        
 BETA TODOs
     REDESIGN - FIGMA
     ANIMATE - SVGs

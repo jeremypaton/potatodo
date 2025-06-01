@@ -38,7 +38,7 @@ class MessageManager: ObservableObject {
 //        print("🎯 Selected message: \(message)")
         
         // Add 1.5 second delay before showing message and starting animation
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             
             // Show message bubble and start animation

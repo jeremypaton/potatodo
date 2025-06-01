@@ -2,7 +2,6 @@ import SwiftUI
 
 struct PageDay_VM: View {
     @ObservedObject var appManager: AppManager
-
     @State private var previousCompletedCount = 0
     
     private var tasksForCurrentDay: [Task] {
@@ -23,16 +22,13 @@ struct PageDay_VM: View {
     var body: some View {
         TopNav_V(appManager: appManager)
         
-//        if appManager.isToday() {
         ZStack {
             Potato_V(appManager: appManager).padding(.bottom,10)
             VStack {
                 Spacer()
                 Text("DAY PRIORITIES:").font(.title3).underline(false, color: Color.black)
-                }
+            }
         }
-//            Potato_V(appManager: appManager).padding(.bottom,10)
-//        }
 
         VStack {
             VStack(spacing: 10) {
@@ -52,8 +48,8 @@ struct PageDay_VM: View {
             // Update potato level based on completed tasks
             appManager.setLevel(newCount)
             
-            // Celebrate if we've completed more tasks than before
-            if newCount > oldCount {
+            // Only celebrate if we've completed more tasks than before AND we're not just initializing
+            if newCount > oldCount {//}&& oldCount != 0 {
                 appManager.celebrateLevel(newCount)
             }
             
@@ -61,9 +57,10 @@ struct PageDay_VM: View {
             previousCompletedCount = newCount
         }
         .onAppear {
-            // Initialize previous count and set initial level
+            // Initialize previous count and set initial level without celebration
             previousCompletedCount = completedTasksCount
             appManager.setLevel(completedTasksCount)
+            appManager.potatoWave()
         }
     }
 }

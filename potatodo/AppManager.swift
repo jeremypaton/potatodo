@@ -340,8 +340,6 @@ class AppManager: ObservableObject {
     func celebrateLevel(_ newLevel: Int) {
         messageManager.showMessageForCompletionLevel(newLevel)
         
-        setLevel(newLevel)
-
         appDataStore.uiState.isCelebrating = true
         
         if newLevel == 3 {
@@ -352,16 +350,8 @@ class AppManager: ObservableObject {
         let duration = newLevel == 3 ? 2.5 : 1.2
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
             self?.appDataStore.uiState.isCelebrating = false
-//            self?.setLevel(newLevel)
-            
             self?.potatoTalk()
         }
-        
-//        let speakDuration = 2.0
-//        DispatchQueue.main.asyncAfter(deadline: .now() + speakDuration) { [weak self] in
-//            self?.appDataStore.uiState.isTalking = false
-////            self?.setLevel(newLevel)
-//        }
     }
     
     func potatoWave() {
@@ -517,8 +507,8 @@ class AppManager: ObservableObject {
         messageManager.clear()
     }
     
-    func requestPermissions() {
-        //TODO
+    func requestPermissions() async {
+        _ = await ReminderUtils.requestPermissions()
     }
     
     func showTaskEdit(task: Task){

@@ -8,6 +8,7 @@ struct Potato_V: View {
     @State private var danceFrame = 1
     @State private var waveFrame = 1
     @State private var talkFrame = 1
+    @State private var goldBackgroundOpacity = 0.0
 
     private var currentImageName: String {
         if appManager.appDataStore.uiState.isCelebrating {
@@ -34,6 +35,15 @@ struct Potato_V: View {
                     .cornerRadius(12)
                     .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
                 
+                // Gold background effect
+                if appManager.appDataStore.uiState.isCelebrating && appManager.appDataStore.uiState.level == 3{
+                    Rectangle()
+                        .fill(Color.yellow.opacity(0.8))
+                        .frame(width: geometry.size.width - 4, height: geometry.size.width - 4)
+                        .cornerRadius(12)
+                        .opacity(goldBackgroundOpacity)
+                }
+                
                 if appManager.isToday() {
                     let scale = 0.4
                     if let _ = UIImage(named: currentImageName) {
@@ -49,12 +59,18 @@ struct Potato_V: View {
                         Text("Image not found: \(currentImageName)")
                             .foregroundColor(.red)
                     }
+                    
+                    VStack {
+                                        Message_V(messageManager: appManager.getMessageManagerForMessageView())
+                                            .padding(.top, geometry.size.width * 0.1)
+                                        Spacer()
+                                    }
                 }
-                VStack {
-                    Message_V(messageManager: appManager.getMessageManagerForMessageView())
-                        .padding(.top, geometry.size.width * 0.2)
-                    Spacer()
-                }
+//                VStack {
+//                    Message_V(messageManager: appManager.getMessageManagerForMessageView())
+//                        .padding(.top, geometry.size.width * 0.1)
+//                    Spacer()
+//                }
             }
         }
         .frame(height: UIScreen.main.bounds.width - 24)
@@ -62,6 +78,14 @@ struct Potato_V: View {
             if isCelebrating {
                 celebrationFrame = 1
                 danceFrame = 1
+                // Animate gold background
+//                withAnimation(.easeIn(duration: 1.5)) {
+//                    goldBackgroundOpacity = 1.0
+//                }
+                goldBackgroundOpacity = 1.0
+                withAnimation(.spring(duration: 2.5)) {
+                    goldBackgroundOpacity = 0.0
+                }
                 if appManager.appDataStore.uiState.level == 3 {
                     animateCelebration()
                 } else {
@@ -70,6 +94,10 @@ struct Potato_V: View {
             } else {
                 celebrationFrame = 1
                 danceFrame = 1
+                // Fade out gold background
+                withAnimation(.easeOut(duration: 0.5)) {
+                    goldBackgroundOpacity = 0.0
+                }
             }
         }
         .onChange(of: appManager.appDataStore.uiState.isWaving) { isWaving in

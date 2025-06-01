@@ -18,19 +18,24 @@ struct Main: View {
         ZStack {
             if appManager.shouldShowIntro() {
                 PageIntro(appManager: appManager)
-                    .onAppear {
-                        appManager.requestPermissions()
-                    }
+//                    .onAppear {
+////                        _Concurrency.Task {
+////                            await appManager.requestPermissions()
+////                        }
+//                    }
             } else if appManager.appDataStore.uiState.showSplash {
                 Splash(appManager: appManager)
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
                             withAnimation {
                                 appManager.endSplash()
-                                appManager.requestPermissions()
+                                _Concurrency.Task {
+                                    await appManager.requestPermissions()
+                                }
                             }
                         }
                     }
+                // ask f
             } else {
                 PageManager(
                     appManager: appManager

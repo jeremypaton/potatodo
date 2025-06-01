@@ -1,9 +1,17 @@
 import SwiftUI
+import UserNotifications
 
 struct PageSettings_VM: View {
     @ObservedObject var appManager: AppManager
     @State private var notificationTime = Date()
     @State private var selectedBadgeCount = 0
+    @State private var selectedTab: SettingsTab = .main
+    @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
+    
+    enum SettingsTab: String, CaseIterable {
+        case main = "Main"
+        case debug = "Debug"
+    }
     
     var version: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "N/A"
@@ -14,19 +22,43 @@ struct PageSettings_VM: View {
     }
     
     var body: some View {
-        Form {
-            Section(header: Text("About")) {
-                Text("Version: \(version)")
-                Text("Build: \(build)")
-                #if DEBUG
-                Text("Config: DEBUG")
-                #elseif TEST
-                Text("Config: TEST")
-                #else
-                Text("Config: RELEASE")
-                #endif
+        VStack(spacing: 0) {
+            // Title and Subtitle
+            VStack(spacing: 4) {
+                Text("SETTINGS")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .background(Color.clear)
+                Text("app preferences")
+                    .font(.headline)
+                    .foregroundColor(.gray)
             }
+            .padding(10)
             
+            // Tab Picker
+            Picker("Settings Tab", selection: $selectedTab) {
+                ForEach(SettingsTab.allCases, id: \.self) { tab in
+                    Text(tab.rawValue).tag(tab)
+                }
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding(.horizontal)
+            
+            // Content based on selected tab
+            if selectedTab == .main {
+                mainSettingsView
+            } else {
+                debugSettingsView
+            }
+        }
+        .task {
+            let settings = await UNUserNotificationCenter.current().notificationSettings()
+            notificationStatus = settings.authorizationStatus
+        }
+    }
+    
+    var mainSettingsView: some View {
+        Form {
             Section(header: Text("Notifications")) {
                 Toggle("Enable Notifications", isOn: Binding(
                     get: { appManager.appDataStore.userSettings.notificationsEnabled },
@@ -72,18 +104,40 @@ struct PageSettings_VM: View {
                              ),
                              displayedComponents: .hourAndMinute)
                 }
-                
-//                Picker("Badge Count", selection: $selectedBadgeCount) {
-//                    Text("0").tag(0)
-//                    Text("1").tag(1)
-//                    Text("2").tag(2)
-//                    Text("3").tag(3)
-//                    Text("4").tag(4)
-//                    Text("5").tag(5)
-//                }
-//                .onChange(of: selectedBadgeCount) { oldValue, newValue in
-//                    ReminderUtils.setBadgeCount(newValue)
-//                }
+            }
+            
+            Section("Intro") {
+                Button("Replay Intro") {
+                    appManager.setShowIntro(true)
+                }
+            }
+        }
+    }
+    
+    func string(from status: UNAuthorizationStatus) -> String {
+        switch status {
+        case .notDetermined: return "Not Determined"
+        case .denied: return "Denied"
+        case .authorized: return "Authorized"
+        case .provisional: return "Provisional"
+        case .ephemeral: return "Ephemeral"
+        @unknown default: return "Unknown"
+        }
+    }
+    
+    var debugSettingsView: some View {
+        Form {
+            Section(header: Text("About")) {
+                Text("Version: \(version)")
+                Text("Build: \(build)")
+                #if DEBUG
+                Text("Config: DEBUG")
+                #elseif TEST
+                Text("Config: TEST")
+                #else
+                Text("Config: RELEASE")
+                #endif
+                Text("notificationStatus: \(string(from:notificationStatus))")
             }
             
             Section(header: Text("Profile")) {
@@ -99,25 +153,6 @@ struct PageSettings_VM: View {
                 }
                 .pickerStyle(MenuPickerStyle())
             }
-            
-            Section(header: Text("Intro")) {
-                Toggle("Show Intro", isOn: Binding(
-                    get: { appManager.appDataStore.userSettings.showIntro },
-                    set: { newValue in
-                        appManager.setShowIntro(newValue)
-                    }
-                ))
-                
-                if appManager.appDataStore.userSettings.newUser {
-                    Text("New User: Yes")
-                        .foregroundColor(.gray)
-                }
-            }
-        }
-        .onAppear {
-            notificationTime = appManager.appDataStore.userSettings.notificationTime
-            // Initialize badge count picker with current value
-            selectedBadgeCount = UIApplication.shared.applicationIconBadgeNumber
         }
     }
 }

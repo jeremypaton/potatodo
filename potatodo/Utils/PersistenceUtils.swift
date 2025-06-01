@@ -173,24 +173,49 @@ struct PersistenceUtils {
         }
     }
     
-    /// Ensures all tasks have correct positions grouped by date, then undated
+    /// Ensures all tasks have valid positions grouped by date, then undated
+    /// Only fixes positions if they are invalid (gaps, duplicates, or out of order)
     static func fixTaskPositions(_ tasks: [Task]) {
         let calendar = Calendar.current
+        
         // First handle tasks with dates
         let datedTasks = tasks.filter { $0.date != nil }
         let tasksByDate = Dictionary(grouping: datedTasks) { task in
             calendar.startOfDay(for: task.date!)
         }
+        
         // Fix positions for each date group
         for (_, dateTasks) in tasksByDate {
-            for (index, task) in dateTasks.enumerated() {
-                task.setPosition(index)
+            // Sort by current position to check for validity
+            let sortedTasks = dateTasks.sorted { $0.position < $1.position }
+            
+            // Check if positions are valid (sequential, no gaps, no duplicates)
+            let positions = Set(sortedTasks.map { $0.position })
+            let expectedPositions = Set(0..<sortedTasks.count)
+            
+            // Only fix if positions are invalid
+            if positions != expectedPositions {
+                // Fix positions while preserving relative order
+                for (index, task) in sortedTasks.enumerated() {
+                    task.setPosition(index)
+                }
             }
         }
+        
         // Then handle tasks without dates
         let undatedTasks = tasks.filter { $0.date == nil }
-        for (index, task) in undatedTasks.enumerated() {
-            task.setPosition(index)
+        let sortedUndatedTasks = undatedTasks.sorted { $0.position < $1.position }
+        
+        // Check if undated positions are valid
+        let undatedPositions = Set(sortedUndatedTasks.map { $0.position })
+        let expectedUndatedPositions = Set(0..<sortedUndatedTasks.count)
+        
+        // Only fix if positions are invalid
+        if undatedPositions != expectedUndatedPositions {
+            // Fix positions while preserving relative order
+            for (index, task) in sortedUndatedTasks.enumerated() {
+                task.setPosition(index)
+            }
         }
     }
     
