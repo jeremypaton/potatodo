@@ -222,6 +222,7 @@ struct TaskDropDelegate: DropDelegate {
                 
                 // Swap the tasks
                 Task.swapTasks(draggedTask, targetTask)
+                FirebaseManager.shared.trackSwapTask()
                 
                 // Force an update of the task list to trigger UI refresh
                 self.appManager.objectWillChange.send()

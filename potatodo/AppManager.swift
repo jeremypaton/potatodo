@@ -305,6 +305,9 @@ class AppManager: ObservableObject {
         
         self.messageManager = potatoManager.messageManager
         
+        // Initialize Firebase
+        _ = FirebaseManager.shared
+        
         // Observe all manager changes
         observeManagerChanges()
         
@@ -379,9 +382,17 @@ class AppManager: ObservableObject {
     
     // BASIC TASK MANAGEMENT
     func setTasks(_ tasks: [Task]) { self.appDataStore.taskData.setTasks(tasks) }
-    private func loadTasks(){ self.setTasks(PersistenceUtils.getTaskArrayForProfile(self.appDataStore.userSettings.profile))}
+    private func loadTasks(){ 
+        self.setTasks(PersistenceUtils.getTaskArrayForProfile(self.appDataStore.userSettings.profile))
+        
+        // Track task count for defaultUser only
+        if self.appDataStore.userSettings.profile.name == "defaultUser" {
+            FirebaseManager.shared.trackTaskCount(self.appDataStore.taskData.tasks.count)
+        }
+    }
     func addTask(_ task: Task) {
         self.appDataStore.taskData.tasks.append(task)
+        FirebaseManager.shared.trackAddTask()
         // Observe the new task
         task.objectWillChange
             .sink { [weak self] _ in
@@ -398,6 +409,7 @@ class AppManager: ObservableObject {
         
         // Remove the task
         self.appDataStore.taskData.tasks.removeAll { $0.id == id }
+        FirebaseManager.shared.trackDeleteTask()
         
         // If the task had a date, reorder remaining tasks for that day
         if let date = deletedDate {
@@ -432,6 +444,7 @@ class AppManager: ObservableObject {
     
     func setNotificationsEnabled(_ enabled: Bool) {
         self.appDataStore.userSettings.notificationsEnabled = enabled
+        FirebaseManager.shared.trackNotificationsEnabled(enabled)
     }
     
     func toggleNotificationsEnabled() {
@@ -440,6 +453,7 @@ class AppManager: ObservableObject {
     
     func setNotificationTime(_ time: Date) {
         self.appDataStore.userSettings.notificationTime = time
+        FirebaseManager.shared.trackNotificationTimeChange(time)
     }
     
     func saveTaskEditOverlay(){
@@ -451,6 +465,7 @@ class AppManager: ObservableObject {
         let updatedTask = task
         updatedTask.setTitle(overlayManager.taskEditOverlay.editedTitle)
         updatedTask.setColor(overlayManager.taskEditOverlay.selectedColor)
+        FirebaseManager.shared.trackEditTask()
         hideTaskEditOverlay()
     }
     

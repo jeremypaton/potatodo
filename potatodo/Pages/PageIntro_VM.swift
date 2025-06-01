@@ -286,6 +286,9 @@ struct PageIntro: View {
             Overlay_V(appManager: appManager)
                 .zIndex(3)
         }
+        .onAppear {
+            FirebaseManager.shared.trackPageView("PageIntro")
+        }
     }
 }
 
