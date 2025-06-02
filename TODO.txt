@@ -258,31 +258,32 @@ PRE-ALPHA TODOs
     
     1hr
     
+    [ ] simplify animations
+        [ ] potato button -> wave
+        [ ] messages immediate
+        [ ] only play speaking animation level 0
+    
     [ ] forms
         [X] tester sign up form
         [ ] tester feedback forms
-            [ ] first impression
+            [ ] first impression "GETTING STARTED"
             [ ] 1 week follow-up
+    
+    [ ] app store listing mockup
         
     [ ] official ALPHA build
         [ ] feedback links in settings
-        
+            
+    [ ] tester email
+        [ ] alpha overview
+            [ ] getting started form link
+            [ ] testflight emails
+            
     [ ] record demo / progress video
-    
-    [ ] tester info packet (1 pager)
-        [ ] about app
-            [ ] basic images w/ tagline like app store
-            [ ] stage of development / timeline
-        [ ] feedback
-            [ ] goals
-            [ ] how-to
-                [ ] testflight screenshots etc.
-                [ ] form
-                [ ] talk to me
             
     WAVES
-        [ ] mon morning - broski
-        [ ] mon evening - will / weiwei
+        [ ] mon - broski
+        [ ] tue - will / weiwei
         [ ] wed - everyone else
         
     ---

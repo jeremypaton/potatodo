@@ -14,6 +14,8 @@ struct Potato_V: View {
         if appManager.appDataStore.uiState.isCelebrating {
             if appManager.appDataStore.uiState.level == 3 {
                 return "potato_celebrate-\(celebrationFrame)"
+            } else if appManager.appDataStore.uiState.level == 1 {
+                return "potato_talk-\(talkFrame)"
             } else {
                 return "potato_dance-\(danceFrame)"
             }
@@ -78,6 +80,7 @@ struct Potato_V: View {
             if isCelebrating {
                 celebrationFrame = 1
                 danceFrame = 1
+                talkFrame = 1
                 // Animate gold background
 //                withAnimation(.easeIn(duration: 1.5)) {
 //                    goldBackgroundOpacity = 1.0
@@ -88,12 +91,15 @@ struct Potato_V: View {
                 }
                 if appManager.appDataStore.uiState.level == 3 {
                     animateCelebration()
+                } else if appManager.appDataStore.uiState.level == 1 {
+                    animateTalk()
                 } else {
                     animateDance()
                 }
             } else {
                 celebrationFrame = 1
                 danceFrame = 1
+                talkFrame = 1
                 // Fade out gold background
                 withAnimation(.easeOut(duration: 0.5)) {
                     goldBackgroundOpacity = 0.0
@@ -143,7 +149,7 @@ struct Potato_V: View {
     }
     
     private func animateTalk() {
-        guard appManager.appDataStore.uiState.isTalking else { return }
+        guard appManager.appDataStore.uiState.isTalking || (appManager.appDataStore.uiState.isCelebrating && appManager.appDataStore.uiState.level == 1) else { return }
         talkFrame = (talkFrame % 3) + 1
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             animateTalk()

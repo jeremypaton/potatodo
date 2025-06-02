@@ -17,68 +17,48 @@ class MessageManager: ObservableObject {
         loadMessages()
     }
     
-    func showMessageForCompletionLevel(_ level: Int) {
-//        print("🎯 showMessageForCompletionLevel called with level: \(level)")
-//        print("📝 Current messages count: \(messages.count)")
-//        
-        messageTimer?.invalidate()
-        messageTimer = nil
-        
+    private func getMessageForLevel(_ level: Int) -> Message? {
         let levelMessages = messages.filter { message in
             message.level == level
         }
-        
-//        print("🎯 Found \(levelMessages.count) messages for level \(level)")
-        
-        guard let message = levelMessages.randomElement() else {
-//            print("❌ No messages found for level \(level)")
-            return
-        }
-        
+        return levelMessages.randomElement()
+    }
+    
+    func showMessageForCompletionLevel(_ level: Int) {
+        guard let message = getMessageForLevel(level) else { return }
 //        print("🎯 Selected message: \(message)")
         
-        // Add 1.5 second delay before showing message and starting animation
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        // Show message bubble and start animation immediately
+        DispatchQueue.main.async {
+            self.isShowingMessage = true
+            self.displayedText = ""
+        }
+        
+        // Animate the text
+        var charIndex = 0
+        let typingTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] timer in
             guard let self = self else { return }
             
-            // Show message bubble and start animation
-            DispatchQueue.main.async {
-                self.isShowingMessage = true
-                self.displayedText = ""
-                // Start potato talking animation
-                AppManager.shared.potatoTalk()
-            }
-            
-            // Animate the text
-            var charIndex = 0
-            let typingTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] timer in
-                guard let self = self else { return }
+            if charIndex < message.text.count {
+                let startIndex = message.text.startIndex
+                let endIndex = message.text.index(startIndex, offsetBy: charIndex + 1)
+                let substring = message.text[startIndex..<endIndex]
                 
-                if charIndex < message.text.count {
-                    let startIndex = message.text.startIndex
-                    let endIndex = message.text.index(startIndex, offsetBy: charIndex + 1)
-                    let substring = message.text[startIndex..<endIndex]
-                    
+                DispatchQueue.main.async {
+                    self.displayedText = String(substring)
+                }
+                charIndex += 1
+            } else {
+                timer.invalidate()
+                self.messageTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { [weak self] _ in
+                    guard let self = self else { return }
                     DispatchQueue.main.async {
-                        self.displayedText = String(substring)
-//                        print("📝 Updated displayedText: \(self.displayedText)")
-                    }
-                    charIndex += 1
-                } else {
-                    timer.invalidate()
-                    self.messageTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { [weak self] _ in
-                        guard let self = self else { return }
-                        DispatchQueue.main.async {
-                            withAnimation(.easeOut(duration: 0.3)) {
-                                self.isShowingMessage = false
-//                                print("📝 Hiding message")
-                            }
+                        withAnimation(.easeOut(duration: 0.3)) {
+                            self.isShowingMessage = false
                         }
                     }
                 }
             }
-            
-            self.messageTimer = typingTimer
         }
     }
     

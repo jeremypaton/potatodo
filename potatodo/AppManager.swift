@@ -342,7 +342,6 @@ class AppManager: ObservableObject {
     
     func celebrateLevel(_ newLevel: Int) {
         messageManager.showMessageForCompletionLevel(newLevel)
-        
         appDataStore.uiState.isCelebrating = true
         
         if newLevel == 3 {
@@ -353,7 +352,6 @@ class AppManager: ObservableObject {
         let duration = newLevel == 3 ? 2.5 : 1.2
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
             self?.appDataStore.uiState.isCelebrating = false
-            self?.potatoTalk()
         }
     }
     
