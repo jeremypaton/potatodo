@@ -20,16 +20,18 @@ struct PageDay_VM: View {
     }
     
     var body: some View {
-        TopNav_V(appManager: appManager)
-        
-        ZStack {
-            Potato_V(appManager: appManager)
-                .frame(height: UIScreen.main.bounds.width - 60)
-
-                .padding(.bottom,40)
-            VStack {
-                Spacer()
-                Text("DAY PRIORITIES:").font(.title3).underline(false, color: Color.black)
+        VStack{
+            TopNav_V(appManager: appManager)
+            
+            ZStack {
+                Potato_V(appManager: appManager)
+                    .frame(height: UIScreen.main.bounds.width - 60)
+                
+                    .padding(.bottom,40)
+                VStack {
+                    Spacer()
+                    Text("DAY PRIORITIES:").font(.title3).underline(false, color: Color.black)
+                }
             }
         }
 
