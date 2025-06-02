@@ -31,23 +31,31 @@ struct Potato_V: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
+                let base_scale = 1.0
+
                 Rectangle()
                     .fill(Color.white)
-                    .frame(width: geometry.size.width - 4, height: geometry.size.width - 4)
+                    .frame(width: (geometry.size.width - 4)*base_scale, height: (geometry.size.width - 4)*base_scale)
+//                    .cornerRadius(12)
+//                    .shadow(color: Color.black.opacity(0.4), radius: 4, x: 0, y: 2)
+                
+                let sq_scale = 0.85 * base_scale
+                Rectangle()
+                    .fill(Color.white)
+                    .frame(width: (geometry.size.width - 4)*sq_scale, height: (geometry.size.width - 4)*sq_scale)
                     .cornerRadius(12)
-                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                    .shadow(color: Color.black.opacity(0.4), radius: 4, x: 0, y: 2)
                 
                 // Gold background effect
                 if appManager.appDataStore.uiState.isCelebrating && appManager.appDataStore.uiState.level == 3{
                     Rectangle()
                         .fill(Color.yellow.opacity(0.8))
-                        .frame(width: geometry.size.width - 4, height: geometry.size.width - 4)
-                        .cornerRadius(12)
+                        .frame(width: (geometry.size.width - 4)*sq_scale, height: (geometry.size.width - 4)*sq_scale)                        .cornerRadius(12)
                         .opacity(goldBackgroundOpacity)
                 }
                 
                 if appManager.isToday() {
-                    let scale = 0.4
+                    let scale = 0.5
                     if let _ = UIImage(named: currentImageName) {
                         Image(currentImageName)
                             .resizable()
@@ -64,7 +72,7 @@ struct Potato_V: View {
                     
                     VStack {
                                         Message_V(messageManager: appManager.getMessageManagerForMessageView())
-                                            .padding(.top, geometry.size.width * 0.1)
+                                            .padding(.top, geometry.size.width * 0.2)
                                         Spacer()
                                     }
                 }

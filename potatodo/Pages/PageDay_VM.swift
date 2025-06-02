@@ -23,7 +23,10 @@ struct PageDay_VM: View {
         TopNav_V(appManager: appManager)
         
         ZStack {
-            Potato_V(appManager: appManager).padding(.bottom,10)
+            Potato_V(appManager: appManager)
+                .frame(height: UIScreen.main.bounds.width - 60)
+
+                .padding(.bottom,40)
             VStack {
                 Spacer()
                 Text("DAY PRIORITIES:").font(.title3).underline(false, color: Color.black)
