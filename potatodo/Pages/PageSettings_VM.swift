@@ -106,6 +106,19 @@ struct PageSettings_VM: View {
                 }
             }
             
+            Section(header: Text("Profile")) {
+                Picker("User Profile", selection: Binding(
+                    get: { appManager.appDataStore.userSettings.profile.name },
+                    set: { newValue in
+                        appManager.setProfileByName(newValue)
+                    }
+                )) {
+                    Text("defaultUser").tag("defaultUser")
+                    Text("potatoUser").tag("potatoUser")
+                }
+                .pickerStyle(MenuPickerStyle())
+            }
+            
             Section("Intro") {
                 Button("Replay Intro") {
                     appManager.setShowIntro(true)
@@ -140,8 +153,16 @@ struct PageSettings_VM: View {
                 Text("notificationStatus: \(string(from:notificationStatus))")
             }
             
-            Section(header: Text("Profile")) {
-                Picker("Profile", selection: Binding(
+            Section(header: Text("Debug Tools")) {
+                Button("Open Debug View") {
+                    withAnimation {
+                        appManager.toggleDebugView()
+                    }
+                }
+            }
+            
+            Section(header: Text("All Profiles")) {
+                Picker("All Profiles", selection: Binding(
                     get: { appManager.appDataStore.userSettings.profile.name },
                     set: { newValue in
                         appManager.setProfileByName(newValue)
@@ -150,6 +171,7 @@ struct PageSettings_VM: View {
                     Text("DEBUG").tag("DEBUG")
                     Text("TEST").tag("TEST")
                     Text("defaultUser").tag("defaultUser")
+                    Text("potatoUser").tag("potatoUser")
                 }
                 .pickerStyle(MenuPickerStyle())
             }

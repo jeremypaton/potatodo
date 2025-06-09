@@ -42,7 +42,10 @@ struct Main: View {
                 )
                 .onTapGesture(count: 3) {
                     withAnimation {
-                        appManager.toggleDebugView()
+                        // Switch between defaultUser and potatoUser
+                        let currentProfile = appManager.appDataStore.userSettings.profile.name
+                        let newProfile = currentProfile == "defaultUser" ? "potatoUser" : "defaultUser"
+                        appManager.setProfileByName(newProfile)
                     }
                 }
             }
@@ -84,6 +87,8 @@ struct NameIndicator: View {
             return .yellow
         case "defaultUser":
             return .green
+        case "potatoUser":
+            return .orange
         default:
             return .clear
         }
