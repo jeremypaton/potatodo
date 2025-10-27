@@ -1,14 +1,26 @@
 # Potatodo
 
-A tiny iOS **habit tracker** with a cheerful potato buddy 🥔
-
-> Capture up to three daily tasks, keep a streak, and get gentle nudges from your animated potato pal.
+A tiny iOS **habit tracker** with a tamagotchi-style potato buddy 🥔
+> Decide three daily priorities, keep your streak going, celebrate progress with your potato pal.
 
 ---
 
-## Why this exists
+## The Thesis
 
-I built Potatodo over ~1 month, from the initial “tamagotchi todo app” idea to deployed alpha pilot with friends. It was my **first iOS app**, and the goal was speed to feedback, so the code-base is scrappy in parts. 
+focus + consistency are the keys to progress
+- only choosing 3 tasks per day encourages focus
+- a tamagotchi buddy and streaks encourage consistency
+
+---
+
+## The Prototype
+
+This prototype exists solely to test the question:
+"is there a market for a tamagotchi habit tracker app?"
+
+It was my **first iOS app** and was built in ~2 weeks - from concept to alpha test deployment with friends. 
+
+The goal was to get user feedback asap, so speed of development was prioritized, and the code is scrappy in parts.
 
 ---
 
@@ -16,9 +28,9 @@ I built Potatodo over ~1 month, from the initial “tamagotchi todo app” idea 
 
 - Up to **3 tasks/day** with **day/week/month** views  
 - **Daily streak** counters and visualization
-- **Tamagotchi-style Potato Buddy** who celebrates your progress 
-- **Notifications** to encourage consistency  
+- **Tamagotchi-style Potato Buddy** who celebrates your progress
 - seperate **RELEASE**/Test/Debug builds + interactive **Debug View** for development
+- **Notifications** to encourage consistency  
 - **Google Analytics**
 
 See `TODO.txt` for a chronological feature log.
