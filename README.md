@@ -18,7 +18,8 @@ I built Potatodo over ~1 month, from the initial “tamagotchi todo app” idea 
 - **Daily streak** counters and visualization
 - **Tamagotchi-style Potato Buddy** who celebrates your progress 
 - **Notifications** to encourage consistency  
-- **Profiles**, **Debug View**, and **Google Analytics**
+- seperate **RELEASE**/Test/Debug builds + interactive **Debug View** for development
+- **Google Analytics**
 
 See `TODO.txt` for a chronological feature log.
 
