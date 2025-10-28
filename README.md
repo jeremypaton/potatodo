@@ -122,4 +122,3 @@ potatodo/
 - **Speed to feedback > polish.** I prioritized shipping an alpha quickly to evaluate the “3 tasks/day + streak + tamagotchi” concept.  
 - **Simple state** with a single data store `potatodo/DataModels.swift` and manager `AppManager.swift`. Centralizing state increases development speed, but these would need to be broken up for modularity if project scope expanded.
 - **Placeholder graphics and UI.** This was a MVP funcitonal prototype so animations and UI are very basic.
-y
