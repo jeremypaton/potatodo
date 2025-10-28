@@ -7,9 +7,9 @@ An iOS **habit tracker** with a tamagotchi-style potato buddy 🥔
 
 ---
 
-## Demo
+## Demo: [View 3min Demo](https://drive.google.com/file/d/1KWaio40nQ0CS2WZbFiWBsQj8Crd8D0I6/view?usp=drive_link)
+## Install: [Potatodo iPhone(17+) Installation](https://testflight.apple.com/join/w8TPU5AM)
 
-# [view 3min demo](https://drive.google.com/file/d/1KWaio40nQ0CS2WZbFiWBsQj8Crd8D0I6/view?usp=drive_link)
 ---
 
 
@@ -54,7 +54,7 @@ See `TODO.txt` for a chronological feature log.
 
 ---
 
-## Screenshots / Demo
+## Screenshots
 
 <img height="400" alt="" src="https://github.com/user-attachments/assets/dfbeca9b-02cb-48f8-be03-f5d77c269e81" />
 <img height="400" alt="Screenshot 2025-10-28 at 2 24 44 pm" src="https://github.com/user-attachments/assets/163eb7ab-edd6-45a3-a9a3-9c02f1b9ea4e" />
@@ -67,7 +67,7 @@ See `TODO.txt` for a chronological feature log.
 **iPhone Installation**
 
 Use this link to install on your iPhone via TestFlight: 
-## [Potatodo iPhone(17+) Installation](https://testflight.apple.com/join/w8TPU5AM)
+[Potatodo iPhone(17+) Installation](https://testflight.apple.com/join/w8TPU5AM)
 
 **Or Run In Xcode**
 
