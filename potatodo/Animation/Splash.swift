@@ -11,7 +11,6 @@ struct Splash: View {
     @State private var timer: Timer?
     @State private var spawnTimer: Timer?
     @State private var isSpawning = true
-//    @Binding var showingSplash: Bool
     
     @ObservedObject var appManager: AppManager
 
@@ -49,16 +48,6 @@ struct Splash: View {
                         .opacity(opacity3)
                 }
                 .foregroundColor(.white)
-                
-//                VStack(spacing: 20) {
-//                    Spacer()
-//                    Text("[EARLY ACCESS]")
-//                        .font(.system(size: 20, weight: .bold))
-////                        .opacity(opacity4)
-//                        .foregroundColor(.red)
-////                        .fontWeight(.thin)
-//                }
-//                .foregroundColor(.white)
             }
             .onTapGesture {
                 withAnimation {

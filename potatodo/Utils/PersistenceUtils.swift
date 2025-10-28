@@ -122,7 +122,7 @@ struct PersistenceUtils {
             tasks = loadedTasks
             fixTaskPositions(tasks)
         } catch {
-            // errorMessage = "Failed to load CSV tasks: \(error.localizedDescription)"
+            // Failed to load CSV tasks
         }
         return tasks
     }
@@ -141,20 +141,6 @@ struct PersistenceUtils {
         }
     }
     
-    static func saveUserSettings(_ settings: UserSettings, profile: Profile) {
-        // No longer needed as we're using UserDefaults
-    }
-    
-    static func getUserSettingsForProfile(_ profile: Profile) -> UserSettings {
-        // No longer needed as we're using UserDefaults
-        return UserSettings()
-    }
-    
-    private static func getUserSettingsURLForProfile(_ profile: Profile) -> URL {
-        // No longer needed as we're using UserDefaults
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        return documentsDirectory.appendingPathComponent("\(profile.name)_settings.json")
-    }
     
     static func getMAY26TaskArray() -> [Task] {
         guard let jsonURL = Bundle.main.url(forResource: "MAY26tasks", withExtension: "json") else {

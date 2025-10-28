@@ -18,11 +18,6 @@ struct Main: View {
         ZStack {
             if appManager.shouldShowIntro() {
                 PageIntro(appManager: appManager)
-//                    .onAppear {
-////                        _Concurrency.Task {
-////                            await appManager.requestPermissions()
-////                        }
-//                    }
             } else if appManager.appDataStore.uiState.showSplash {
                 Splash(appManager: appManager)
                     .onAppear {
@@ -35,7 +30,6 @@ struct Main: View {
                             }
                         }
                     }
-                // ask f
             } else {
                 PageManager(
                     appManager: appManager
@@ -70,14 +64,6 @@ struct NameIndicator: View {
     
     @ObservedObject var appManager: AppManager
     
-//    var version: String {
-//        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "N/A"
-//    }
-//
-//    var build: String {
-//        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "N/A"
-//    }
-//    
     var backgroundColor: Color {
         let name = appManager.appDataStore.userSettings.profile.name
         switch name {
@@ -96,9 +82,6 @@ struct NameIndicator: View {
     
     var body: some View {
         VStack {
-//            Text(appManager.appDataStore.userSettings.profile.name)
-//                .font(.system(size: 12))
-//                .background(backgroundColor)
             Text(appManager.appDataStore.userSettings.profile.name)
                 .font(.system(size: 12))
                 .background(backgroundColor)

@@ -18,7 +18,7 @@
                BlueprintIdentifier = "D1900CBF2DD1A82200C53EEF"
                BuildableName = "potatodo.app"
                BlueprintName = "potatodo"
-               ReferencedContainer = "container:potatodo.xcodeproj">
+               ReferencedContainer = "container:Potatodo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -38,7 +38,7 @@
                BlueprintIdentifier = "D1900CCC2DD1A82300C53EEF"
                BuildableName = "potatodoTests.xctest"
                BlueprintName = "potatodoTests"
-               ReferencedContainer = "container:potatodo.xcodeproj">
+               ReferencedContainer = "container:Potatodo.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -49,7 +49,7 @@
                BlueprintIdentifier = "D1900CD62DD1A82300C53EEF"
                BuildableName = "potatodoUITests.xctest"
                BlueprintName = "potatodoUITests"
-               ReferencedContainer = "container:potatodo.xcodeproj">
+               ReferencedContainer = "container:Potatodo.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,7 +71,7 @@
             BlueprintIdentifier = "D1900CBF2DD1A82200C53EEF"
             BuildableName = "potatodo.app"
             BlueprintName = "potatodo"
-            ReferencedContainer = "container:potatodo.xcodeproj">
+            ReferencedContainer = "container:Potatodo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -88,7 +88,7 @@
             BlueprintIdentifier = "D1900CBF2DD1A82200C53EEF"
             BuildableName = "potatodo.app"
             BlueprintName = "potatodo"
-            ReferencedContainer = "container:potatodo.xcodeproj">
+            ReferencedContainer = "container:Potatodo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

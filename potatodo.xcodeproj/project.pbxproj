@@ -315,7 +315,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D1900CBB2DD1A82200C53EEF /* Build configuration list for PBXProject "potatodo" */;
+			buildConfigurationList = D1900CBB2DD1A82200C53EEF /* Build configuration list for PBXProject "Potatodo" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -902,7 +902,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D1900CBB2DD1A82200C53EEF /* Build configuration list for PBXProject "potatodo" */ = {
+		D1900CBB2DD1A82200C53EEF /* Build configuration list for PBXProject "Potatodo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D1900CDF2DD1A82300C53EEF /* Debug */,

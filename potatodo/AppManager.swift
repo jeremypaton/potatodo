@@ -35,19 +35,6 @@ class Profile : Hashable, ObservableObject, Codable {
         hasher.combine(name)
     }
 }
-//enum Profile: String, Codable {
-//    case debug
-//    case test
-//    case prod
-//}
-
-//enum PageType: String, Codable {
-//    case backlog
-//    case day
-//    case week
-//    case month
-//    case settings
-//}
 
 class UserSettings: ObservableObject, Codable {
     @Published fileprivate(set) var profile: Profile = Profile()
@@ -158,26 +145,22 @@ class TaskData: ObservableObject {
     }
     
     private func updateArrayObservations() {
-//        print("[TaskData] updateArrayObservations called") // Debug print
         arrayCancellables.removeAll()
         $tasks
             .sink { [weak self] _ in
                 self?.objectWillChange.send()
                 self?.updateTaskObservations()
-//                print("[TaskData] something changed in the task array") // Debug print
             }
             .store(in: &arrayCancellables)
     }
     
     private func updateTaskObservations() {
-//        print("[TaskData] updateTaskObservations called") // Debug print
         // Only clear taskCancellables, not arrayCancellables!
         taskCancellables.removeAll()
         // Observe each task
         for task in tasks {
             task.objectWillChange
                 .sink { [weak self] _ in
-//                    print("[TaskData] Task \(task.id) changed") // Debug print
                     guard let self = self else { return }
                     // Force a task array update to trigger auto-save
                     self.tasks = self.tasks
@@ -191,13 +174,6 @@ class TaskData: ObservableObject {
         updateArrayObservations()
         updateTaskObservations()
     }
-    //add task
-    //edit task
-    //delete task
-    
-    // init()
-    // load()
-    // save()
 }
 
 class AppDataStore: ObservableObject {
@@ -206,11 +182,8 @@ class AppDataStore: ObservableObject {
     @Published var taskData = TaskData()
     
     private var cancellables = Set<AnyCancellable>()
-//    private weak var appManager: AppManager?
     
     init() {
-//        self.appManager = appManager
-        
         // Connect child object changes to parent's objectWillChange
         userSettings.objectWillChange
             .sink { [weak self] _ in self?.objectWillChange.send() }
@@ -273,8 +246,6 @@ class AppDataStore: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
-    // save()
 }
 
 @MainActor
@@ -313,7 +284,6 @@ class AppManager: ObservableObject {
         
         // Load initial data
         self.loadTasks()
-        self.loadUserSettings()
     }
     
     private func observeManagerChanges() {
@@ -544,11 +514,6 @@ class AppManager: ObservableObject {
         appDataStore.uiState.showDebugView = false
     }
     
-    private func loadUserSettings() {
-        // No longer needed as we're using UserDefaults
-        // The settings are loaded in the UserSettings init()
-    }
-    
     func setShowIntro(_ show: Bool) {
         self.appDataStore.userSettings.showIntro = show
     }
@@ -564,6 +529,7 @@ class AppManager: ObservableObject {
     func endIntro() {
         setNewUser(false)
         setShowIntro(false)
+        setPage(PageType.day)
         endSplash()
     }
 } 
