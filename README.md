@@ -3,7 +3,15 @@
 An iOS **habit tracker** with a tamagotchi-style potato buddy 🥔
 - Decide three daily priorities, celebrate completion with your potato pal, keep your streak going.
 
+<img src="https://github.com/user-attachments/assets/654d0312-3a29-4c05-a887-2ec71a0bba65" alt="Alt Text" width="300">
+
 ---
+
+## Demo
+
+# [view 3min demo](https://drive.google.com/file/d/1KWaio40nQ0CS2WZbFiWBsQj8Crd8D0I6/view?usp=drive_link)
+---
+
 
 ## The Product Thesis
 
@@ -48,8 +56,9 @@ See `TODO.txt` for a chronological feature log.
 
 ## Screenshots / Demo
 
-- (Add a 20–30s GIF here if you have one)  
-- (Optional) `/docs/screenshots/` for static shots
+<img height="600" alt="" src="https://github.com/user-attachments/assets/dfbeca9b-02cb-48f8-be03-f5d77c269e81" />
+<img height="600" alt="Screenshot 2025-10-28 at 2 24 44 pm" src="https://github.com/user-attachments/assets/163eb7ab-edd6-45a3-a9a3-9c02f1b9ea4e" />
+<img height="600" alt="Screenshot 2025-10-28 at 2 25 03 pm" src="https://github.com/user-attachments/assets/bc77f337-cf5e-4325-9a4b-cc2b1fae4c7e" />
 
 ---
 
