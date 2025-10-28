@@ -56,9 +56,9 @@ See `TODO.txt` for a chronological feature log.
 
 ## Screenshots / Demo
 
-<img height="600" alt="" src="https://github.com/user-attachments/assets/dfbeca9b-02cb-48f8-be03-f5d77c269e81" />
-<img height="600" alt="Screenshot 2025-10-28 at 2 24 44 pm" src="https://github.com/user-attachments/assets/163eb7ab-edd6-45a3-a9a3-9c02f1b9ea4e" />
-<img height="600" alt="Screenshot 2025-10-28 at 2 25 03 pm" src="https://github.com/user-attachments/assets/bc77f337-cf5e-4325-9a4b-cc2b1fae4c7e" />
+<img height="400" alt="" src="https://github.com/user-attachments/assets/dfbeca9b-02cb-48f8-be03-f5d77c269e81" />
+<img height="400" alt="Screenshot 2025-10-28 at 2 24 44 pm" src="https://github.com/user-attachments/assets/163eb7ab-edd6-45a3-a9a3-9c02f1b9ea4e" />
+<img height="400" alt="Screenshot 2025-10-28 at 2 25 03 pm" src="https://github.com/user-attachments/assets/bc77f337-cf5e-4325-9a4b-cc2b1fae4c7e" />
 
 ---
 
