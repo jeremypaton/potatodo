@@ -1,239 +1,31 @@
 //
-//  ContentView.swift
+//  AppManager.swift
 //  potatodo
 //
 //  Created by Jeremy Paton on 12/5/2025.
 //
-//womble
+
 import SwiftUI
 import UserNotifications
 import Combine
 import WidgetKit
 
-class Profile : Hashable, ObservableObject, Codable {
-    var name: String
-    
-    #if DEBUG
-    init(name: String = "DEBUG") {
-        self.name = name
-    }
-    #elseif TEST
-    init(name: String = "TEST") {
-        self.name = name
-    }
-    #else
-    init(name: String = "defaultUser") {
-        self.name = name
-    }
-    #endif
-    
-    static func == (lhs: Profile, rhs: Profile) -> Bool {
-        return lhs.name == rhs.name
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-    }
-}
-
-class UserSettings: ObservableObject, Codable {
-    @Published fileprivate(set) var profile: Profile = Profile()
-    @Published fileprivate(set) var notificationsEnabled: Bool {
-        didSet {
-            UserDefaults.standard.set(notificationsEnabled, forKey: "notificationsEnabled")
-        }
-    }
-    @Published fileprivate(set) var notificationTime: Date {
-        didSet {
-            UserDefaults.standard.set(notificationTime, forKey: "notificationTime")
-        }
-    }
-    @Published fileprivate(set) var newUser: Bool {
-        didSet {
-            UserDefaults.standard.set(newUser, forKey: "newUser")
-        }
-    }
-    @Published fileprivate(set) var showIntro: Bool {
-        didSet {
-            UserDefaults.standard.set(showIntro, forKey: "showIntro")
-        }
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case profile, notificationsEnabled, notificationTime, newUser, showIntro
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        profile = try container.decode(Profile.self, forKey: .profile)
-        notificationsEnabled = try container.decode(Bool.self, forKey: .notificationsEnabled)
-        notificationTime = try container.decode(Date.self, forKey: .notificationTime)
-        newUser = try container.decode(Bool.self, forKey: .newUser)
-        showIntro = try container.decode(Bool.self, forKey: .showIntro)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(profile, forKey: .profile)
-        try container.encode(notificationsEnabled, forKey: .notificationsEnabled)
-        try container.encode(notificationTime, forKey: .notificationTime)
-        try container.encode(newUser, forKey: .newUser)
-        try container.encode(showIntro, forKey: .showIntro)
-    }
-    
-    init() {
-        // Load saved settings from UserDefaults
-        self.notificationsEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
-        self.notificationTime = UserDefaults.standard.object(forKey: "notificationTime") as? Date ?? Calendar.current.date(from: DateComponents(hour: 9, minute: 0)) ?? Date()
-        self.newUser = UserDefaults.standard.bool(forKey: "newUser", defaultValue: true)
-        self.showIntro = UserDefaults.standard.bool(forKey: "showIntro", defaultValue: false)
-    }
-}
-
-extension UserDefaults {
-    func bool(forKey key: String, defaultValue: Bool) -> Bool {
-        if object(forKey: key) == nil {
-            set(defaultValue, forKey: key)
-            return defaultValue
-        }
-        return bool(forKey: key)
-    }
-}
-
-class UIState: ObservableObject {
-    @Published fileprivate(set) var level: Int = 0
-    @Published fileprivate(set) var isCelebrating: Bool = false
-    @Published fileprivate(set) var isWaving: Bool = false
-    @Published fileprivate(set) var isTalking: Bool = false
-    @Published fileprivate(set) var showSplash = true
-    @Published fileprivate(set) var showDebugView = false
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    init() {
-        // Connect all @Published properties to objectWillChange
-        $level
-            .sink { [weak self] _ in self?.objectWillChange.send() }
-            .store(in: &cancellables)
-        $isCelebrating
-            .sink { [weak self] _ in self?.objectWillChange.send() }
-            .store(in: &cancellables)
-        $isWaving
-            .sink { [weak self] _ in self?.objectWillChange.send() }
-            .store(in: &cancellables)
-        $isTalking
-            .sink { [weak self] _ in self?.objectWillChange.send() }
-            .store(in: &cancellables)
-        $showSplash
-            .sink { [weak self] _ in self?.objectWillChange.send() }
-            .store(in: &cancellables)
-        $showDebugView
-            .sink { [weak self] _ in self?.objectWillChange.send() }
-            .store(in: &cancellables)
-    }
-}
-
-class TaskData: ObservableObject {
-    @Published fileprivate(set) var tasks: [Task] = []
-    private var arrayCancellables = Set<AnyCancellable>()
-    private var taskCancellables = Set<AnyCancellable>()
-    
-    init() {
-        // Observe the tasks array itself
-        updateArrayObservations()
-        updateTaskObservations()
-    }
-    
-    private func updateArrayObservations() {
-        arrayCancellables.removeAll()
-        $tasks
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-                self?.updateTaskObservations()
-            }
-            .store(in: &arrayCancellables)
-    }
-    
-    private func updateTaskObservations() {
-        // Only clear taskCancellables, not arrayCancellables!
-        taskCancellables.removeAll()
-        // Observe each task
-        for task in tasks {
-            task.objectWillChange
-                .sink { [weak self] _ in
-                    guard let self = self else { return }
-                    // Force a task array update to trigger auto-save
-                    self.tasks = self.tasks
-                }
-                .store(in: &taskCancellables)
-        }
-    }
-    
-    fileprivate func setTasks(_ tasks: [Task]) {
-        self.tasks = tasks
-        updateArrayObservations()
-        updateTaskObservations()
-    }
-}
-
-class AppDataStore: ObservableObject {
-    @Published var userSettings = UserSettings()
-    @Published var uiState = UIState()
-    @Published var taskData = TaskData()
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    init() {
-        // Connect child object changes to parent's objectWillChange
-        userSettings.objectWillChange
-            .sink { [weak self] _ in self?.objectWillChange.send() }
-            .store(in: &cancellables)
-            
-        uiState.objectWillChange
-            .sink { [weak self] _ in self?.objectWillChange.send() }
-            .store(in: &cancellables)
-            
-        taskData.objectWillChange
-            .sink { [weak self] _ in self?.objectWillChange.send() }
-            .store(in: &cancellables)
-        
-        // Auto-save tasks when they change
-        taskData.$tasks
-            .dropFirst() // Ignore initial value
-            .sink { [weak self] tasks in
-                guard let self = self else { return }
-                PersistenceUtils.saveTasksForProfile(tasks, profile: self.userSettings.profile)
-                
-                let numberTasksLeftToday = tasks.filter { task in
-                    !task.isCompleted && task.isToday()
-                }.count
-                ReminderUtils.setBadgeCount(numberTasksLeftToday)
-                
-                // Recalculate reminders when tasks change
-                DispatchQueue.main.async {
-                    _Concurrency.Task {
-                        await ReminderUtils.recalcReminders(userSettings: self.userSettings,
-                            tasks: tasks
-                        )
-                    }
-                }
-            }
-            .store(in: &cancellables)
-    }
-}
-
 @MainActor
 class AppManager: ObservableObject {
     static let shared = AppManager()
+    
+    // MARK: - Properties
+    
+    @Published var appDataStore: AppDataStore
     
     private var navManager: NavManager
     private var overlayManager: OverlayManager
     private var potatoManager: PotatoManager
     private var messageManager: MessageManager
     
-    @Published var appDataStore: AppDataStore
-    
     private var cancellables = Set<AnyCancellable>()
+    
+    // MARK: - Initialization
     
     init() {
         let appDataStore = AppDataStore()
@@ -269,17 +61,15 @@ class AppManager: ObservableObject {
     }
     
     private func observe<T: ObservableObject>(_ object: T) {
-        object.objectWillChange
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-            }
-            .store(in: &cancellables)
+        object.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }.store(in: &cancellables)
     }
     
+    // MARK: - Potato Actions
     
-    func getLevel() -> Int{
+    func getLevel() -> Int {
         return appDataStore.uiState.level
     }
+    
     func setLevel(_ newLevel: Int) {
         appDataStore.uiState.level = newLevel
     }
@@ -317,21 +107,26 @@ class AppManager: ObservableObject {
         messageManager.showMessageForCompletionLevel(appDataStore.uiState.level)
     }
     
-    func getNavManagerForNavView() -> NavManager { return navManager }
-    func getOverlayManagerForOverlayView() -> OverlayManager { return overlayManager }
-    func getMessageManagerForMessageView() -> MessageManager { return messageManager }
+    func potatoReset() {
+        appDataStore.uiState.isCelebrating = false
+        appDataStore.uiState.isWaving = false
+        appDataStore.uiState.isTalking = false
+        messageManager.clear()
+    }
     
+    // MARK: - Task Management
+    func setTasks(_ tasks: [Task]) {
+        self.appDataStore.taskData.setTasks(tasks)
+    }
     
-    // BASIC TASK MANAGEMENT
-    func setTasks(_ tasks: [Task]) { self.appDataStore.taskData.setTasks(tasks) }
-    private func loadTasks(){ 
+    private func loadTasks() {
         self.setTasks(PersistenceUtils.getTaskArrayForProfile(self.appDataStore.userSettings.profile))
         
-        // Track task count for defaultUser only
         if self.appDataStore.userSettings.profile.name == "defaultUser" {
             FirebaseManager.shared.trackTaskCount(self.appDataStore.taskData.tasks.count)
         }
     }
+    
     func addTask(_ task: Task) {
         self.appDataStore.taskData.tasks.append(task)
         FirebaseManager.shared.trackAddTask()
@@ -344,6 +139,7 @@ class AppManager: ObservableObject {
             }
             .store(in: &cancellables)
     }
+    
     func deleteTaskByID(_ id: UUID) {
         // Get the task being deleted to know its date
         guard let deletedTask = getTaskByID(id) else { return }
@@ -370,19 +166,30 @@ class AppManager: ObservableObject {
         }
     }
 
-    func getTasks() -> [Task] { return self.appDataStore.taskData.tasks}
-    func getTaskByID(_ id: UUID) -> Task? { return self.appDataStore.taskData.tasks.first(where: { $0.id == id }) }
-    func getTaskForDate(date: Date) -> [Task] { return self.appDataStore.taskData.tasks.filter {$0.date == date } }
-    func getTasksForToday() -> [Task] { return self.appDataStore.taskData.tasks.filter {$0.date == Date()} }
-    func getUnscheduledTasks() -> [Task] { return self.appDataStore.taskData.tasks.filter { $0.date == nil } }
+    func getTasks() -> [Task] {
+        return self.appDataStore.taskData.tasks
+    }
     
-    func createDefaultTask(_ task: Task) { self.appDataStore.taskData.tasks.append(task) }
-
+    func getTaskByID(_ id: UUID) -> Task? {
+        return self.appDataStore.taskData.tasks.first(where: { $0.id == id })
+    }
+    
+    func getTasksForToday() -> [Task] {
+        return self.appDataStore.taskData.tasks.filter { $0.date == Date() }
+    }
+    
+    func getUnscheduledTasks() -> [Task] {
+        return self.appDataStore.taskData.tasks.filter { $0.date == nil }
+    }
+    
+    // MARK: - Profile Management
     
     func setProfileByName(_ name: String) {
         self.appDataStore.userSettings.profile = Profile(name: name)
         self.loadTasks()
     }
+    
+    // MARK: - Settings Management
     
     func setNotificationsEnabled(_ enabled: Bool) {
         self.appDataStore.userSettings.notificationsEnabled = enabled
@@ -398,20 +205,21 @@ class AppManager: ObservableObject {
         FirebaseManager.shared.trackNotificationTimeChange(time)
     }
     
-    func saveTaskEditOverlay(){
+    // MARK: - Task Edit Overlay
+    
+    func saveTaskEditOverlay() {
         guard let taskId = overlayManager.taskEditOverlay.taskId,
               let task = self.getTaskByID(taskId) else {
             return
         }
-  
-        let updatedTask = task
-        updatedTask.setTitle(overlayManager.taskEditOverlay.editedTitle)
-        updatedTask.setColor(overlayManager.taskEditOverlay.selectedColor)
+        
+        task.setTitle(overlayManager.taskEditOverlay.editedTitle)
+        task.setColor(overlayManager.taskEditOverlay.selectedColor)
         FirebaseManager.shared.trackEditTask()
         hideTaskEditOverlay()
     }
     
-    func deleteTaskEditOverlay(){
+    func deleteTaskEditOverlay() {
         guard let taskId = overlayManager.taskEditOverlay.taskId,
               let task = self.getTaskByID(taskId) else {
             return
@@ -421,12 +229,14 @@ class AppManager: ObservableObject {
         hideTaskEditOverlay()
     }
     
-    func hideTaskEditOverlay(){
+    func hideTaskEditOverlay() {
         overlayManager.taskEditOverlay.hide()
         overlayManager.objectWillChange.send()
     }
     
-    func setDate(_ date : Date){
+    // MARK: - Navigation
+    
+    func setDate(_ date: Date) {
         navManager.setDate(date)
         potatoReset()
     }
@@ -435,7 +245,7 @@ class AppManager: ObservableObject {
         return navManager.currentDate
     }
     
-    func setInterval(_ interval: DateInterval){
+    func setInterval(_ interval: DateInterval) {
         navManager.setInterval(interval)
         potatoReset()
     }
@@ -457,34 +267,17 @@ class AppManager: ObservableObject {
         potatoReset()
     }
     
-    func potatoReset() {
-        appDataStore.uiState.isCelebrating = false
-        appDataStore.uiState.isWaving = false
-        appDataStore.uiState.isTalking = false
-        messageManager.clear()
-    }
+    // MARK: - UI State
     
-    func requestPermissions() async {
-        _ = await ReminderUtils.requestPermissions()
-    }
-    
-    func showTaskEdit(task: Task){
-        overlayManager.showTaskEdit(task: task)
-    }
-    
-    func celebrateTaskComplete(){
-        overlayManager.showPotatoRain(isSinglePotato: true)
-    }
-    
-    func endSplash(){
+    func endSplash() {
         appDataStore.uiState.showSplash = false
     }
     
-    func toggleDebugView(){
+    func toggleDebugView() {
         appDataStore.uiState.showDebugView.toggle()
     }
     
-    func hideDebugView(){
+    func hideDebugView() {
         appDataStore.uiState.showDebugView = false
     }
     
@@ -505,5 +298,33 @@ class AppManager: ObservableObject {
         setShowIntro(false)
         setPage(PageType.day)
         endSplash()
+    }
+    
+    // MARK: - Manager Access
+    
+    func getNavManagerForNavView() -> NavManager {
+        return navManager
+    }
+    
+    func getOverlayManagerForOverlayView() -> OverlayManager {
+        return overlayManager
+    }
+    
+    func getMessageManagerForMessageView() -> MessageManager {
+        return messageManager
+    }
+    
+    // MARK: - Actions
+    
+    func showTaskEdit(task: Task) {
+        overlayManager.showTaskEdit(task: task)
+    }
+    
+    func celebrateTaskComplete() {
+        overlayManager.showPotatoRain(isSinglePotato: true)
+    }
+    
+    func requestPermissions() async {
+        _ = await ReminderUtils.requestPermissions()
     }
 } 
