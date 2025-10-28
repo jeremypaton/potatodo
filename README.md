@@ -43,7 +43,6 @@ The goal was to get user feedback asap, so speed of development was prioritized,
 - Visualize **streaks** with counters and calendar
 - Animated launch screen and overlay celebration fx
 - Set **Notifications**
-- **Profile** management
 - **Data Persistence** via FileManager (tasks) and UserDefaults (settings)
 - Seperate **RELEASE**/Test/Debug builds for development
 - Interactive **Debug View**
