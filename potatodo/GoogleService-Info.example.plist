@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>YOUR_API_KEY_HERE</string>
+	<string>YOUR_FIREBASE_API_KEY</string>
 	<key>GCM_SENDER_ID</key>
 	<string>YOUR_SENDER_ID</string>
 	<key>PLIST_VERSION</key>
@@ -28,3 +28,4 @@
 	<string>1:YOUR_SENDER_ID:ios:YOUR_APP_ID</string>
 </dict>
 </plist>
+

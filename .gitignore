@@ -1,0 +1,40 @@
+# Xcode
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+*.xcworkspace
+xcuserdata/
+*.xcuserstate
+*.hmap
+
+# Build
+build/
+DerivedData/
+*.pbxuser
+
+# Swift Package Manager
+.swiftpm/
+
+# Sensitive files
+GoogleService-Info.plist
+*.pem
+.env
+secrets/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# IDEs
+.vscode/
+.idea/
+
+# Other
+*.log
+*.swp
+*~
+*.orig
+*.bak
+
