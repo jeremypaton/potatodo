@@ -27,9 +27,9 @@ plan less, finish more
 
 This prototype exists to test the question: "is there a market for a tamagotchi habit tracker app?"
 
-It was my **first iOS app** and was built in ~2 weeks - from concept to alpha test deployment. 
+It was my **first iOS app** and was built in ~2 weeks, from concept to alpha test deployment. 
 
-The goal was to get user feedback asap, so speed of development was prioritized, and the code is scrappy in parts.
+The goal was to get user feedback asap, so speed of development was prioritized, and the code is scrappy in parts i.e. this is *not* production-quality code.
 
 10 friends tested this app during Alpha. I collected feedback via a survey and google analytics.
 
@@ -119,6 +119,5 @@ potatodo/
 
 ## Notes
 
-- **Speed to feedback > polish.** I prioritized shipping an alpha quickly to evaluate the “3 tasks/day + streak + tamagotchi” concept.  
-- **Simple state** with a single data store `potatodo/DataModels.swift` and manager `AppManager.swift`. Centralizing state increases development speed, but these would need to be broken up for modularity if project scope expanded.
-- **Placeholder graphics and UI.** This was a MVP funcitonal prototype so animations and UI are very basic.
+- State is managed primarily via data storage in `potatodo/DataModels.swift` and updates via `AppManager.swift`. Centralizing state increases development speed, but these would need to be broken up for modularity if project scope expanded.
+- This was a MVP funcitonal prototype so animations and UI are very basic.
