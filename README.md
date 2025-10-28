@@ -1,4 +1,4 @@
-# Potatodo
+# Potatodo - Alpha Prototype
 
 An iOS **habit tracker** with a tamagotchi-style potato buddy 🥔
 - Decide three daily priorities, celebrate completion with your potato pal, keep your streak going.
