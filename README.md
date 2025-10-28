@@ -1,37 +1,46 @@
 # Potatodo
 
-A tiny iOS **habit tracker** with a tamagotchi-style potato buddy 🥔
-> Decide three daily priorities, keep your streak going, celebrate progress with your potato pal.
+An iOS **habit tracker** with a tamagotchi-style potato buddy 🥔
+- Decide three daily priorities, celebrate completion with your potato pal, keep your streak going.
 
 ---
 
-## The Thesis
+## The Product Thesis
 
-focus + consistency are the keys to progress
+focus + consistency are the keys to forming habits
 - only choosing 3 tasks per day encourages focus
-- a tamagotchi buddy and streaks encourage consistency
+- streaks and tamagotchi buddy encourage consistency
+
+plan less, finish more
 
 ---
 
 ## The Prototype
 
-This prototype exists solely to test the question:
-"is there a market for a tamagotchi habit tracker app?"
+This prototype exists to test the question: "is there a market for a tamagotchi habit tracker app?"
 
-It was my **first iOS app** and was built in ~2 weeks - from concept to alpha test deployment with friends. 
+It was my **first iOS app** and was built in ~2 weeks - from concept to alpha test deployment. 
 
 The goal was to get user feedback asap, so speed of development was prioritized, and the code is scrappy in parts.
 
+10 friends tested this app during Alpha. I collected feedback via a survey and google analytics.
+
 ---
 
-## Features
+## Key Features
 
-- Up to **3 tasks/day** with **day/week/month** views  
-- **Daily streak** counters and visualization
-- **Tamagotchi-style Potato Buddy** who celebrates your progress
-- seperate **RELEASE**/Test/Debug builds + interactive **Debug View** for development
-- **Notifications** to encourage consistency  
-- **Google Analytics**
+- **Tamagotchi-style Potato Buddy** with dance animations and async buffered speach
+- Choose **3 tasks/day**
+- View by **day/week/month**
+- Visualize **streaks** with counters and calendar
+- Animated launch screen and overlay celebration fx
+- Set **Notifications**
+- **Profile** management
+- **Data Persistence** via FileManager (tasks) and UserDefaults (settings)
+- Seperate **RELEASE**/Test/Debug builds for development
+- Interactive **Debug View**
+- **Google Analytics** enabled
+
 
 See `TODO.txt` for a chronological feature log.
 
@@ -46,40 +55,34 @@ See `TODO.txt` for a chronological feature log.
 
 ## Getting started
 
-**Prereqs**
+**iPhone Installation**
 
-- Xcode 15+  
-- iOS 17+ simulator (or device)
+Use this link to install on your iPhone via TestFlight: 
+## [Potatodo iPhone(17+) Installation](https://testflight.apple.com/join/w8TPU5AM)
 
-**Run**
+**Or Run In Xcode**
 
-1. Open the workspace/project in Xcode.  
-2. Select an iPhone simulator.  
-3. Press **Run** (⌘R).
-
-**Notes**
-
-- Notifications require simulator permissions or a real device.  
-- Google Analytics config lives under `potatodo/Firebase/`. Remove/disable if you prefer a privacy-only build.
+1. Open the project in Xcode (15+).
+2. Select an iPhone simulator (17+).  
+3. Build & Run potatodo_RELEASE.
 
 ---
 
 # Codebase
 
+## Architecture
+
+Files are named according to the following conventions:
+- `*_V.swift` - views (UI components)
+- `*Manager.swift` – managers (store + manipulate data)
+- `*_VM.swift` - viewmodels (assemble views, tigger manager updates)
+
+## Key Files (START HERE)
+
 - `potatodo/potatodoApp.swift` – app entry point
 
-## File Naming Conventions
-
-- `*_V.swift` - view only classes (stateless)
-- `*_M.swift` - model only classes (no UI)
-- `*_VM.swift` - viewmodel classes (views with basic state)
-- `*Manager.swift` – core state management classes
-
-## Start here (for reviewers)
-
-- `potatodo/AppManager.swift` – **central state manager** (app-level state, flows)  
-- `potatodo/Pages/` – primary screens and navigation targets  
-- `potatodo/Tasks/` – task model & logic  
+- `potatodo/AppManager.swift` – central state manager
+- `potatodo/Pages/` – the various app screens
 - `potatodo/Potato/` – potato character (animation + speech)  
 
 ---
@@ -105,8 +108,8 @@ potatodo/
 
 ---
 
-## Design notes & trade-offs
+## Notes
 
-- **Speed to feedback > polish.** I prioritized shipping an alpha quickly to evaluate the “3 tasks/day + streak + tamagotchi” thesis.  
-- **Simple state with a single manager.** `AppManager.swift` currently centralizes app state, prioritizing iteration speed. This would be moduralized if scaled.
+- **Speed to feedback > polish.** I prioritized shipping an alpha quickly to evaluate the “3 tasks/day + streak + tamagotchi” concept.  
+- **Simple state with a single manager.** `AppManager.swift` currently centralizes app state, prioritizing iteration speed.
 - **Placeholder graphics and UI.** This was a MVP funcitonal prototype so animations and UI are very basic.
