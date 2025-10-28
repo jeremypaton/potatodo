@@ -101,16 +101,6 @@
 			path = potatodo;
 			sourceTree = "<group>";
 		};
-		D1900CD02DD1A82300C53EEF /* potatodoTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = potatodoTests;
-			sourceTree = "<group>";
-		};
-		D1900CDA2DD1A82300C53EEF /* potatodoUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = potatodoUITests;
-			sourceTree = "<group>";
-		};
 		D1DCDB642DE3E48E00B4C48E /* PotatodoWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -164,8 +154,6 @@
 				D1C503132DD48A960022FC52 /* MILESTONES.txt */,
 				D1C503152DD490E40022FC52 /* TODO.txt */,
 				D1900CC22DD1A82200C53EEF /* potatodo */,
-				D1900CD02DD1A82300C53EEF /* potatodoTests */,
-				D1900CDA2DD1A82300C53EEF /* potatodoUITests */,
 				D1DCDB642DE3E48E00B4C48E /* PotatodoWidget */,
 				D1DCDB5F2DE3E48E00B4C48E /* Frameworks */,
 				D1900CC12DD1A82200C53EEF /* Products */,
@@ -234,9 +222,6 @@
 			dependencies = (
 				D1900CCF2DD1A82300C53EEF /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				D1900CD02DD1A82300C53EEF /* potatodoTests */,
-			);
 			name = potatodoTests;
 			packageProductDependencies = (
 			);
@@ -256,9 +241,6 @@
 			);
 			dependencies = (
 				D1900CD92DD1A82300C53EEF /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				D1900CDA2DD1A82300C53EEF /* potatodoUITests */,
 			);
 			name = potatodoUITests;
 			packageProductDependencies = (
