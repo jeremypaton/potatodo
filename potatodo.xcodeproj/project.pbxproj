@@ -11,9 +11,6 @@
 		D18F9B8A2DEC57790094CE1D /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = D18F9B892DEC57790094CE1D /* FirebaseCrashlytics */; };
 		D1C503142DD48A9C0022FC52 /* MILESTONES.txt in Resources */ = {isa = PBXBuildFile; fileRef = D1C503132DD48A960022FC52 /* MILESTONES.txt */; };
 		D1C503162DD490E90022FC52 /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = D1C503152DD490E40022FC52 /* TODO.txt */; };
-		D1DCDB612DE3E48E00B4C48E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1DCDB602DE3E48E00B4C48E /* WidgetKit.framework */; };
-		D1DCDB632DE3E48E00B4C48E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1DCDB622DE3E48E00B4C48E /* SwiftUI.framework */; };
-		D1DCDB722DE3E48F00B4C48E /* PotatodoWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D1DCDB5E2DE3E48E00B4C48E /* PotatodoWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,13 +28,6 @@
 			remoteGlobalIDString = D1900CBF2DD1A82200C53EEF;
 			remoteInfo = potatodo;
 		};
-		D1DCDB702DE3E48F00B4C48E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D1900CB82DD1A82200C53EEF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D1DCDB5D2DE3E48E00B4C48E;
-			remoteInfo = PotatodoWidgetExtension;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,7 +37,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				D1DCDB722DE3E48F00B4C48E /* PotatodoWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -60,7 +49,6 @@
 		D1900CD72DD1A82300C53EEF /* potatodoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = potatodoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1C503132DD48A960022FC52 /* MILESTONES.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MILESTONES.txt; sourceTree = "<group>"; };
 		D1C503152DD490E40022FC52 /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
-		D1DCDB5E2DE3E48E00B4C48E /* PotatodoWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PotatodoWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1DCDB602DE3E48E00B4C48E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		D1DCDB622DE3E48E00B4C48E /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		D1DCDB952DE3F1BD00B4C48E /* PotatodoWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PotatodoWidgetExtension.entitlements; sourceTree = "<group>"; };
@@ -74,20 +62,6 @@
 			);
 			target = D1900CBF2DD1A82200C53EEF /* potatodo */;
 		};
-		D1DCDB772DE3E48F00B4C48E /* Exceptions for "PotatodoWidget" folder in "PotatodoWidgetExtension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = D1DCDB5D2DE3E48E00B4C48E /* PotatodoWidgetExtension */;
-		};
-		D1DCDB942DE3F00C00B4C48E /* Exceptions for "potatodo" folder in "PotatodoWidgetExtension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Utils/DebugUtils.swift,
-			);
-			target = D1DCDB5D2DE3E48E00B4C48E /* PotatodoWidgetExtension */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -95,16 +69,12 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				D1C503922DD586120022FC52 /* Exceptions for "potatodo" folder in "potatodo" target */,
-				D1DCDB942DE3F00C00B4C48E /* Exceptions for "potatodo" folder in "PotatodoWidgetExtension" target */,
 			);
 			path = potatodo;
 			sourceTree = "<group>";
 		};
 		D1DCDB642DE3E48E00B4C48E /* PotatodoWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				D1DCDB772DE3E48F00B4C48E /* Exceptions for "PotatodoWidget" folder in "PotatodoWidgetExtension" target */,
-			);
 			path = PotatodoWidget;
 			sourceTree = "<group>";
 		};
@@ -134,15 +104,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D1DCDB5B2DE3E48E00B4C48E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D1DCDB632DE3E48E00B4C48E /* SwiftUI.framework in Frameworks */,
-				D1DCDB612DE3E48E00B4C48E /* WidgetKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -165,7 +126,6 @@
 				D1900CC02DD1A82200C53EEF /* potatodo.app */,
 				D1900CCD2DD1A82300C53EEF /* potatodoTests.xctest */,
 				D1900CD72DD1A82300C53EEF /* potatodoUITests.xctest */,
-				D1DCDB5E2DE3E48E00B4C48E /* PotatodoWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -194,7 +154,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				D1DCDB712DE3E48F00B4C48E /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				D1900CC22DD1A82200C53EEF /* potatodo */,
@@ -248,28 +207,6 @@
 			productReference = D1900CD72DD1A82300C53EEF /* potatodoUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		D1DCDB5D2DE3E48E00B4C48E /* PotatodoWidgetExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D1DCDB732DE3E48F00B4C48E /* Build configuration list for PBXNativeTarget "PotatodoWidgetExtension" */;
-			buildPhases = (
-				D1DCDB5A2DE3E48E00B4C48E /* Sources */,
-				D1DCDB5B2DE3E48E00B4C48E /* Frameworks */,
-				D1DCDB5C2DE3E48E00B4C48E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				D1DCDB642DE3E48E00B4C48E /* PotatodoWidget */,
-			);
-			name = PotatodoWidgetExtension;
-			packageProductDependencies = (
-			);
-			productName = PotatodoWidgetExtension;
-			productReference = D1DCDB5E2DE3E48E00B4C48E /* PotatodoWidgetExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -290,9 +227,6 @@
 					D1900CD62DD1A82300C53EEF = {
 						CreatedOnToolsVersion = 16.3;
 						TestTargetID = D1900CBF2DD1A82200C53EEF;
-					};
-					D1DCDB5D2DE3E48E00B4C48E = {
-						CreatedOnToolsVersion = 16.3;
 					};
 				};
 			};
@@ -316,7 +250,6 @@
 				D1900CBF2DD1A82200C53EEF /* potatodo */,
 				D1900CCC2DD1A82300C53EEF /* potatodoTests */,
 				D1900CD62DD1A82300C53EEF /* potatodoUITests */,
-				D1DCDB5D2DE3E48E00B4C48E /* PotatodoWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -339,13 +272,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D1900CD52DD1A82300C53EEF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D1DCDB5C2DE3E48E00B4C48E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -376,13 +302,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D1DCDB5A2DE3E48E00B4C48E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -395,11 +314,6 @@
 			isa = PBXTargetDependency;
 			target = D1900CBF2DD1A82200C53EEF /* potatodo */;
 			targetProxy = D1900CD82DD1A82300C53EEF /* PBXContainerItemProxy */;
-		};
-		D1DCDB712DE3E48F00B4C48E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D1DCDB5D2DE3E48E00B4C48E /* PotatodoWidgetExtension */;
-			targetProxy = D1DCDB702DE3E48F00B4C48E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -787,99 +701,6 @@
 			};
 			name = Test;
 		};
-		D1DCDB742DE3E48F00B4C48E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = PotatodoWidgetExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JS3JFCX9RV;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = PotatodoWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = PotatodoWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 0.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo.PotatodoWidget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		D1DCDB752DE3E48F00B4C48E /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = PotatodoWidgetExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JS3JFCX9RV;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = PotatodoWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = PotatodoWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 0.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo.PotatodoWidget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Test;
-		};
-		D1DCDB762DE3E48F00B4C48E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = PotatodoWidgetExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JS3JFCX9RV;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = PotatodoWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = PotatodoWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 0.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = wombleman.potatodo.PotatodoWidget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -919,16 +740,6 @@
 				D1900CE82DD1A82300C53EEF /* Debug */,
 				D1DCDB552DE3191200B4C48E /* Test */,
 				D1900CE92DD1A82300C53EEF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D1DCDB732DE3E48F00B4C48E /* Build configuration list for PBXNativeTarget "PotatodoWidgetExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D1DCDB742DE3E48F00B4C48E /* Debug */,
-				D1DCDB752DE3E48F00B4C48E /* Test */,
-				D1DCDB762DE3E48F00B4C48E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
