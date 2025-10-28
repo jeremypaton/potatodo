@@ -15,7 +15,7 @@ v0.2 - UI/animation update
 v0.3 - splash/onboard update
     v03.x - iterate animation
 
-=== CLOSED ALPHA RELEASE (FEEDBACK) === [JUNE 1]
+=== CLOSED ALPHA RELEASE (FEEDBACK) ===
 
 ... start socials
 
@@ -27,7 +27,7 @@ v0.4 - closed alpha
 v0.5 - open alpha
     v0.5.x - iterate
         
-=== START BETA DEV === [JULY 1]
+=== START BETA DEV ===
 
 2 weeks
 v0.6 - incorporate alpha feedback
@@ -39,7 +39,7 @@ v0.6 - incorporate alpha feedback
 v0.7 - make robust / test
     v0.7.x
 
-=== OPEN BETA RELEASE (EARLY ACCESS) === [AUGUST 1]
+=== OPEN BETA RELEASE (EARLY ACCESS) ===
 
 1 week
 v0.9 - soft launch
@@ -50,9 +50,7 @@ v0.9 - free early access
 GOAL: 1000 Daily Active Users
     -> then monetize
     
-=== FULL LAUNCH === [o]
+=== FULL LAUNCH === 
 
 v1.0 - full launch w/ monetization
 
-[SEPTEMBER 1]
-HBS / YC APPS
