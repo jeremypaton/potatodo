@@ -201,7 +201,6 @@ class AppDataStore: ObservableObject {
         taskData.$tasks
             .dropFirst() // Ignore initial value
             .sink { [weak self] tasks in
-//                print("[AppDataStore] taskData.$tasks sink called, tasks count: \(tasks.count)") // Debug print
                 guard let self = self else { return }
                 PersistenceUtils.saveTasksForProfile(tasks, profile: self.userSettings.profile)
                 
