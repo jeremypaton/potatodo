@@ -143,10 +143,6 @@ PRE-ALPHA TODOs
             [X] waving
             [X] dance
             [X] celebration anim
- 
-    
-    --- glasses ---
-    --- library ---
     
     POTATO ANIM ~ 20min
         [X] integrate into test preview
@@ -166,8 +162,6 @@ PRE-ALPHA TODOs
     [X] fix counter overflow
     
     [X] fix notification whitespaace
-
-    --- run ---
 
     [X] POTATO SPEECH - 15min
         [X] better text
@@ -235,10 +229,6 @@ PRE-ALPHA TODOs
           
     [PASS] update intro screenshots with better today data
     
-    ---
-    go for walk
-    ---
-    
     30min
     
     [X] basic analytics
@@ -252,10 +242,6 @@ PRE-ALPHA TODOs
     
     [X] call for help
     
-    ---
-    go for run
-    ---
-    
     1hr
     
     [X] simplify animations
@@ -263,241 +249,21 @@ PRE-ALPHA TODOs
         [X] messages immediate
         [X] only play speaking animation level 0
     
-    [ ] forms
+    [X] forms
         [X] tester sign up form
-        [ ] tester feedback forms
-            [ ] first impression "GETTING STARTED"
-            [ ] 1 week follow-up
+        [X] tester feedback forms
+            [X] first impression "GETTING STARTED"
+            [X] 1 week follow-up
     
-    [ ] app store listing mockup
+    [X] app store listing mockup
         
-    [ ] official ALPHA build
+    [X] official ALPHA build
         [ ] feedback links in settings
             
-    [ ] tester email
-        [ ] alpha overview
-            [ ] getting started form link
-            [ ] testflight emails
+    [X] tester email
+        [X] alpha overview
+            [X] getting started form link
+            [X] testflight emails
             
     [ ] record demo / progress video
             
-    WAVES
-        [ ] mon - broski
-        [ ] tue - will / weiwei
-        [ ] wed - everyone else
-        
-    ---
-    
-    [ ] make the test user data awesome (replace with json?) demoUser? - 20min
-
-    [ ] teasers
-        [ ] web
-            [ ] make super appealing so people want to help / team up
-                [ ] call for help / be vulnerable
-            [ ] progress chart
-                MVP (MAY) -> ALPHA (JUNE) -> BETA (JULY) -> EARLY ACCESS (AUGUST) -> PUBLIC LAUNCH (SEPTEMBER)
-                [ ] motivate signing up with email
-            [ ] fwd to links?
-                [ ] early access
-                [ ] social media
-        [ ] social media
-            [ ] instagram
-            [ ] tiktok
-
-    
-    figure out
-        [ ] space on day pages
-                affirmations / potato wisdom etc.?
-        [ ] compact backlog view?
-        
-BETA TODOs
-    REDESIGN - FIGMA
-    ANIMATE - SVGs
-    ENGINEER - FLUTTER (or reactnative?)
-    
-    [ ] FORK flag
-        [ ] forks tasks from default user
-            [ ] confirm dialog for intial fork, then load/save from forkUser\
-    [ ] profiles with max tasks, max empty tasks etc. for debugging
-        [ ] an excellent demo profile (well thought out task names etc.)
-    [ ] configs for different profiles eg. defaultUser without -o
-
-
-v0.2.0 - UI layout
-    [ ] learn best practices for designing layouts for different screen sizes
-
-    [ ] fix basic previews
-
-    [ ] setup testing pipeline for auto-screenshot different devices, pages etc.
-    
-    [ ] first pass all previews
-        [ ] fix all basic broken stuff
-            [ ] fix iphone keyboard layout squashing
-            [ ] fix scrolling in backlog
-            [ ] backlog should default to showing incomplete
-            etc.
-    
-    [ ] basic responsiveness
-        [ ] test all pages on regular phone
-        [ ] test all pages on small phone
-        [ ] test all pages on large phone
-
-    [ ] disable landscape
-
-v0.2.1 - UI styles
-    [ ] UI design pass / alts
-        [ ] mock up basic design
-        [ ] implement basic design
-     
-v0.2.2 - potato character lookdev
-    [ ] make smol
-    [ ] still frames for each level?
-        [ ] EMPTY
-        [ ] 0
-        [ ] 1
-        [ ] 2
-        [ ] CELEBRATE
-        [ ] POST-CELEBRATE
-
-v0.2.3 - potato speech
-    [ ] generate good speech for each level (quality over quantity)
-        [ ] guarantee first 10 are best (use a seed / iterator with saved position?)
-    [ ] figure out timing / triggers
-    [ ] mouth anim
-    [ ] bring back potato button
-    [ ] improve notifications speech
-    
-=== DESIGN ALPHA LOCK === [MON 02 JUNE]
-
-MON
-v0.2.4 - basic potato anim
-    [ ] 0/EMPTY: keep alive / idle
-    [ ] BUTTON/COMPLETE: speaking
-    [ ] COMPLETE: 3 potato dances
-    [ ] CELEBRATE - make epic
-        [ ] potato celebration animation
-        [ ] overlay elements / fx
-    [ ] POST-CELEBRATE
-
-TUE
-v0.2.5 - splash screen
-    [ ] don't toggle from widget
-    [ ] make sweeeet
-    [ ] cool early access marker
-        [ ] user #'s / IDs ?
-
-WED
-v0.2.6 - onboarding
-    [ ] add FRESH_LAUNCH config
-    [ ] make onboarding flow super clear / motivating
-    
-THU
-v0.2.7 - alpha launch prep
-    [ ] analytics
-    [ ] crash reporting
-        etc.
-
-FRI
-advertising
-    [ ] copywriting / taglines
-    [ ] app store screenshots / material
-    [ ] basic website
-    [ ] template social media posts
-        [ ] insta
-        [ ] x
-        [ ] tiktok
-        [ ]
-
-=== PRIVATE ALPHA READY === [MON 09 JUNE]
-
-inner circle
-start social media accounts
-start email listserv
-
-1 week inner circle [JUNE09 - JUNE16]
-2 weeks broadcast to friends [JUNE16 - JUNE30]
-
-=== ITERATE === JULY
-2 weeks incorporate alpha feedback
-2 weeks robustness / final testing
-
-=== PUBLIC SOFT LAUNCH [EARLY ACCESS] === EARLY AUGUST
-1 week
-live on app store but limit regions, don't advertize, see checklist
-
-=== PUBLIC FULL LAUNCH [EARLY ACCESS] === MID AUGUST
-
-=== END EARLY ACCESS / MONETIZE === OCTOBER
-
-FUTURE:
-    emails
-    weekly recaps
-    progress charts
-    3+ characters (sweet, seargant, sleepy?)
-
-
-    [ ] RESPONSIVE REFACTOR
-        
-        Layout
-        - [ ] Remove fixed width/height unless absolutely necessary
-        - [ ] Use Spacer() and .frame(maxWidth: .infinity) for flexible spacing
-        - [ ] Replace HStack/VStack with GeometryReader if layout should change on wide screens
-        - [ ] Use ScrollView if content may overflow on small screens
-
-        Text
-        - [ ] Replace hardcoded font sizes with .font(.title), .body, etc.
-        - [ ] Ensure Text views use .lineLimit(nil) or appropriate wrapping
-        - [ ] Test with Dynamic Type enabled (larger accessibility fonts)
-
-        Device Support
-        - [ ] Preview on small (SE), medium (iPhone 16), and large (16 Pro Max) devices
-        - [ ] Check layout in both portrait and landscape orientations
-        - [ ] Test in Light Mode and Dark Mode
-
-        Safe Areas
-        - [ ] Ensure views respect safe areas (notches, home indicator)
-        - [ ] Avoid .ignoresSafeArea() unless it's for a background
-
-        Logic & Adaptation
-        - [ ] Use @Environment(\.horizontalSizeClass) for iPad/landscape support if needed
-        - [ ] Use .layoutPriority() to avoid unwanted text/view compression
-        - [ ] Use .adaptive grid layout if displaying a collection of items
-        
-        [ ] disable landscape
-    
-
-# 🧪 Soft Launch Checklist – Tamagotchi + Todo App
-
-## ✅ Pre-Soft Launch
-- [ ] Test all core features manually (e.g., feeding, completing a task, progress UI)
-- [ ] Crash reporting integrated (e.g., Firebase Crashlytics, Sentry)
-- [ ] Basic analytics live (task completed, pet fed, user retention)
-- [ ] Onboarding flows tested
-- [ ] Empty states and edge cases handled gracefully
-- [ ] App Store metadata filled out (minimal SEO/keywords for now)
-- [ ] App review prompt implemented (but shown only after success action, like completing 3 tasks)
-- [ ] TestFlight build distributed and stable
-
-## 🚀 Soft Launch (Live on App Store but unannounced)
-- [ ] App available in 1–2 test regions (or limited keyword discoverability)
-- [ ] Share app privately with trusted testers (outside TestFlight)
-- [ ] Monitor crash reports daily
-- [ ] Monitor analytics (especially retention, session length, feature usage)
-- [ ] Start collecting App Store reviews from early users
-
-## 🔁 Iterate
-- [ ] Fix any high-severity bugs or onboarding drop-offs
-- [ ] Improve any unclear UX based on real feedback
-- [ ] Validate engagement: are users completing tasks, returning, interacting with the pet?
-
-## 📣 Prep for Public Launch
-- [ ] Add final App Store keywords & optimized description
-- [ ] Add promotional assets (screenshots, preview video, icon polish)
-- [ ] Submit for App Store editorial (optional but helpful)
-- [ ] Prep launch tweet/post/email/etc.
-- [ ] Confirm scalability (e.g., any backend rate limits or push notification handling)
-
-## 🏁 Launch Day
-- [ ] Announce to your audience (social, newsletter, etc.)
-- [ ] Monitor servers and crash reports closely
-- [ ] Engage with early feedback and respond to reviews if needed
