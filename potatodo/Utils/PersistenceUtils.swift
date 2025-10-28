@@ -141,7 +141,6 @@ struct PersistenceUtils {
         }
     }
     
-    
     static func getMAY26TaskArray() -> [Task] {
         guard let jsonURL = Bundle.main.url(forResource: "MAY26tasks", withExtension: "json") else {
             return []

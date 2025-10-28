@@ -220,31 +220,6 @@ class AppDataStore: ObservableObject {
                 }
             }
             .store(in: &cancellables)
-            
-        // Auto-save user settings when they change
-        userSettings.$profile
-            .dropFirst()
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                PersistenceUtils.saveUserSettings(self.userSettings, profile: self.userSettings.profile)
-            }
-            .store(in: &cancellables)
-            
-        userSettings.$notificationsEnabled
-            .dropFirst()
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                PersistenceUtils.saveUserSettings(self.userSettings, profile: self.userSettings.profile)
-            }
-            .store(in: &cancellables)
-            
-        userSettings.$notificationTime
-            .dropFirst()
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                PersistenceUtils.saveUserSettings(self.userSettings, profile: self.userSettings.profile)
-            }
-            .store(in: &cancellables)
     }
 }
 

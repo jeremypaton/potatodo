@@ -84,7 +84,6 @@
 		D1DCDB942DE3F00C00B4C48E /* Exceptions for "potatodo" folder in "PotatodoWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Tasks/Task_M.swift,
 				Utils/DebugUtils.swift,
 			);
 			target = D1DCDB5D2DE3E48E00B4C48E /* PotatodoWidgetExtension */;
